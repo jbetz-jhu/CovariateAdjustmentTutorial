@@ -202,7 +202,7 @@ updateEstimate = function(covMatrixOriginal,
 # Input: testStatistic, a numeric value for the calculated test statistic;
 # alpha, the (total) siginificance level alpha;
 # alternative, a character string specifying the alternative hypothesis;
-# boundaries, type of alpha spending function to use (see bounds in ldbounds package);
+# boundaries, type of alpha spending function to use (see ldbounds in ldbounds package);
 # plannedAnalyses, total number of planned analyses (interim and final);
 # previousInformationTimes, information times of estimates up to the previous analysis; 
 # currentInformationTime, information time of current analysis.
@@ -225,14 +225,14 @@ interimDecision = function(testStatistic,
     
     if(analysisNumber==plannedAnalyses){
       
-      bound=bounds(t= c(previousInformationTimes, 1), 
+      bound=ldbounds(t= c(previousInformationTimes, 1), 
                    iuse = c(boundaries, boundaries), 
                    asf = NULL, 
                    alpha = c(alpha/2, alpha/2))$upper.bounds[analysisNumber]
       
     }else{
       
-      bound=bounds(t= c(previousInformationTimes, currentInformationTime), 
+      bound=ldbounds(t= c(previousInformationTimes, currentInformationTime), 
                    iuse = c(boundaries, boundaries), 
                    asf = NULL, 
                    alpha = c(alpha/2, alpha/2))$upper.bounds[analysisNumber]
