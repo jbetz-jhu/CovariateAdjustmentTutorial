@@ -1,0 +1,365 @@
+---
+title: "Covariate Adjustment and Group Sequential Designs"
+subtitle: "Worked Examples using Simulated Trial Data"
+author: "Kelly Van Lancker (kvanlan3@jhu.edu), Josh Betz (jbetz@jhu.edu), and Michael Rosenblum (mrosen@jhu.edu)"
+date: "`r format(Sys.time(), '%Y-%m-%d %I:%M')`"
+output:
+  html_document:
+    toc: true # table of content true
+    # toc_depth: 3
+    # number_sections: true
+    theme: united
+    highlight: tango
+    # css: my.css   # For custom CSS - In same folder
+---
+
+```{r setup, include=FALSE}
+options(
+  knitr.kable.NA = ""
+)
+
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  # warning = FALSE,
+  results = "markup"
+) 
+```
+
+## Installing R Packages
+
+We first install the required packages
+```{r install-packages, eval = FALSE}
+required_packages <-
+  c("rpact", "tidyr", "dplyr", "parallel", "ldbounds")
+
+install.packages(required_packages)
+```
+
+Once the required packages are installed, they can be loaded using `library()`
+
+```{r load-packages}
+library(rpact)
+library(tidyr)
+library(dplyr)
+library(parallel)
+library(ldbounds)
+```
+
+## Simulated Dataset
+
+### Design Parameters
+We first determine the maximum/total information and sample size based on a design with 2 analyses: 1 interim analyses when 50\% of the information is available in addition to the final analysis. The two-sided significance level equals 5\% and the power to detect a 5\% difference in the success rate (55\% in treatment arm versus 50\% in control) equals 90\%. An alpha-spending function that approximates the Pocock boundaries are used for efficacy stopping (futility stopping is not considered).
+```{r design-parameters}
+design_par = getDesignGroupSequential(sided = 2, alpha = 0.05, beta=0.1,
+                                      informationRates = c(0.50, 1),
+                                      typeOfDesign = "asP")
+# Determine Inflation Factor
+#getDesignCharacteristics(design_par) #1.1110  
+
+inf_total = 1.1110*(qnorm(0.975)+qnorm(0.90))^2/0.05^2
+
+n_total = round(1.1110*(power.prop.test(power=0.90,p1=0.55,p2=0.5, 
+                                         alternative="two.sided", 
+                                         sig.level=0.05)$n)*2
+)
+```
+
+We load the code to create the data (we need function `expit()`) and conduct the data analysis.
+```{r load-code-github, warning=FALSE}
+data_url_code <-
+  "https://github.com/jbetz-jhu/CovariateAdjustmentTutorial/raw/main/codeGeneral.R"
+
+source(file = url(data_url_code))
+
+```
+
+
+### Creating Simulated Dataset
+Create data frame 'study_data' with baseline covariates `x_1`, `x_2`, `x_3` and `x_4`, a patient identifier (`id`), a treatment indicator (`treatment`), the primary outcome of interest (`y_1`), the time of enrollment (`enrollment_times`), and the time a patient's outcome is measured (`outcome_times`).
+
+```{r data-generation, eval=FALSE}
+set.seed(12345)
+# Generate baseline covariates
+baseline_covariates_orig <-
+  matrix(
+    data =
+      mvtnorm::rmvnorm(
+        n = n_total,
+        mean = matrix(data = 0, nrow = 4),
+        sigma = diag(x = 1, nrow = 4)
+      ),
+    nrow = n_total,
+    ncol = 4
+  ) %>% 
+  data.frame() %>% 
+  setNames(
+    object = .,
+    nm = paste0("x_", 1:4)
+  )
+
+# Generate treatment indicator
+treatment <-
+      rbinom(
+        n = n_total,
+        size = 1,
+        prob = 0.5
+      )
+
+# (Counterfactual) outcomes under new experimental treatment
+n_outcomes = 1
+outcomes1 <-
+      matrix(
+        data =
+          rbinom(
+            n = n_total*n_outcomes,
+            size = 1,
+            prob = expit(-2.5*baseline_covariates_orig$x_1+
+                           2*baseline_covariates_orig$x_2-
+                           2.5*baseline_covariates_orig$x_3+
+                           2.1*baseline_covariates_orig$x_4)
+          ),
+        nrow = n_total,
+        ncol = n_outcomes
+      ) %>% 
+      data.frame() %>% 
+      setNames(
+        object = .,
+        nm = paste0("y1_", 1:n_outcomes)
+      )
+
+# (Counterfactual) outcomes under control
+outcomes0 <-
+      matrix(
+        data =
+          rbinom(
+            n = n_total*n_outcomes,
+            size = 1,
+            prob = expit(-2*baseline_covariates_orig$x_1+
+                           2.5*baseline_covariates_orig$x_2-
+                           2.25*baseline_covariates_orig$x_3-
+                           2.1*baseline_covariates_orig$x_4)
+          ),
+        nrow = n_total,
+        ncol = n_outcomes
+      ) %>% 
+      data.frame() %>% 
+      setNames(
+        object = .,
+        nm = paste0("y0_", 1:n_outcomes)
+      )
+
+# Enrollment times
+daily_enrollment = 5
+enrollment_times <-
+      round(
+        runif(
+          n = n_total, min = 0, max=n_total/daily_enrollment
+        )
+      )
+
+# Outcome times
+outcome_times <-
+      setNames(
+        object = 365 + enrollment_times,
+        nm = paste0("outcome_time_", 1)
+      )
+
+# Measured baseline covariates   
+baseline_covariates_meas = as.data.frame(cbind(
+  x_1 = exp(baseline_covariates_orig$x_1/2),
+  x_2 = baseline_covariates_orig$x_2/
+  (1+exp(baseline_covariates_orig$x_1))+10,
+  x_3 = (baseline_covariates_orig$x_1*
+                                  baseline_covariates_orig$x_3/25+0.6)^3,
+  x_4 = (baseline_covariates_orig$x_2
+                                +baseline_covariates_orig$x_4+20)^2
+  ))
+
+# Make dataset    
+study.data <-
+      tibble(
+        id = 1:n_total,
+        baseline_covariates_meas,
+        enrollment_times,
+        treatment,
+        outcome_times,
+        y_1 = outcomes1$y1_1*treatment+outcomes0$y0_1*(1-treatment)
+      )
+```
+
+The data can also be directly loaded from Github
+
+```{r load-simulated-data-github}
+data_url_gsd_data <-
+  "https://github.com/jbetz-jhu/CovariateAdjustmentTutorial/raw/main/simData.RData"
+
+load(file = url(data_url_gsd_data))
+
+```
+
+The complete simulated trial data without any missing values are in a `data.frame` named `study.data`.
+
+  - Randomization Information
+    - `treatment`: Treatment Arm
+  - Baseline Information
+    - `x_1`, `x_2`, `x_3` and `x_4`: 4 continuous baseline covariates
+    - `id`: patient identifier
+    - `enrollment_times`: time of enrollment
+  - Outcome information:
+    - `y_1`: Binary outcome (1: success; 0: otherwise) 
+    - `outcome_times`: time someone outcome is measured (365 days after enrollment)
+
+## Combining Group Sequential Designs and Covariate Adjustment
+
+### Interim analysis
+
+Via the function `data_at_time_t()` we construct a dataframe of the data available at the interim analysis, which is conducted when 50\% of the patients have their primary endpoint available.
+```{r interim-data}
+n_total_ia = round(0.5*n_total)
+time_ia = sort(study.data$outcome_times)[n_total_ia]
+n_recr_ia = length(which(study.data$enrollment_times<=time_ia))
+
+data_ia = data_at_time_t(
+  data = study.data,
+  id_column = "id",
+  analysis_time = time_ia,
+  enrollment_time = "enrollment_times",
+  treatment_column = "treatment",
+  covariate_columns = c("x_1", "x_2", "x_3", "x_4"),
+  outcome_columns = c("y_1"),
+  outcome_times = c("outcome_times")
+      ) 
+    
+```
+
+We can then call the function `interimAnalysis()` to conduct the interim analysis. This gives us a decision based on the original estimator and updated estimator (which is the same as the original one at the first analysis). In addition, we get the estimates(both the original and updated estimate), the corresponding standard errors, test statistics, and information fractions. Finally, we also get the current covariance matrix based on the original estimates, which we will need at the final analysis to do the orthogonalization (in order to obtain the updated estimate).
+
+```{r interim-analysis, warning=FALSE}
+results_ia = interimAnalysis(data = data_ia,
+                             totalInformation = inf_total, 
+                             estimationMethod= standardization,
+                             null.value = 0,
+                             alpha = 0.05, 
+                             alternative = "two.sided", 
+                             boundaries = 2,
+                             plannedAnalyses=2,
+                             y0_formula=y_1 ~ x_1, 
+                             y1_formula=y_1 ~ x_1,
+                             family="binomial"
+                             )
+```
+
+#### Results
+Decision based on original interim estimator
+```{r ia-original-decision}
+results_ia$decisionOriginal
+```
+So we do not stop the trial early for efficacy based on the original interim estimator.
+
+Decision based on updated interim estimator
+```{r ia-updated-decision}
+results_ia$decisionUpdated
+```
+So we do not stop the trial early for efficacy based on the updated interim estimator.
+
+Original interim estimate
+```{r ia-original-estimate}
+results_ia$estimateOriginal
+previousEstimates = results_ia$estimateOriginal
+```
+
+Updated interim estimate
+```{r ia-updated-estimate}
+results_ia$estimateUpdated
+```
+
+Covariance matrix (i.e., variance) of the original interim estimate
+```{r ia-original-covariance}
+results_ia$covMatrixOriginal
+covMatrix = results_ia$covMatrixOriginal
+```  
+
+Information time (current information divided by expected information at end of trial) corresonding with original interim estimate
+```{r ia-original-informationtime}
+results_ia$informationTimeOriginal
+previousTimes = results_ia$informationTimeOriginal
+```  
+
+Information time (current information divided by expected information at end of trial) corresonding with updated interim estimate
+```{r ia-updated-informationtime}
+results_ia$informationTimeUpdated
+previousTimesUpd = results_ia$informationTimeUpdated
+```
+
+### Final analysis
+
+Via the function `data_at_time_t()` we construct a dataframe of the data available at the final analysis (which equals the full dataset!).
+```{r final-data}
+time_fin = sort(study.data$outcome_times)[n_total]
+n_recr_fin = length(which(study.data$enrollment_times<=time_fin))
+
+data_fin = data_at_time_t(
+  data = study.data,
+  id_column = "id",
+  analysis_time = time_fin,
+  enrollment_time = "enrollment_times",
+  treatment_column = "treatment",
+  covariate_columns = c("x_1", "x_2", "x_3", "x_4"),
+  outcome_columns = c("y_1"),
+  outcome_times = c("outcome_times")
+      ) 
+    
+```
+
+We can then call the function `interimAnalysis()` to conduct the final analysis. This gives us a decision based on the original estimator and updated estimator (which is the same as the original one at the first analysis). In addition, we get the estimates(both the original and updated estimate), the corresponding standard errors, test statistics, and information fractions. Finally, we also get the current covariance matrix based on the original estimates, which we will need at the final analysis to do the orthogonalization (in order to obtain the updated estimate).
+
+```{r final-analysis}
+results_fin = interimAnalysis(data = data_fin, 
+                            totalInformation = inf_total, 
+                            estimationMethod= standardization,
+                            previousEstimatesOriginal=previousEstimates,
+                            previousCovMatrixOriginal=covMatrix,
+                            previousInformationTimesOriginal=previousTimes,
+                            previousInformationTimesUpdated=previousTimesUpd,
+                            previousDatasets = list(data_ia),
+                            null.value = 0,
+                            alpha = 0.05, 
+                            alternative = "two.sided", 
+                            boundaries = 2,
+                            plannedAnalyses=2,
+                            y0_formula=y_1 ~ x_2, 
+                            y1_formula=y_1 ~ x_2,
+                            family="binomial",
+                            parametersPreviousEstimators = list(list(
+                              y0_formula=y_1 ~ x_1,
+                              y1_formula=y_1 ~ x_1,
+                              family="binomial"
+                              )) 
+)
+
+```
+
+#### Results
+Decision based on original final estimator
+```{r final-original-decision}
+results_fin$decisionOriginal
+```
+So we do not reject the null hypothesis based on the original final estimator.
+
+Decision based on updated final estimator
+```{r final-updated-decision}
+results_fin$decisionUpdated
+```
+So we do not reject the null hypothesis based on the updated final estimator.
+
+Original final estimate
+```{r final-original-estimate}
+results_fin$estimateOriginal
+```
+
+Updated final estimate
+```{r final-updated-estimate}
+results_fin$estimateUpdated
+```
+
