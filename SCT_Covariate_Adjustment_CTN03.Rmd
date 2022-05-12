@@ -1,0 +1,449 @@
+---
+title: "Covariate Adjustment in Randomized Trials"
+subtitle: "Worked Examples using Simulated CTN03 Trial Data"
+author: "Josh Betz (jbetz@jhu.edu), Kelly Van Lancker (kvanlan3@jhu.edu), and Michael Rosenblum (mrosen@jhu.edu)"
+date: "`r format(Sys.time(), '%Y-%m-%d %I:%M')`"
+header-includes:
+   - \usepackage{amsmath}
+output:
+  html_document:
+    toc: true # table of content true
+    # toc_depth: 3
+    # number_sections: true
+    theme: united
+    highlight: tango
+    # css: my.css   # For custom CSS - In same folder
+bibliography: stratified_randomization.bib # For Bibliography - In same folder
+# csl: biomed-central.csl # For citation style - In same folder
+---
+
+```{r Report_Setup, echo = FALSE, message = FALSE}
+## Create Paths
+
+ctn03_results_paper_link <-
+  "https://github.com/BingkaiWang/covariate-adaptive"
+
+icad_repo_link <-
+  "https://github.com/BingkaiWang/covariate-adaptive"
+
+
+### Graphics and Report Options ################################################
+table_digits <- 1 # Significant Figures for Mean/SD, N (%), Median/IQR
+
+
+
+
+### Set Default Options ########################################################
+options(
+  knitr.kable.NA = ""
+)
+
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  # warning = FALSE,
+  results = "markup"
+) 
+```
+
+
+## Executive Summary
+
+Randomly allocating participants to treatment arms will tend to produce groups that are initially comparable to one another across both observed and unobserved factors. In any given randomized trial, there will be some degree of imbalance in the distribution of baseline covariates between treatment groups. When a variable is a strong predictor of the outcome and is imbalanced across treatment arms, it represents a potential confounding variable and source of bias, even if these differences are not statistically significant [@Assmann2000]. Confounding can be addressed both in the design phase of a trial, using stratified randomization to lessen the potential imbalance, and in during the analysis phase, through covariate adjustment.
+
+
+Both stratified randomization and covariate adjustment can lead to a more efficient trial, even if covariates are balanced across treatment groups: such approaches can lower the required sample size to detect a given treatment effect if it exists, or provide greater precision (shorter confidence interval widths and higher power) for the same sample size and treatment effect. When stratified randomization is used, covariate adjustment is generally suggested, but not always implemented, which can lead to reduced power and precision [@Kahan2011]. The potential benefit of stratified randomization increases as the correlation between the stratification variable and the outcome increases, and the variability within the strata decreases relative to the variability between strata. Accessible and practical discussions of baseline balance, stratified randomized trials, and adjusted analyses are also available to offer further explanation and guidance to investigators [@Kernan1999, @Assmann2000].
+
+
+When using regression models for inference, it is important to understand how model misspecification may affect statistical inference. Fortunately, there are several approaches to covariate-adjusted analyses whose validity does not depend on a correctly specified model, or provide inference with greater robustness to misspecification than those used in common practice.
+
+
+This tutorial illustrates the use of covariate-adjusted analysis in clinical trials using a simulated dataset which mimics key features of an actual randomized trial in substance abuse. Covariate-adjusted estimates are also illustrated for trials with stratified randomization, using variance estimates that are more efficient than those that do not account for stratified randomization. All of the methods illustrated give estimates that are consistent even when the models are partly or wholly misspecified.
+
+
+#### Continuous Outcomes
+
+The estimand or quantity of interest in a randomized trial with a continuous or binary outcome is usually the average treatment effect (ATE): this is the difference in the mean outcome if everyone in the population received the treatment under investigation versus the mean outcome if everyone in the population received the control/comparator intervention. Let $Y$ denote the outcome of interest and $A$ denote the indicator of treatment ($A_{i} = 1$ among the intervention group and $A_{i} = 0$ among the control/comparator group)
+
+$$ATE = E\left[Y \vert A = 1\right] - E\left[Y \vert A = 0\right]$$
+
+
+For continuous outcomes, adjustment for covariates can be done using the analysis of covariance (ANCOVA). This is a regression of the outcome on the treatment variable and baseline covariates. Even though the ANCOVA models the conditional distribution of the outcome given the treatment assignment and covariates, the identity link in the linear model means the marginal and conditional associations are identical, and the coefficient for the treatment indicator is the average treatment effect. When the data are completely observed or the rates of missingness are unrelated to the covariates, treatment, or outcomes (i.e. the missing completely at random or MAR assumption), the ANCOVA estimator is valid even under arbitrary model misspecification.
+
+The ANCOVA does reduce bias and improve precision by adjusting for baseline covariates, but its variance estimate does not automatically account for stratified randomization. Additionally, missing data can potentially introduce bias if out model is not correctly specified and the MCAR assumption does not hold. These can be remedied by using a doubly robust weighted least squares (DR-WLS) estimator, which incorporates propensity score models that address imbalance and missing data. This estimator is called doubly robust because if either the outcome or propensity models are correctly specified, this estimator will be a consistent estimator of the average treatment effect. Both the ANCOVA and DR-WLS estimators can be modified to take advantage of stratified randomization, potentially yielding additional efficiency gains.
+
+Other doubly robust estimators include the augmented inverse probablity weighted (AIPW) estimator and the targeted maximum likelihood estimator (TMLE), which can incorporate information from intermediate outcomes in order to reduce bias and increase precision when estimating the effect of the treatment on the final outcome.
+
+
+#### Binary Outcomes
+
+Unlike the ANCOVA, regression models for binary outcomes typically uses a nonlinear link function, such as the logistic, probit, or cumulative log-logistic links. In these models, the marginal and conditional associations do not necessarily coincide, and the coefficient for the treatment indicator does not correspond to the average treatment effect. In these cases, we can obtain a marginal treatment effect by averaging over the covariates. This average marginal effect (AME) is computed by using a regression model to predict the outcome for each individual under treatment and control, and then comparing the average prediction under treatment to the average prediction under control. This approach to inference is also known as G-computation. When any outcome data are missing, the DR-WLS, AIPW, or TMLE can be employed to obtain doubly robust inference for binary outcomes.
+
+
+#### Ordinal Outcomes
+
+If the outcome of interest is ordinal variable with $K$ categories, there are other estimands that may be of interest. When categories can be assigned a numeric score or utility, one estimand of interest is the average treatment effect on the score or utility.
+
+When the mean outcome is not defined, not meaningful, or simply not of interest, other estimands are available. The Mann-Whitney estimand, which estimates the probability that a randomly-selected individual from a population of treated individuals will have a better outcome than a randomly-selected individual from the population of indiviuals receiving the control or comparator intervention.
+
+The Log Odds Ratio compares the odds of having an outcome of category $k$ or higher in a population of treated individuals relative to a population receiving the control. The log of these odds ratios is then averaged across each of the $(K-1)$ possible cutoffs of the outcome. This estimand is similar to the proportional odds logistic regression model, but its validity does not require the assumption that the model is correctly specified.
+
+Covariate-adjusted estimators are also available for these estimands which are also doubly robust.
+
+
+#### Using This Tutorial
+
+This tutorial contains an example dataset as well as code to illustrate how to perform covariate adjustment in practice for continuous and binary outcomes using [R](https://www.r-project.org/). R is a free and open source language and statistical computing environment. [Rstudio](https://rstudio.com/) is a powerful development environment for using the R language. The ability of R can be extended by downloading software packages from the [Comprehensive R Archival Network (CRAN)](https://cran.r-project.org/). In R, these packages can be installed from the Comprehensive R Archival Network, or CRAN, using the `install.packages()` command. In Rstudio IDE, there is a 'Packages' tab that allows users to see which packages are installed, which packages are currently in use, and install or update packages using a graphical interface. Once the required packages are installed, data can be downloaded from Github, and users can run the code on their own devices.
+
+
+
+
+## Covariate Adjusted Analysis in Practice
+
+### Installing R Packages
+
+The following packages and their dependencies needs to be installed:
+
+  - [tidyverse](https://www.tidyverse.org/packages/) - An ecosystem of packages for working with data
+  - [table1](https://cran.r-project.org/web/packages/table1/index.html) - Creating simple tabulations in aggregate and by treatment arm
+  - [margins](https://cran.r-project.org/web/packages/margins/) - Computing Average Marginal Effects (AMEs)
+  - [drord](https://cran.r-project.org/web/packages/drord/drord.pdf) - Doubly-Robust Estimators for Ordinal Outcomes
+  - [sandwich](https://cran.r-project.org/web/packages/sandwich/sandwich.pdf) - Robust Covariance Matrix Estimators
+
+
+```{r install-packages, eval = FALSE}
+required_packages <-
+  c("tidyverse",
+    "table1",
+    "margins",
+    "drord",
+    "sandwich")
+
+install.packages(required_packages)
+```
+
+
+Once the required packages are installed, they can be loaded using `library()`
+
+
+```{r load-packages}
+library(purrr)
+library(table1)
+library(margins)
+library(drord)
+library(sandwich)
+```
+
+
+## CTN03 Study Design
+
+CTN03 was a phase III two arm trial to assess tapering schedules of the drug buprenorphine, a pharmacotherapy for opioid dependence. At the time of the study design, there was considerable variation in tapering schedules in practice, and a knowledge gap in terms of the best way to administer buprenorphine to control withdrawal symptoms and give the greatest chance of abstinence at the end of treatment. It was hypothesized that a longer taper schedule would result in greater likelihood of a participant being retained on study and providing opioid-free urine samples at the end of the drug taper schedule. 
+
+
+Participants were randomized 1:1 to a 7-day or 28-day taper using stratified block randomization across 11 sites in 10 US cities. Randomization was stratified by the maintenance dose of buprenorphine at stabilization: 8, 16, or 24 mg.
+
+The results of CTN03 can be found [here](`r ctn03_results_paper_link`).
+
+
+
+
+### Creating Simulated Data:
+
+The data in this template are simulated data, generated from probability models fit to the original study data, and *not the actual data from the CTN03 trial.* A new dataset was created by resampling with replacement from the original data, and then each variable in the new dataset was iteratively replaced using simulated values from probability models based on the original data.
+
+
+
+
+--------------------------------------------------------------------------------
+
+
+
+
+
+## Simulated CTN03 Data
+
+The data can be loaded directly from Github:
+
+
+```{r load-ctn03-data-github}
+data_url <-
+  "https://github.com/jbetz-jhu/CovariateAdjustmentTutorial/raw/main/SIMULATED_CTN03_220506.Rdata"
+
+load(file = url(data_url))
+```
+
+
+The complete simulated trial data without any missing values are in a `data.frame` named `ctn03_sim`, and a missingness mechanism based on baseline data is applied to `ctn03_sim_mar`.
+
+  - Randomization Information
+    - `arm`: Treatment Arm
+    - `stability_dose`: Stratification Factor
+  - Baseline Covariates
+    - `age`: Participant age at baseline
+    - `sex`: Participant sex
+    - `race`: Participant race
+    - `ethnic`: Participant ethnicity
+    - `marital`: Participant marital status
+  - Baseline (`_bl`) & End-Of-Taper (`_eot`) Outcomes:
+    - `arsw_score`: Adjective Rating Scale for Withdrawal (ARSW) Score at baseline
+    - `cows_score`: Clinical Opiate Withdrawal Scale (COWS) Score at baseline
+    - `cows_category`: COWS Severity Category - Ordinal
+    - `vas_crave_opiates`: Visual Analog Scale (VAS) - Self report of opiate cravings
+    - `vas_current_withdrawal`: Visual Analog Scale (VAS) - Current withdrawal symptoms
+    - `vas_study_tx_help`: Visual Analog Scale (VAS) - Study treatment helping symptoms
+    - `uds_opioids`: Urine Drug Screen Result - Opioids
+    - `uds_oxycodone`: Urine Drug Screen Result - Oxycodone
+    - `uds_any_positive`: Urine Drug Screen - Any positive result
+
+
+
+
+### Reference level for Treatment
+
+When the treatment is a `factor` variable, we can use the `levels()` function to see the reference level (i.e. the comparator/control group): it will appear as the first level.
+
+```{r check-reference-level}
+# Check reference level
+levels(ctn03_sim$arm)
+```
+
+Make sure that the reference level is appropriately chosen before running analyses.
+
+
+
+
+### Baseline Demographics & Stratum
+
+Below are summary statistics of participant characteristics at baseline:
+
+```{r table-demographic-characteristics-stratum}
+table1(
+  ~ age + sex + race + ethnic + marital + stability_dose | arm, 
+  data = ctn03_sim
+)
+```
+
+
+
+
+### End-of-Taper Outcomes
+
+Below are summary statistics of the baseline outcomes: if there are clinically significant imbalances between treatment arms, an adjusted estimator can reduce the bias that this may introduce.
+
+```{r table-baseline-outcomes}
+table1(
+  ~ arsw_score_bl + cows_total_score_bl + vas_crave_opiates_bl +
+    vas_current_withdrawal_bl + vas_study_tx_help_bl +
+    uds_opioids_bl + uds_oxycodone_bl + uds_any_positive_bl | arm,
+  data = ctn03_sim
+)
+```
+
+
+
+
+### End-of-Taper Outcomes
+
+Here we summarize the outcomes of the study if there were no missing data:
+
+```{r table-end-of-taper-outcomes}
+table1(
+  ~ arsw_score_eot + cows_total_score_eot + vas_crave_opiates_eot +
+    vas_current_withdrawal_eot + vas_study_tx_help_eot +
+    uds_opioids_eot + uds_oxycodone_eot + uds_any_positive_eot | arm,
+  data = ctn03_sim
+)
+```
+
+
+Note that when data are missing, summary statistics may be potentially misleading:
+
+
+```{r}
+table1(
+  ~ arsw_score_eot + cows_total_score_eot + vas_crave_opiates_eot +
+    vas_current_withdrawal_eot + vas_study_tx_help_eot +
+    uds_opioids_eot + uds_oxycodone_eot + uds_any_positive_eot | arm,
+  data = ctn03_sim_mar %>% 
+    dplyr::filter(
+      !is.na(arsw_score_eot)
+    )
+)
+```
+
+
+
+
+--------------------------------------------------------------------------------
+
+
+## Binary Outcomes: Opioids by Urine Drug Screening (UDS)
+
+### Two Sample Test of Proportions
+
+Similar to the t-test, the validity of from a two-sample test of proportions assumes that data are missing completely at random (MCAR), which should be empirically assessed.
+
+```{r opioids-prop-test}
+opioids_prop_test <-
+  prop.test(
+    x = with(ctn03_sim, table(uds_opioids_eot, arm))
+  )
+
+print(opioids_prop_test)
+diff(opioids_prop_test$estimate) # Estimate
+opioids_prop_test$conf.int # Confidence Interval
+opioids_prop_test$p.value # P-Value
+```
+
+
+Again, missing data not only increases variance, but also introduces potential bias:
+
+
+```{r opioids-prop-test-missing}
+opioids_prop_test_missing <-
+  prop.test(
+    x = with(ctn03_sim_mar, table(uds_opioids_eot, arm))
+  )
+
+print(opioids_prop_test_missing)
+diff(opioids_prop_test_missing$estimate) # Estimate
+opioids_prop_test_missing$conf.int # Confidence Interval
+opioids_prop_test_missing$p.value # P-Value
+```
+
+
+
+
+### Adjusted for Covariates: G-Computation
+
+We can use a logistic regression to adjust for baseline covariates with a binary outcome, however, inference is not as straightforward as with ANCOVA. The coefficient in a logistic regression is a *conditional association:* it is the associated change in the log odds of the outcome with a unit change in the predictor when holding all other variables constant. The average treatment effect is a *marginal, not conditional quantity*. In order to obtain the average treatment effect, we must marginalize by averaging over the covariates. First, fit a logistic regression model for the outcome.
+
+```{r opioids-g-computation-1-of-3}
+opioids_glm <-
+  glm(
+    formula = 
+      1*(ctn03_sim$uds_opioids_eot == "Negative") ~
+      arm + arsw_score_eot +
+      stability_dose + age + sex + marital +
+      cows_total_score_bl + vas_crave_opiates_bl +
+      vas_current_withdrawal_bl + vas_study_tx_help_bl +
+      uds_opioids_bl + uds_oxycodone_bl + uds_any_positive_bl,
+    data = ctn03_sim,
+    family = binomial(link = "logit")
+  )
+
+summary(opioids_glm) # Print a summary of the `lm` object
+```
+
+
+We obtain an estimate of the ATE estimate this by plugging in estimating of the probabilities from a fitted model: this involves obtaining a prediction for each individual as if they were assigned to treatment, and a prediction for each individual assigned to control, and marginalize over the covariates by taking the sample average:
+
+
+```{r opioids-g-computation-2-of-3}
+# Predict Pr{Y = 1 | A = 1}
+pr_y1_a1 <-
+  predict(
+    object = opioids_glm,
+    newdata =
+      ctn03_sim %>% 
+      dplyr::mutate(
+        arm = "7-day"
+      ),
+    type = "response"
+  )
+
+# Predict Pr{Y = 1 | A = 0}
+pr_y1_a0 <-
+  predict(
+    object = opioids_glm,
+    newdata =
+      ctn03_sim %>% 
+      dplyr::mutate(
+        arm = "28-day"
+      ),
+    type = "response"
+  )
+
+mean(pr_y1_a1) - mean(pr_y1_a0) # Estimate
+```
+
+
+Note that this process just produces a point estimate of the ATE: confidence intervals can be obtained using the delta method, bootstrap, or influence functions.
+
+
+```{r opioids-g-computation-3-of-3}
+margins::margins(
+  model = opioids_glm,
+  variables = "arm",
+  vcov = vcovHC(opioids_glm)
+) %>% 
+  summary
+```
+
+
+Note that the G-computation estimate does not account for missing data or stratified randomization. Adjustment for missing data can be done by constructing propensity score models for treatment and missingness, giving the DR-WLS estimator. For continuous and binary outcomes, there are existing methods to account for stratified randomization.
+
+
+### Adjusted for Baseline Variables & Stratified Design
+
+The Inference under Covariate Adaptive Design (ICAD) framework can be used to make full use of the stratified randomization. `ICAD` not only allows adjustment for baseline covariates, but also can gain efficiency from designs with stratified randomization. When the strata are correlated with the response, and when the variation between strata is large relative to the variation within strata, variance estimates which incorporate the strata will be more efficient than those that ignore the stratified randomization.
+The `ICAD` function can handle binary outcomes using the argument `family = "binomial"`:
+
+```{r opioids-icad}
+icad_continuous_binary_link <-
+  "https://raw.githubusercontent.com/BingkaiWang/covariate-adaptive/master/R/ICAD.R"
+source(url(icad_continuous_binary_link))
+
+baseline_covariates <-
+  c("age", "sex", "marital",
+    "arsw_score_bl", "cows_total_score_bl",
+    "vas_crave_opiates_bl", "vas_current_withdrawal_bl", "vas_study_tx_help_bl",
+    "uds_opioids_bl", "uds_oxycodone_bl", "uds_any_positive_bl")
+
+opioids_icad <-
+  ICAD(
+    # Outcome: 1 if Negative, 0 if Positive or Missing
+    Y = 1*(ctn03_sim$uds_opioids_eot == "Negative"), 
+    A = 1*(ctn03_sim$arm == "7-day"), # Treatment indicator - Must be 1/0
+    Strata = ctn03_sim$stability_dose, # Abstinence x Substance Strata
+    W = ctn03_sim[, baseline_covariates],
+    pi = 0.5, # 1:1 Randomization
+    family = "binomial"
+  )
+
+opioids_icad
+```
+
+
+Since there does not appear to be a strong relationship between the strata and the outcome, there appears to be minimal gain in efficiency from adjustment. When there is missing data in the outcome, `ICAD` calculates the DR-WLS estimate of the average treatment effect:
+
+
+```{r opioids-icad-missing-1-of-2}
+baseline_covariates <-
+  c("age", "sex", "marital",
+    "arsw_score_bl", "cows_total_score_bl",
+    "vas_crave_opiates_bl", "vas_current_withdrawal_bl", "vas_study_tx_help_bl",
+    "uds_opioids_bl", "uds_oxycodone_bl", "uds_any_positive_bl")
+
+opioids_icad_missing <-
+  ICAD(
+    # Outcome: 1 if Negative, 0 if Positive or Missing
+    Y = 1*(ctn03_sim_mar$uds_opioids_eot == "Negative"), 
+    A = 1*(ctn03_sim_mar$arm == "7-day"), # Treatment indicator - Must be 1/0
+    Strata = ctn03_sim_mar$stability_dose, # Abstinence x Substance Strata
+    W = ctn03_sim_mar[, baseline_covariates],
+    pi = 0.5, # 1:1 Randomization
+    family = "binomial"
+  )
+```
+
+
+`Warning in eval(family$initialize): non-integer #successes in a binomial glm!` arises even when the outcomes are all binary - this happens when weights are used in `glm` and the `binomial` family is specified. If your outcome is binary, this can be safely ignored. Using the `quasibinomial` family in GLMs can avoid this message.
+
+
+```{r opioids-icad-missing-2-of-2}
+opioids_icad_missing
+```
+
+
+The DR-WLS Estimator has less restrictive assumptions about missingness: if either the outcome model or the missingness model are correctly specified, the DR-WLS estimator is a consistent estimator of the average treatment effect.
