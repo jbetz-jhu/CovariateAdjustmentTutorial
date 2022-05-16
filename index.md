@@ -1,37 +1,45 @@
-## Welcome to GitHub Pages
+## Tutorials for Covariate Adjustment in Randomized Trials
 
-You can use the [editor on GitHub](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+Randomized trials provide the highest level of evidence regarding the potential benefits and harms of an intervention. These studies should be designed to detect meaningful benefits and harms with high probability if they exist, and provide timely information to policymakers, regulators, care providers, and the public at large. Baseline covariates are variables measured prior to randomization that are expected to have strong associations with the outcomes of interest, including demographic factors, biomarkers, or other characteristics. Imbalance in such factors between treatment groups could indicate potential confounding, and failure to include these basline covariates in the comparison of groups can lead to less efficient studies. These tutorials are meant to help trialists make use of covariate adjustment across the lifespan of a randomized trial, from pre-trial preparations to interim analyses and final reporting of results. These tutorials use settings and datasets which are meant to mimic settings found in practice.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+  - [List of Resources on Learning & Using R](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
+  - [List of Available Simulated Datasets](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
+  - [Exploration of Datasets](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
+  - [Estimands of Interest](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
+  - [Primer on Interim Analysis & Group Sequential Designs](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
+  - [Primer on Information Monitoring](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
+  - [Sample Size Determination](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
+  - [Language for Statistical Analysis Plans](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
+  
+ 
+## Worked Case Studies
 
-### Markdown
+All case studies include *simulated data* that are generated from models based on actual study data. 
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+### Single Post-Randomization Outcomes - Fixed Sample Size
 
-```markdown
-Syntax highlighted code block
+ - [Suboxone Taper CTN0003 Vignette](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
+ - [Prescription Opioid Abuse Treatment Study CTN0003 Vignette](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
 
-# Header 1
-## Header 2
-### Header 3
 
-- Bulleted
-- List
+### Single Post-Randomization Outcomes - Interim Monitoring
 
-1. Numbered
-2. List
+ - [Suboxone Taper CTN0003 Vignette](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
+ - [Prescription Opioid Abuse Treatment Study CTN0003 Vignette](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
 
-**Bold** and _Italic_ and `Code` text
 
-[Link](url) and ![Image](src)
-```
+### Multiple Post-Randomization Outcomes - Fixed Sample Size
 
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
+ - [Example 1](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
+ - [Example 2](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
 
-### Jekyll Themes
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+### Multiple Post-Randomization Outcomes - Interim Monitoring
 
-### Support or Contact
+ - [Example 1](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
+ - [Example 2](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+## Other Example Code
+
+  - [Using the Bootstrap in R](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
+  - [Imputing Missing Covariates in R](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
