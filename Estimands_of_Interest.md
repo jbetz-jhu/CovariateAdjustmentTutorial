@@ -115,7 +115,7 @@ $$\hat{S}_{n}^{(a)}(t) = \prod_{j: \, T_{j} \le t} \left( 1 - \frac{\sum_{i = 1}
 
 ### Restricted Mean Survival Time
 
-Another estimand that may be of interest is the restricted mean survival time (RMST). This estimand is the average time-to-event (e.g. life expectancy when mortality is the event of interest) from baseline to a pre-specified point in time, denoted $tau$. The interval $[0, \tau]$ is called the time horizon. This is given by taking the area under the survival function over the time horizon:
+Another estimand that may be of interest is the restricted mean survival time (RMST). This estimand is the average time-to-event (e.g. life expectancy when mortality is the event of interest) from baseline to a pre-specified point in time, denoted $\tau$. The interval $[0, \tau]$ is called the time horizon. This is given by taking the area under the survival function over the time horizon:
 
 $$RMST = E[min\{ Y, \tau \} \vert a] = \int_{0}^{\tau} S_{0}^{(a)}(t) dt$$
 
