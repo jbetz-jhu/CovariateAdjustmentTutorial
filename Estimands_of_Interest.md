@@ -98,3 +98,23 @@ A positive slope indicates greater likelihood of lower scores in those assigned 
 Since $-log(a/b) = log(b/a)$ and $odds(Y > j \vert A = 1) = 1/odds(Y \le j \vert A = 1)$, changing the sign of the log odds ratio estimator tells us about the average log odds of having scores higher than level $j$ in the treatment of interest relative to the comparator group:
 
 $$ -\theta_{LOR} = \frac{1}{K-1} \sum_{j=1}^{K-1} log \left( \frac{odds(Y > j \vert A = 1)}{odds(Y > j \vert A = 0)} \right) $$
+
+
+## Survival/Time-To-Event Outcomes
+
+### Kaplan Meier Survival Function
+
+When the outcome is a time-to-event, the usual target of inference is the survival function $S_{0}^{(a)}(t) = Pr\{Y > t \vert A = a\}$, or the marginal probability of being event-free through time $t$ if the entire population were assigned to study arm $A = a$. This is typically estimated using the Kaplan-Meier (K-M) estimator, defined as:
+
+$$\hat{S}_{n}^{(a)}(t) = \prod_{j: \, T_{j} \le t} \left( 1 - \frac{\sum_{i = 1}^{n} \delta_{i} I_{\{A_{i} = a\}} I_{\{U_{i} = T_{j}\}}} {\sum_{i = 1}^{n} I_{\{A_{i} = a\}} I_{\{U_{i} \ge T_{j}\}}} \right)$$
+
+
+### Restricted Mean Survival Time
+
+Another estimand that may be of interest is the restricted mean survival time (RMST). This estimand is the average time-to-event (e.g. life expectancy when mortality is the event of interest) from baseline to a pre-specified point in time, denoted $tau$. The interval $[0, \tau]$ is called the time horizon. This is given by taking the area under the survival function over the time horizon:
+
+$$RMST = E[min\{ Y, \tau \} \vert a] = \int_{0}^{\tau} S_{0}^{(a)}(t) dt$$
+
+Treatments can be compared using a difference in RMST in the population where everyone receives treatment and that same population where everyone receives the control/comparator intervention. This contrast assesses the area between the survival curves under each treatment scenario.
+
+$\theta_{RMST} = E[min\{ Y^{(1)}, \tau \}] - E[min\{ Y^{(0)}, \tau \}]$
