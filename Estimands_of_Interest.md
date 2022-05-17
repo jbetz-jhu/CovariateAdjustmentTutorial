@@ -1,8 +1,8 @@
 ## Estimands of Interest
 
-### Difference in Means
+Testing KaTeX: Update once operational
 
-Testing KaTeX:
+### Difference in Means
 
 {% raw %}
 $\theta_{DIM}$
