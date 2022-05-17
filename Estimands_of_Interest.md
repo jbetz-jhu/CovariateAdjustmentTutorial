@@ -18,7 +18,7 @@ This estimand compares the mean outcome in the population of interest if all ind
 
 ## Estimands for Ordinal Outcomes
 
-Let $Y$ be an ordinal outcome with $k$ ordered categories. For each outcome category $j \in \{1, \ldots, K\}$, the cumulative distribution function of $Y$ given treatment $A$ is denoted as $Pr\{Y \le j\} = F(j \vert a)$, and the probability mass function of $Y$ given treatment $A$ is $Pr\{Y = j\} = f(j \vert a) = F(j \vert a) - F(j-1 \vert a)$. 
+Let $Y$ be an ordinal outcome with $k$ ordered categories. For each outcome category $j \in \{1, \ldots, K\}$, the cumulative distribution function of $Y$ given treatment $A$ is denoted as $Pr\left\{Y \le j\right\} = F(j \vert a)$, and the probability mass function of $Y$ given treatment $A$ is $Pr\left\{Y = j\right\} = f(j \vert a) = F(j \vert a) - F(j-1 \vert a)$. 
 
 Although this notation involves numeric labels for levels, this is merely to simplify notation. Clarifications will be made as needed when distinguishing between outcomes with and without a numeric levels.
 
@@ -60,7 +60,7 @@ The utilities will usually be monotone increasing, such that each succesive leve
 
 The Mann-Whitney estimand gives the probability that a randomly-selected person assigned to treatment of interest will have an outcome on the same level or a higher level than a randomly-selected person assigned to the comparator group, with ties broken at random:
 
-$$ \delta_{MW} = P(\tilde{Y} > Y \vert \tilde{A} = 1, A = 0) + \frac{1}{2}P(\tilde{Y} = Y \vert \tilde{A} = 1, A = 0) = \sum_{j=1}^{K} \left\{ F(j-1 \vert 0) + \frac{1}{2} f(j \vert 0) \right\} f(j \vert 1) $$
+$$ \theta_{MW} = P(\tilde{Y} > Y \vert \tilde{A} = 1, A = 0) + \frac{1}{2}P(\tilde{Y} = Y \vert \tilde{A} = 1, A = 0) = \sum_{j=1}^{K} \left\{ F(j-1 \vert 0) + \frac{1}{2} f(j \vert 0) \right\} f(j \vert 1) $$
 
 If there is no difference in treatments, we would expect a randomly selected individual from one group to have a higher outcome than a randomly selected individual from the other group about half the time: the null value for this estimand is $1/2$.
 
