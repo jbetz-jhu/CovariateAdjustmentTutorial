@@ -32,10 +32,10 @@ $$\theta_{DIM} = E[u(Y) \vert A=1] - E[u(Y) \vert A=0] = \sum_{i=1}^{k}u(j)\left
 
 When all outcomes at or above a threshold $t \in \{2, \ldots, k\}$ are given a utility of 1, and all others are given a utility of 0, this collapses the ordinal outcome into a binary one. The resulting estimand is the risk difference estimator of the outcome being at or above $t$:
 
-\\[
+\[
     u(Y)= 
 \begin{cases}
     1: & Y \geq t \\
     0: & Y < t
 \end{cases}
-\\]
+\]
