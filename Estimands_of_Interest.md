@@ -32,7 +32,7 @@ Although this notation involves numeric labels for levels, this is merely to sim
 
 If the levels of $Y$ have numeric labels, and the mean value of this ordinal variable is meaningful, the difference in means estimand may still be meaningful and useful. Alternatively, if either the labels do not have a numeric interpretation, or the mean of these values is not particularly meaningful, it may be possible to create a meaningful numeric value by assigning 'utilities' or 'weights' to each level of the outcome. The quantitative and clinical meanings of the difference in means estimator will depend on the utilities assigned to the outcome scale. This allows the difference in means to be used, even if the levels of the outcome are not numeric (e.g. the Glasgow Outcome Scale, ranging from 'Dead', 'Vegetative state', 'Severely disabled', 'Moderately disabled', and 'Good recovery').
 
-Let $u(\cdot)$ denote a pre-specified mapping of the outcome, mapping the outcome label to a utility value. The estimand is defined as:
+Let $u(\cdot)$ denote a pre-specified mapping from the outcome labels to utility values. The estimand is defined as:
 
 $$\theta_{DIM} = E[u(Y) \vert A=1] - E[u(Y) \vert A=0] = \sum_{i=1}^{k}u(j)\left(f( j \vert 1) - f(j \vert 0)\right)$$
 
@@ -61,6 +61,7 @@ When utilities can be assigned according to patient preferences or other conside
 \]
 
 The utilities will usually be monotone increasing, such that each succesive level of the outcome is associated with equal or better utility. Alternatively, if lower values of the outcome are preferable (such as the NYHA class), utilities will usually be monotone decreasing.
+
 
 ### Mann-Whitney (M-W) Estimand
 
