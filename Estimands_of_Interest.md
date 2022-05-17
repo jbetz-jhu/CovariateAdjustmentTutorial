@@ -18,7 +18,7 @@ This estimand compares the mean outcome in the population of interest if all ind
 
 ## Estimands for Ordinal Outcomes
 
-Let $Y$ be an ordinal outcome with $k$ ordered categories. For each outcome category $j \in \{1, \ldots, K\}$, the cumulative distribution function of $Y$ given treatment $A$ is denoted as $Pr\left{Y \le j\right} = F(j \vert a)$, and the probability mass function of $Y$ given treatment $A$ is $Pr\left{Y = j\right} = f(j \vert a) = F(j \vert a) - F(j-1 \vert a)$. 
+Let $Y$ be an ordinal outcome with $k$ ordered categories. For each outcome category $j \in \{1, \ldots, K\}$, the cumulative distribution function of $Y$ given treatment $A$ is denoted as $Pr\left{Y \le j\right} = F(j \vert a)$, and the probability mass function of $Y$ given treatment $A$ is $Pr\{Y = j\} = f(j \vert a) = F(j \vert a) - F(j-1 \vert a)$. 
 
 Although this notation involves numeric labels for levels, this is merely to simplify notation. Clarifications will be made as needed when distinguishing between outcomes with and without a numeric levels.
 
