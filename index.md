@@ -4,10 +4,10 @@ Randomized trials provide the highest level of evidence regarding the potential 
 
   - [List of Resources on Learning & Using R](https://jbetz-jhu.github.io/CovariateAdjustmentTutorial/Resources_learning_using_R.html)
   - [Estimands of Interest](https://jbetz-jhu.github.io/CovariateAdjustmentTutorial/Estimands_of_Interest.html)
-  - [Primer on Interim Analysis & Group Sequential Designs](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
-  - [Primer on Information Monitoring](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
-  - [Sample Size Determination](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
-  - [Language for Statistical Analysis Plans](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
+  - [Primer on Interim Analysis & Group Sequential Designs (TBA)](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
+  - [Primer on Information Monitoring (TBA)](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
+  - [Sample Size Determination (TBA)](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
+  - [Language for Statistical Analysis Plans (TBA)](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
   
  
 ## Worked Case Studies
@@ -15,33 +15,33 @@ Randomized trials provide the highest level of evidence regarding the potential 
 All case studies include *simulated data* that are generated from models based on actual study data. 
 
   - [List of Trials Used in Creating Case Studies](https://jbetz-jhu.github.io/CovariateAdjustmentTutorial/Description_of_Case_Studies.html)
-  - [List of Available Simulated Datasets](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
-  - [Exploration of Datasets](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
+  - [List of Available Simulated Datasets (TBA)](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
+  - [Exploration of Datasets (TBA)](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
 
 ### Single Post-Randomization Outcomes - Fixed Sample Size
 
- - [Suboxone Taper CTN0003 Vignette](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
- - [Prescription Opioid Abuse Treatment Study CTN0003 Vignette](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
+ - [Suboxone Taper CTN0003 Vignette (TBA)](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
+ - [Prescription Opioid Abuse Treatment Study CTN0003 Vignette (TBA)](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
 
 
 ### Single Post-Randomization Outcomes - Interim Monitoring
 
- - [Suboxone Taper CTN0003 Vignette](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
- - [Prescription Opioid Abuse Treatment Study CTN0003 Vignette](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
+ - [Suboxone Taper CTN0003 Vignette (TBA)](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
+ - [Prescription Opioid Abuse Treatment Study CTN0003 Vignette (TBA)](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
 
 
 ### Multiple Post-Randomization Outcomes - Fixed Sample Size
 
- - [Example 1](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
- - [Example 2](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
+ - [Example 1 (TBA)](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
+ - [Example 2 (TBA)](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
 
 
 ### Multiple Post-Randomization Outcomes - Interim Monitoring
 
- - [Example 1](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
- - [Example 2](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
+ - [Example 1 (TBA)](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
+ - [Example 2 (TBA)](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
 
 ## Other Example Code
 
-  - [Using the Bootstrap in R](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
-  - [Imputing Missing Covariates in R](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
+  - [Using the Bootstrap in R (TBA)](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
+  - [Imputing Missing Covariates in R (TBA)](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
