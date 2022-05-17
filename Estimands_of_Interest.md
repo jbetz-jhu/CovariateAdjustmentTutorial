@@ -39,3 +39,55 @@ When all outcomes at or above a threshold $t \in \{2, \ldots, k\}$ are given a u
     0: & Y < t
 \end{cases}
 \\]
+
+While a risk difference may be more familiar to implement and conceptually easier to interpret, it treats all outcome states either below or above the threshold identically, ignoring potential information in such outcome states.
+
+When utilities can be assigned according to patient preferences or other considerations, the estimand is the difference in mean utility between treatment arms.
+
+\[
+    u(Y)= 
+\begin{cases}
+    u_{1} := \text{utility of } Y = 1\\
+    u_{2} := \text{utility of } Y = 2\\
+    \vdots \\
+    u_{k} := \text{utility of } Y = k
+\end{cases}
+\]
+
+The utilities will usually be monotone increasing, such that each succesive level of the outcome is associated with equal or better utility. Alternatively, if lower values of the outcome are preferable (such as the NYHA class), utilities will usually be monotone decreasing.
+
+### Mann-Whitney (M-W) Estimand
+
+The Mann-Whitney estimand gives the probability that a randomly-selected person assigned to treatment of interest will have an outcome on the same level or a higher level than a randomly-selected person assigned to the comparator group, with ties broken at random:
+
+$$ \delta_{MW} = P(\tilde{Y} > Y \vert \tilde{A} = 1, A = 0) + \frac{1}{2}P(\tilde{Y} = Y \vert \tilde{A} = 1, A = 0) = \sum_{j=1}^{K} \left\{ F(j-1 \vert 0) + \frac{1}{2} f(j \vert 0) \right\} f(j \vert 1) $$
+
+If there is no difference in treatments, we would expect a randomly selected individual from one group to have a higher outcome than a randomly selected individual from the other group about half the time: the null value for this estimand is $1/2$.
+
+Note that if higher numerical values indicate worse outcomes, like in the NYHA Class, the outcome scale can be reversed prior to analysis, so that the estimand can be interepreted as the probability that a randomly-selected person assigned to treatment of interest will have an outcome as good or better than a randomly-selected person assigned to the comparator group.
+
+This estimand addresses a common concern of those choosing between treatment options, and may be easier to communicate to a lay audience.
+
+
+### Log Odds Ratio (LOR)
+
+In the case of a binary outcome, the odds ratio of a "good" outcome ($Y=1$) is $OR = odds(Y = 1 \vert A = 1)/odds(Y = 1 \vert A = 0)$: a value greater than 1 indicates a greater likelihood of a "good" outcome in the treatment of interest relative to the comparator group, and the log of the odds ratio will be positive. 
+
+In the case of an ordinal outcome with categories $1, \ldots, K$, these categories can be collapsed into $(K-1)$ binary outcomes: $Y \le j$ for $j \in \{1, \ldots, (K-1) \}$. The odds ratio at threshold $j$ compares the odds of falling at or below level $j$ between the treatment of interest and the comparator group: 
+
+$$ OR_{j} = \frac{odds(Y \le j \vert A = 1)}{odds(Y \le j \vert A = 0)} $$
+
+When this odds ratio is greater than 1, individuals assigned to the treatment of interest are more likely to have outcomes at or below level $j$ than those in the comparator group: the log of this odds ratio will be positive. The log odds ratio estimand combines information across the levels of an ordinal outcome by averaging the log odds of an outcome at or below each threshold across all thresholds of the outcome:
+
+$$ \delta_{LOR} = \frac{1}{K-1} \sum_{j=1}^{K-1} log \left( \frac{odds(Y \le j \vert A = 1)}{odds(Y \le j \vert A = 0)} \right) = \frac{1}{K-1} \sum_{j=1}^{K-1} log \left( \frac{F(j \vert 1)/ \left( 1 - F(j \vert 1) \right) } {F(j \vert 0)/ \left( 1 - F(j \vert 0) \right) } \right) $$
+
+This estimand is related to the proportional odds logistic regression model, a common parametric model for analyzing ordinal outcomes. In the proportional odds model, a regression coefficient for treatment group gives the increase in the odds of being at or below a given level of the outcome associated with a unit increase in that variable holding all else constant:
+
+$$ log(odds(Y \le j \vert A)) = logit \left(P(Y \le j \vert A) \right) =  \alpha_{j} + \beta A: \quad j \in \{1, \ldots, (K-1)\} $$
+
+A positive slope indicates greater likelihood of lower scores in those assigned to receive the treatment of interest relative to the comparator group. The proportional odds assumption involves assuming that the treatment has the same effect across each binary threshold (i.e. that $\beta$ does not vary across the $K-1$ thresholds). When this assumption holds, the log odds ratio estimand is the same as the coefficient in the proportional odds model, but importantly, the validity of the LOR estimand does not depend on this assumption. As in binary and ordinal logistic regression, the null value for this estimand is 0.
+
+
+Since $-log(a/b) = log(b/a)$ and $odds(Y > j \vert A = 1) = 1/odds(Y \le j \vert A = 1)$, changing the sign of the log odds ratio estimator tells us about the average log odds of having scores higher than level $j$ in the treatment of interest relative to the comparator group:
+
+$$ -\delta_{LOR} = \frac{1}{K-1} \sum_{j=1}^{K-1} log \left( \frac{odds(Y > j \vert A = 1)}{odds(Y > j \vert A = 0)} \right) $$
