@@ -66,7 +66,7 @@ The utilities will usually be monotone increasing, such that each succesive leve
 
 The Mann-Whitney estimand gives the probability that a randomly-selected person assigned to treatment of interest will have an outcome on the same level or a higher level than a randomly-selected person assigned to the comparator group, with ties broken at random:
 
-$$ \delta_{MW} = P(\tilde{Y} > Y \vert \tilde{A} = 1, A = 0) + \frac{1}{2}P(\tilde{Y} = Y \vert \tilde{A} = 1, A = 0) = \sum_{j=1}^{K} \left\{ F(j-1 \vert 0) + \frac{1}{2} f(j \vert 0) \right\} f(j \vert 1) $$
+$$ \theta_{MW} = P(\tilde{Y} > Y \vert \tilde{A} = 1, A = 0) + \frac{1}{2}P(\tilde{Y} = Y \vert \tilde{A} = 1, A = 0) = \sum_{j=1}^{K} \left\{ F(j-1 \vert 0) + \frac{1}{2} f(j \vert 0) \right\} f(j \vert 1) $$
 
 If there is no difference in treatments, we would expect a randomly selected individual from one group to have a higher outcome than a randomly selected individual from the other group about half the time: the null value for this estimand is $1/2$.
 
@@ -85,7 +85,7 @@ $$ OR_{j} = \frac{odds(Y \le j \vert A = 1)}{odds(Y \le j \vert A = 0)} $$
 
 When this odds ratio is greater than 1, individuals assigned to the treatment of interest are more likely to have outcomes at or below level $j$ than those in the comparator group: the log of this odds ratio will be positive. The log odds ratio estimand combines information across the levels of an ordinal outcome by averaging the log odds of an outcome at or below each threshold across all thresholds of the outcome:
 
-$$ \delta_{LOR} = \frac{1}{K-1} \sum_{j=1}^{K-1} log \left( \frac{odds(Y \le j \vert A = 1)}{odds(Y \le j \vert A = 0)} \right) = \frac{1}{K-1} \sum_{j=1}^{K-1} log \left( \frac{F(j \vert 1)/ \left( 1 - F(j \vert 1) \right) } {F(j \vert 0)/ \left( 1 - F(j \vert 0) \right) } \right) $$
+$$ \theta_{LOR} = \frac{1}{K-1} \sum_{j=1}^{K-1} log \left( \frac{odds(Y \le j \vert A = 1)}{odds(Y \le j \vert A = 0)} \right) = \frac{1}{K-1} \sum_{j=1}^{K-1} log \left( \frac{F(j \vert 1)/ \left( 1 - F(j \vert 1) \right) } {F(j \vert 0)/ \left( 1 - F(j \vert 0) \right) } \right) $$
 
 This estimand is related to the proportional odds logistic regression model, a common parametric model for analyzing ordinal outcomes. In the proportional odds model, a regression coefficient for treatment group gives the increase in the odds of being at or below a given level of the outcome associated with a unit increase in that variable holding all else constant:
 
@@ -96,4 +96,4 @@ A positive slope indicates greater likelihood of lower scores in those assigned 
 
 Since $-log(a/b) = log(b/a)$ and $odds(Y > j \vert A = 1) = 1/odds(Y \le j \vert A = 1)$, changing the sign of the log odds ratio estimator tells us about the average log odds of having scores higher than level $j$ in the treatment of interest relative to the comparator group:
 
-$$ -\delta_{LOR} = \frac{1}{K-1} \sum_{j=1}^{K-1} log \left( \frac{odds(Y > j \vert A = 1)}{odds(Y > j \vert A = 0)} \right) $$
+$$ -\theta_{LOR} = \frac{1}{K-1} \sum_{j=1}^{K-1} log \left( \frac{odds(Y > j \vert A = 1)}{odds(Y > j \vert A = 0)} \right) $$
