@@ -102,6 +102,8 @@ $$ -\theta_{LOR} = \frac{1}{K-1} \sum_{j=1}^{K-1} log \left( \frac{odds(Y > j \v
 
 ## Survival/Time-To-Event Outcomes
 
+When the outcome is the time from randomization until an event of interest occurs, let $U$ denote the time at which the event occurs, and $M$ denote the time at which an individual's outcome is censored.
+
 ### Kaplan Meier Survival Function
 
 When the outcome is a time-to-event, the usual target of inference is the survival function, which is the marginal probability of being event-free through time $t$ if the entire population were assigned to study arm $A = a$:
