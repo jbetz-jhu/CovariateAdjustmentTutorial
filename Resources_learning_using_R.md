@@ -1,3 +1,7 @@
+---
+nav_order: 4
+---
+
 # Resources for Learning & Using R
 
   - Getting Started
