@@ -1,6 +1,3 @@
-* TOC
-{:toc}
-
 # Simulated Datasets for Tutorials
 
 ### CTN 0003 - Suboxone (Buprenorphine/Naloxone) Taper: A Comparison of Two Schedules
