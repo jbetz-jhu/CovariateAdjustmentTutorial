@@ -16,7 +16,7 @@ Randomized trials provide the highest level of evidence regarding the potential 
 All case studies include *simulated data* that are generated from models based on actual study data. 
 
   - [List of Trials Used in Creating Case Studies](https://jbetz-jhu.github.io/CovariateAdjustmentTutorial/Description_of_Case_Studies.html)
-  - [List of Available Simulated Datasets](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial/List_of_Datasets.html)
+  - [List of Available Simulated Datasets](https://jbetz-jhu.github.io/CovariateAdjustmentTutorial/List_of_Datasets.html)
   - [Exploration of Datasets (TBA)](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
 
 ### Single Post-Randomization Outcomes - Fixed Sample Size
