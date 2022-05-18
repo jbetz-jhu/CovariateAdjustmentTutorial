@@ -1,6 +1,3 @@
-* TOC
-{:toc}
-
 # Resources for Learning & Using R
 
   - Getting Started
