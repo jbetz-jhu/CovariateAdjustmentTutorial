@@ -1,6 +1,3 @@
-* TOC
-{:toc}
-
 # Estimands of Interest
 
 ### Notation
