@@ -1,9 +1,7 @@
-# Case Studies
-
 * TOC
 {:toc}
 
-
+# Case Studies
 
 ### CTN 0003 - Suboxone (Buprenorphine/Naloxone) Taper: A Comparison of Two Schedules
 
