@@ -1,8 +1,7 @@
-# Estimands of Interest
-
 * TOC
 {:toc}
 
+# Estimands of Interest
 
 ### Notation
 
