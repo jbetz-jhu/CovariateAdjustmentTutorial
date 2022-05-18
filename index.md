@@ -5,6 +5,7 @@
 
 Randomized trials provide the highest level of evidence regarding the potential benefits and harms of an intervention. These studies should be designed to detect meaningful benefits and harms with high probability if they exist, and provide timely information to policymakers, regulators, care providers, and the public at large. Baseline covariates are variables measured prior to randomization that are expected to have strong associations with the outcomes of interest, including demographic factors, biomarkers, or other characteristics. Imbalance in such factors between treatment groups could indicate potential confounding, and failure to include these basline covariates in the comparison of groups can lead to less efficient studies. These tutorials are meant to help trialists make use of covariate adjustment across the lifespan of a randomized trial, from pre-trial preparations to interim analyses and final reporting of results. These tutorials use settings and datasets which are meant to mimic settings found in practice.
 
+  - [Frequently Asked Questions: Covariate Adjustment])(https://jbetz-jhu.github.io/CovariateAdjustmentTutorial/FAQ.html)
   - [List of Resources on Learning & Using R](https://jbetz-jhu.github.io/CovariateAdjustmentTutorial/Resources_learning_using_R.html)
   - [Estimands of Interest](https://jbetz-jhu.github.io/CovariateAdjustmentTutorial/Estimands_of_Interest.html)
   - [Outcome Models & Estimators](https://jbetz-jhu.github.io/CovariateAdjustmentTutorial/Estimators.html)
