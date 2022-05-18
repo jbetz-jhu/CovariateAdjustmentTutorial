@@ -1,3 +1,7 @@
+* TOC
+{:toc}
+
+# Outcome Models & Estimators of Treatment Effects
 
 ## Single Timepoint, Continuous Outcomes
 
