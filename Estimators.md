@@ -1,3 +1,7 @@
+---
+nav_order: 4
+---
+
 # Outcome Models & Estimators of Treatment Effects
 
 ## Single Timepoint, Continuous Outcomes
