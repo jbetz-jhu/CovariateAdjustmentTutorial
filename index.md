@@ -4,6 +4,7 @@ Randomized trials provide the highest level of evidence regarding the potential 
 
   - [List of Resources on Learning & Using R](https://jbetz-jhu.github.io/CovariateAdjustmentTutorial/Resources_learning_using_R.html)
   - [Estimands of Interest](https://jbetz-jhu.github.io/CovariateAdjustmentTutorial/Estimands_of_Interest.html)
+  - [Outcome Models & Estimators](https://jbetz-jhu.github.io/CovariateAdjustmentTutorial/Estimators.html)
   - [Primer on Interim Analysis & Group Sequential Designs (TBA)](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
   - [Primer on Information Monitoring (TBA)](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
   - [Sample Size Determination (TBA)](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
