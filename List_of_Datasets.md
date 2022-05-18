@@ -12,7 +12,7 @@ CTN03 was a phase III two arm trial to assess tapering schedules of the drug bup
   - Sample Size: 516
   - [Link to Simulated Data](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial/raw/main/SIMULATED_CTN03_220506.Rdata)
 
-#### Data Dictionary
+#### CTN 0003 Data Dictionary
 
   - Randomization Information
     - `arm`: Treatment Arm
