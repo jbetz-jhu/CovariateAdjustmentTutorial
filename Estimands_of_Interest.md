@@ -1,3 +1,7 @@
+---
+nav_order: 4
+---
+
 # Estimands of Interest
 
 ### Notation
