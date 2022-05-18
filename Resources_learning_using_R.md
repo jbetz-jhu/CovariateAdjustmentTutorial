@@ -1,4 +1,4 @@
-## Resources for Learning & Using R
+# Resources for Learning & Using R
 
   - Getting Started
     - [R Project: An Introduction to R](https://cran.r-project.org/doc/manuals/r-release/R-intro.html)
