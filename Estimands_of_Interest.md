@@ -110,7 +110,7 @@ When the outcome is the time from randomization until an event of interest occur
 
 ### Kaplan Meier Survival Function
 
-When the outcome is a time-to-event, the usual target of inference is the survival function, which is the marginal probability of being event-free through time $t$ if the entire population were assigned to study arm $A = a$:
+When the outcome is a time-to-event, the usual target of inference is the survival function, which is the marginal probability of being event-free through time $t$ if the entire population were assigned to study arm $$A = a$$:
 
 $$S_{0}^{(a)}(t) = Pr\{Y > t \vert A = a\}$$
 
