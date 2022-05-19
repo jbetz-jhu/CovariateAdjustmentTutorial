@@ -7,7 +7,7 @@ nav_order: 3
 
 ### Notation
 
-Let $A$ denote a binary treatment assignment: $$A = 1$$ indicates assignment to receive the treatment of interest, and $A = 0$ indicates assignment to the control or comparator group. Let $Y$ denote the outcome of interest, and $X$ denote a vector of baseline covariates. Each participant's data is assumed to be independent, identically distributed (iid) draws from an unknown distribution. All analyses follow the intention-to-treat (ITT) principle: all participants are analyzed according to how they were randomized, irrespective of what treatment was received during the trial. 
+Let $$A$$ denote a binary treatment assignment: $$A = 1$$ indicates assignment to receive the treatment of interest, and $A = 0$ indicates assignment to the control or comparator group. Let $$Y$$ denote the outcome of interest, and $X$ denote a vector of baseline covariates. Each participant's data is assumed to be independent, identically distributed (iid) draws from an unknown distribution. All analyses follow the intention-to-treat (ITT) principle: all participants are analyzed according to how they were randomized, irrespective of what treatment was received during the trial. 
 
 ## Estimands for Continuous and Binary Outcomes
 
@@ -22,7 +22,7 @@ This estimand compares the mean outcome in the population of interest if all ind
 
 ## Estimands for Ordinal Outcomes
 
-Let $Y$ be an ordinal outcome with $k$ ordered categories. For each outcome category $j \in \{1, \ldots, K\}$, the cumulative distribution function of $Y$ given treatment $A$ is denoted as:
+Let $$Y$$ be an ordinal outcome with $k$ ordered categories. For each outcome category $$j \in \{1, \ldots, K\}$$, the cumulative distribution function of $Y$ given treatment $A$ is denoted as:
 
 $$Pr \left\{Y \le j\right\} = F(j \vert a)$$
 
@@ -36,7 +36,7 @@ Although this notation involves numeric labels for levels, this is merely to sim
 
 If the levels of $Y$ have numeric labels, and the mean value of this ordinal variable is meaningful, the difference in means estimand may still be meaningful and useful. Alternatively, if either the labels do not have a numeric interpretation, or the mean of these values is not particularly meaningful, it may be possible to create a meaningful numeric value by assigning 'utilities' or 'weights' to each level of the outcome. The quantitative and clinical meanings of the difference in means estimator will depend on the utilities assigned to the outcome scale. This allows the difference in means to be used, even if the levels of the outcome are not numeric (e.g. the Glasgow Outcome Scale, ranging from 'Dead', 'Vegetative state', 'Severely disabled', 'Moderately disabled', and 'Good recovery').
 
-Let $u(\cdot)$ denote a pre-specified mapping from the outcome labels to utility values. The estimand is defined as:
+Let $$u(\cdot)$$ denote a pre-specified mapping from the outcome labels to utility values. The estimand is defined as:
 
 $$\theta_{DIM} = E[u(Y) \vert A=1] - E[u(Y) \vert A=0] = \sum_{i=1}^{k}u(j)\left(f( j \vert 1) - f(j \vert 0)\right)$$
 
@@ -73,7 +73,7 @@ The Mann-Whitney estimand gives the probability that a randomly-selected person 
 
 $$ \theta_{MW} = P(\tilde{Y} > Y \vert \tilde{A} = 1, A = 0) + \frac{1}{2}P(\tilde{Y} = Y \vert \tilde{A} = 1, A = 0) = \sum_{j=1}^{K} \left\{ F(j-1 \vert 0) + \frac{1}{2} f(j \vert 0) \right\} f(j \vert 1) $$
 
-If there is no difference in treatments, we would expect a randomly selected individual from one group to have a higher outcome than a randomly selected individual from the other group about half the time: the null value for this estimand is $1/2$.
+If there is no difference in treatments, we would expect a randomly selected individual from one group to have a higher outcome than a randomly selected individual from the other group about half the time: the null value for this estimand is $$1/2$$.
 
 Note that if higher numerical values indicate worse outcomes, like in the NYHA Class, the outcome scale can be reversed prior to analysis, so that the estimand can be interepreted as the probability that a randomly-selected person assigned to treatment of interest will have an outcome as good or better than a randomly-selected person assigned to the comparator group.
 
@@ -82,9 +82,9 @@ This estimand addresses a common concern of those choosing between treatment opt
 
 ### Log Odds Ratio (LOR)
 
-In the case of a binary outcome, the odds ratio of a "good" outcome ($Y=1$) is $OR = odds(Y = 1 \vert A = 1)/odds(Y = 1 \vert A = 0)$: a value greater than 1 indicates a greater likelihood of a "good" outcome in the treatment of interest relative to the comparator group, and the log of the odds ratio will be positive. 
+In the case of a binary outcome, the odds ratio of a "good" outcome ($$Y=1$$) is $$OR = odds(Y = 1 \vert A = 1)/odds(Y = 1 \vert A = 0)$$: a value greater than 1 indicates a greater likelihood of a "good" outcome in the treatment of interest relative to the comparator group, and the log of the odds ratio will be positive. 
 
-In the case of an ordinal outcome with categories $1, \ldots, K$, these categories can be collapsed into $(K-1)$ binary outcomes: $Y \le j$ for $j \in \{1, \ldots, (K-1) \}$. The odds ratio at threshold $j$ compares the odds of falling at or below level $j$ between the treatment of interest and the comparator group: 
+In the case of an ordinal outcome with categories $$1, \ldots, K$$, these categories can be collapsed into $(K-1)$ binary outcomes: $$Y \le j$$ for $$j \in \{1, \ldots, (K-1) \}$$. The odds ratio at threshold $j$ compares the odds of falling at or below level $j$ between the treatment of interest and the comparator group: 
 
 $$ OR_{j} = \frac{odds(Y \le j \vert A = 1)}{odds(Y \le j \vert A = 0)} $$
 
@@ -99,14 +99,14 @@ $$ log(odds(Y \le j \vert A)) = logit \left(P(Y \le j \vert A) \right) =  \alpha
 A positive slope indicates greater likelihood of lower scores in those assigned to receive the treatment of interest relative to the comparator group. The proportional odds assumption involves assuming that the treatment has the same effect across each binary threshold (i.e. that $\beta$ does not vary across the $K-1$ thresholds). When this assumption holds, the log odds ratio estimand is the same as the coefficient in the proportional odds model, but importantly, the validity of the LOR estimand does not depend on this assumption. As in binary and ordinal logistic regression, the null value for this estimand is 0.
 
 
-Since $-log(a/b) = log(b/a)$ and $odds(Y > j \vert A = 1) = 1/odds(Y \le j \vert A = 1)$, changing the sign of the log odds ratio estimator tells us about the average log odds of having scores higher than level $j$ in the treatment of interest relative to the comparator group:
+Since $$-log(a/b) = log(b/a)$$ and $$odds(Y > j \vert A = 1) = 1/odds(Y \le j \vert A = 1)$$, changing the sign of the log odds ratio estimator tells us about the average log odds of having scores higher than level $$j$$ in the treatment of interest relative to the comparator group:
 
 $$ -\theta_{LOR} = \frac{1}{K-1} \sum_{j=1}^{K-1} log \left( \frac{odds(Y > j \vert A = 1)}{odds(Y > j \vert A = 0)} \right) $$
 
 
 ## Survival/Time-To-Event Outcomes
 
-When the outcome is the time from randomization until an event of interest occurs, let $U$ denote the time at which the event occurs, and $M$ denote the time at which an individual's outcome is censored.
+When the outcome is the time from randomization until an event of interest occurs, let $$U$$ denote the time at which the event occurs, and $M$ denote the time at which an individual's outcome is censored.
 
 ### Kaplan Meier Survival Function
 
@@ -121,7 +121,7 @@ $$\hat{S}_{n}^{(a)}(t) = \prod_{j: \, T_{j} \le t} \left( 1 - \frac{\sum_{i = 1}
 
 ### Restricted Mean Survival Time
 
-Another estimand that may be of interest is the restricted mean survival time (RMST). This estimand is the average time-to-event (e.g. life expectancy when mortality is the event of interest) from baseline to a pre-specified point in time, denoted $\tau$. The interval $[0, \tau]$ is called the time horizon. This is given by taking the area under the survival function over the time horizon:
+Another estimand that may be of interest is the restricted mean survival time (RMST). This estimand is the average time-to-event (e.g. life expectancy when mortality is the event of interest) from baseline to a pre-specified point in time, denoted $$\tau$$. The interval $$[0, \tau]$$ is called the time horizon. This is given by taking the area under the survival function over the time horizon:
 
 $$RMST = E[min\{ Y, \tau \} \vert a] = \int_{0}^{\tau} S_{0}^{(a)}(t) dt$$
 
