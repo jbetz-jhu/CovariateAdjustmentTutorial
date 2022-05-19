@@ -1,4 +1,5 @@
 ---
+math: katex
 nav_order: 3
 ---
 
