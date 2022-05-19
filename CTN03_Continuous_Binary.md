@@ -1,8 +1,7 @@
 Covariate Adjustment in Randomized Trials
 ================
-Josh Betz (<jbetz@jhu.edu>), Kelly Van Lancker (<kvanlan3@jhu.edu>), and
-Michael Rosenblum (<mrosen@jhu.edu>)
-2022-05-19 04:33
+[Josh Betz](mailto:jbetz@jhu.edu), [Kelly Van Lancker](kvanlan3@jhu.edu), and [Michael Rosenblum](mrosen@jhu.edu)
+
 
 
 
@@ -87,11 +86,11 @@ continuous or binary outcome is usually the average treatment effect
 (ATE): this is the difference in the mean outcome if everyone in the
 population received the treatment under investigation versus the mean
 outcome if everyone in the population received the control/comparator
-intervention. Let *Y* denote the outcome of interest and *A* denote the
-indicator of treatment (*A*<sub>*i*</sub> = 1 among the intervention
-group and *A*<sub>*i*</sub> = 0 among the control/comparator group)
+intervention. Let $$Y$$ denote the outcome of interest and $$A$$ denote the
+indicator of treatment ($$A_{i} = 1$$ among the intervention
+group and $$A_{i} = 0$$ among the control/comparator group)
 
-*A**T**E* = *E*\[*Y*\|*A*=1\] − *E*\[*Y*\|*A*=0\]
+$$ATE = E[Y \vert A=1\] − E[Y \vert A=0]$$
 
 For continuous outcomes, adjustment for covariates can be done using the
 analysis of covariance (ANCOVA). This is a regression of the outcome on
@@ -197,6 +196,8 @@ The following packages and their dependencies needs to be installed:
     Computing Average Marginal Effects (AMEs)
 -   [drord](https://cran.r-project.org/web/packages/drord/drord.pdf) -
     Doubly-Robust Estimators for Ordinal Outcomes
+-   [sandwich](https://cran.r-project.org/web/packages/sandwich/index.html) -
+    Robust Estimation of Variance
 
 ``` r
 required_packages <-
@@ -237,8 +238,7 @@ stratified block randomization across 11 sites in 10 US cities.
 Randomization was stratified by the maintenance dose of buprenorphine at
 stabilization: 8, 16, or 24 mg.
 
-The results of CTN03 can be found
-[here](https://pubmed.ncbi.nlm.nih.gov/19149822).
+The results of CTN03 can be found [here](https://pubmed.ncbi.nlm.nih.gov/19149822).
 
 ### Creating Simulated Data:
 
