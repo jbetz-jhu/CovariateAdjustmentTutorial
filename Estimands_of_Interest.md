@@ -6,7 +6,7 @@ nav_order: 3
 
 ### Notation
 
-Let $A$ denote a binary treatment assignment: $A = 1$ indicates assignment to receive the treatment of interest, and $A = 0$ indicates assignment to the control or comparator group. Let $Y$ denote the outcome of interest, and $X$ denote a vector of baseline covariates. Each participant's data is assumed to be independent, identically distributed (iid) draws from an unknown distribution. All analyses follow the intention-to-treat (ITT) principle: all participants are analyzed according to how they were randomized, irrespective of what treatment was received during the trial. 
+Let $A$ denote a binary treatment assignment: $$A = 1$$ indicates assignment to receive the treatment of interest, and $A = 0$ indicates assignment to the control or comparator group. Let $Y$ denote the outcome of interest, and $X$ denote a vector of baseline covariates. Each participant's data is assumed to be independent, identically distributed (iid) draws from an unknown distribution. All analyses follow the intention-to-treat (ITT) principle: all participants are analyzed according to how they were randomized, irrespective of what treatment was received during the trial. 
 
 ## Estimands for Continuous and Binary Outcomes
 
@@ -53,7 +53,7 @@ While a risk difference may be more familiar to implement and conceptually easie
 
 When utilities can be assigned according to patient preferences or other considerations, the estimand is the difference in mean utility between treatment arms.
 
-\[
+\\[
     u(Y)= 
 \begin{cases}
     u_{1} := \text{utility of } Y = 1\\
@@ -61,7 +61,7 @@ When utilities can be assigned according to patient preferences or other conside
     \vdots \\
     u_{k} := \text{utility of } Y = k
 \end{cases}
-\]
+\\]
 
 The utilities will usually be monotone increasing, such that each succesive level of the outcome is associated with equal or better utility. Alternatively, if lower values of the outcome are preferable (such as the NYHA class), utilities will usually be monotone decreasing.
 
