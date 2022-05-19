@@ -1,5 +1,5 @@
-Covariate Adjustment in Randomized Trials
-================
+# Case Study: Suboxone Taper CTN0003 with Fixed Sample Size
+
 [Josh Betz](mailto:jbetz@jhu.edu), [Kelly Van Lancker](kvanlan3@jhu.edu), and [Michael Rosenblum](mrosen@jhu.edu)
 
 
@@ -142,7 +142,7 @@ robust inference for binary outcomes.
 
 #### Ordinal Outcomes
 
-If the outcome of interest is ordinal variable with *K* categories,
+If the outcome of interest is ordinal variable with $$K$$ categories,
 there are other estimands that may be of interest. When categories can
 be assigned a numeric score or utility, one estimand of interest is the
 average treatment effect on the score or utility.
@@ -155,9 +155,9 @@ randomly-selected individual from the population of indiviuals receiving
 the control or comparator intervention.
 
 The Log Odds Ratio compares the odds of having an outcome of category
-*k* or higher in a population of treated individuals relative to a
+$$k$$ or higher in a population of treated individuals relative to a
 population receiving the control. The log of these odds ratios is then
-averaged across each of the (*K* − 1) possible cutoffs of the outcome.
+averaged across each of the $$(K − 1)$$ possible cutoffs of the outcome.
 This estimand is similar to the proportional odds logistic regression
 model, but its validity does not require the assumption that the model
 is correctly specified.
