@@ -22,13 +22,13 @@ All case studies include *simulated data* that are generated from models based o
 
 ### Single Post-Randomization Outcomes - Fixed Sample Size
 
- - [Suboxone Taper CTN0003 Vignette (TBA)](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
+ - [Suboxone Taper CTN0003 Vignette](https://jbetz-jhu.github.io/CovariateAdjustmentTutorial/CTN03_Continuous_Binary.html)
  - [Prescription Opioid Abuse Treatment Study CTN0003 Vignette (TBA)](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
 
 
 ### Single Post-Randomization Outcomes - Interim Monitoring
 
- - [Suboxone Taper CTN0003 Vignette](https://jbetz-jhu.github.io/CovariateAdjustmentTutorial/CTN03_Continuous_Binary.html)
+ - [Suboxone Taper CTN0003 Vignette (TBA)](https://jbetz-jhu.github.io/CovariateAdjustmentTutorial/CTN03_Continuous_Binary.html)
  - [Prescription Opioid Abuse Treatment Study CTN0003 Vignette (TBA)](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
 
 
