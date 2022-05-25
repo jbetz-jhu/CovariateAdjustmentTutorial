@@ -2,7 +2,7 @@
 nav_order: 2
 ---
 
-# Resources for Learning & Using R
+# Resources for Using R
 
   - Getting Started
     - [R Project: An Introduction to R](https://cran.r-project.org/doc/manuals/r-release/R-intro.html)
@@ -18,3 +18,9 @@ nav_order: 2
   - Programming & Advanced Topics
     - [Hands On Programming with R](https://rstudio-education.github.io/hopr/)
     - [Advanced R](https://adv-r.hadley.nz/)  
+
+  - Packages for Covariate Adjusted Analyses
+    - [drord](https://cran.r-project.org/web/packages/drord/index.html): Doubly-Robust Estimators for Ordinal Outcomes
+    - [survtmlerct](https://github.com/idiazst/survtmlerct): TMLE for survival outcomes with efficiency guarantees 
+    - [speff2trial](https://cran.r-project.org/web/packages/speff2trial/index.html): Semiparametric efficient estimation for a two-sample treatment effect
+    - [icad](https://github.com/BingkaiWang/covariate-adaptive): Inference under Covariate Adaptive Designs
