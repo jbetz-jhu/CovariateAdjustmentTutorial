@@ -1,5 +1,6 @@
 ---
 nav_order: 3
+math: katex
 ---
 
 # Estimands of Interest
