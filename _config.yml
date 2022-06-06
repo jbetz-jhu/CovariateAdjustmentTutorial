@@ -1,6 +1,4 @@
 title: Covariate Adjustment Tutorials
 remote_theme: just-the-docs/just-the-docs
-#markdown: kramdown
-#math: katex
-#kramdown:
-#    math_engine: katex
+kramdown:
+  math_engine: nil
