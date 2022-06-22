@@ -1,9 +1,6 @@
-# Case Study: Suboxone Taper CTN0003 with Fixed Sample Size
+# CTN-0003 Case Study: Continuous or Binary Outcome, Fixed Sample Size
 
 [Josh Betz](mailto:jbetz@jhu.edu), [Kelly Van Lancker](kvanlan3@jhu.edu), and [Michael Rosenblum](mrosen@jhu.edu)
-
-
-
 
 -   [Executive Summary](#executive-summary)
 -   [Covariate Adjusted Analysis in
