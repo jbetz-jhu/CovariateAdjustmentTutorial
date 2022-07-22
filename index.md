@@ -47,5 +47,5 @@ All case studies include *simulated data* that are generated from models based o
 
 ## Other Example Code
 
-  - [Using the Bootstrap in R (TBA)](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
-  - [Imputing Missing Covariates in R (TBA)](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
+  - [Using the Bootstrap in R (TBA)](https://jbetz-jhu.github.io/CovariateAdjustmentTutorial/bootstrap_tutorial.html)
+  - [Imputing Missing Covariates in R (TBA)](https://jbetz-jhu.github.io/CovariateAdjustmentTutorial/imputation_tutorial.html)
