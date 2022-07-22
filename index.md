@@ -26,6 +26,10 @@ All case studies include *simulated data* that are generated from models based o
     - [Continuous and Binary Outcomes](https://jbetz-jhu.github.io/CovariateAdjustmentTutorial/CTN03_Continuous_Binary.html)
     - [Ordinal Outcomes](https://jbetz-jhu.github.io/CovariateAdjustmentTutorial/CTN03_Ordinal.html)
  - [Prescription Opioid Abuse Treatment Study CTN0003 Vignette (TBA)](https://github.com/jbetz-jhu/CovariateAdjustmentTutorial)
+ - 5-FluoroUracil in Colon Cancer:
+    - [Time-to-Event Outcome](https://jbetz-jhu.github.io/CovariateAdjustmentTutorial/time_to_event_5fu_colon_cancer.html)
+
+
 
 
 ### Single Post-Randomization Outcomes - Interim Monitoring
