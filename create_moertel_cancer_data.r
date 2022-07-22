@@ -138,6 +138,8 @@ colon_cancer <-
   )
 
 
+# Save the original dataset prior to imputation
+colon_cancer_original <- colon_cancer
 
 
 ### Impute Missing Covariates ##################################################
@@ -257,8 +259,3 @@ colon_cancer <-
   dplyr::select(
     all_of(x = names(colon_cancer))
   )
-
-# Checks - 
-nrow(colon_cancer) # All 929 accounted for
-table(table(colon_cancer$id)) # All IDS unique
-colSums(is.na(colon_cancer)) # No missing covariates
