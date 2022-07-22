@@ -1,9 +1,6 @@
 Covariate Adjustment in Randomized Trials
 ================
-Josh Betz (<jbetz@jhu.edu>), Kelly Van Lancker (<kvanlan3@jhu.edu>), and
-Michael Rosenblum (<mrosen@jhu.edu>)
-2022-07-22 04:48
-
+Josh Betz (<jbetz@jhu.edu>), Kelly Van Lancker (<kvanlan3@jhu.edu>), and Michael Rosenblum (<mrosen@jhu.edu>)
 
 
 -   [Executive Summary](#executive-summary)
