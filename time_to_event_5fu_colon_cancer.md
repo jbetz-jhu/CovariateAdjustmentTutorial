@@ -1,43 +1,69 @@
 Covariate Adjustment in Randomized Trials
 ================
-Josh Betz (<jbetz@jhu.edu>), Kelly Van Lancker (<kvanlan3@jhu.edu>), and Michael Rosenblum (<mrosen@jhu.edu>)
+Josh Betz (<jbetz@jhu.edu>), Kelly Van Lancker (<kvanlan3@jhu.edu>), and
+Michael Rosenblum (<mrosen@jhu.edu>)
+2022-08-25 09:24
 
--   [Executive Summary](#executive-summary)
--   [Covariate Adjusted Analysis in
-    Practice](#covariate-adjusted-analysis-in-practice)
-    -   [Installing RTools - Compiling Packages from
-        Source](#installing-rtools---compiling-packages-from-source)
-    -   [Installing R Packages from
-        CRAN](#installing-r-packages-from-cran)
-    -   [Installing R Packages from
-        GitHub](#installing-r-packages-from-github)
-    -   [Loading Installed Packages](#loading-installed-packages)
--   [Chemotherapy for Stage B/C Colon
-    Cancer](#chemotherapy-for-stage-bc-colon-cancer)
-    -   [Baseline Demographics &
-        Stratum](#baseline-demographics--stratum)
-    -   [Kaplan-Meier Survival Estimate:
-        Death](#kaplan-meier-survival-estimate-death)
--   [Checks on the Data:](#checks-on-the-data)
-    -   [Frequency of Events](#frequency-of-events)
-    -   [Reference level for Treatment](#reference-level-for-treatment)
--   [Unadjusted Tests & Models](#unadjusted-tests--models)
-    -   [Log-rank Test](#log-rank-test)
-    -   [Cox Proportional Hazards
-        Model](#cox-proportional-hazards-model)
-    -   [Robust Cox Proportional Hazards
-        Model](#robust-cox-proportional-hazards-model)
-    -   [Restricted Mean Survival Time:
-        `survRM2::rmst2`](#restricted-mean-survival-time-survrm2rmst2)
-    -   [Targeted Maximum Likelihood Estimator (TMLE):
-        `adjrct::survrct`](#targeted-maximum-likelihood-estimator-tmle-adjrctsurvrct)
--   [Covariate Adjusted Analyses](#covariate-adjusted-analyses)
-    -   [Propensity Score](#propensity-score)
-    -   [Adjusted Cox Proportional Hazards
-        Model](#adjusted-cox-proportional-hazards-model)
-    -   [Adjusted Robust Cox Proportional Hazards
-        Model](#adjusted-robust-cox-proportional-hazards-model)
-    -   [Targeted Maximum Likelihood](#targeted-maximum-likelihood)
+
+
+-   <a href="#executive-summary" id="toc-executive-summary">Executive
+    Summary</a>
+-   <a href="#covariate-adjusted-analysis-in-practice"
+    id="toc-covariate-adjusted-analysis-in-practice">Covariate Adjusted
+    Analysis in Practice</a>
+    -   <a href="#installing-rtools---compiling-packages-from-source"
+        id="toc-installing-rtools---compiling-packages-from-source">Installing
+        RTools - Compiling Packages from Source</a>
+    -   <a href="#installing-r-packages-from-cran"
+        id="toc-installing-r-packages-from-cran">Installing R Packages from
+        CRAN</a>
+    -   <a href="#installing-r-packages-from-github"
+        id="toc-installing-r-packages-from-github">Installing R Packages from
+        GitHub</a>
+    -   <a href="#loading-installed-packages"
+        id="toc-loading-installed-packages">Loading Installed Packages</a>
+-   <a href="#chemotherapy-for-stage-bc-colon-cancer"
+    id="toc-chemotherapy-for-stage-bc-colon-cancer">Chemotherapy for Stage
+    B/C Colon Cancer</a>
+    -   <a href="#baseline-demographics--stratum"
+        id="toc-baseline-demographics--stratum">Baseline Demographics &amp;
+        Stratum</a>
+    -   <a href="#kaplan-meier-survival-estimate-death"
+        id="toc-kaplan-meier-survival-estimate-death">Kaplan-Meier Survival
+        Estimate: Death</a>
+-   <a href="#checks-on-the-data" id="toc-checks-on-the-data">Checks on the
+    Data:</a>
+    -   <a href="#frequency-of-events" id="toc-frequency-of-events">Frequency of
+        Events</a>
+    -   <a href="#reference-level-for-treatment"
+        id="toc-reference-level-for-treatment">Reference level for Treatment</a>
+-   <a href="#unadjusted-tests--models"
+    id="toc-unadjusted-tests--models">Unadjusted Tests &amp; Models</a>
+    -   <a href="#log-rank-test" id="toc-log-rank-test">Log-rank Test</a>
+    -   <a href="#cox-proportional-hazards-model"
+        id="toc-cox-proportional-hazards-model">Cox Proportional Hazards
+        Model</a>
+    -   <a href="#robust-cox-proportional-hazards-model"
+        id="toc-robust-cox-proportional-hazards-model">Robust Cox Proportional
+        Hazards Model</a>
+    -   <a href="#restricted-mean-survival-time-survrm2rmst2"
+        id="toc-restricted-mean-survival-time-survrm2rmst2">Restricted Mean
+        Survival Time: <code>survRM2::rmst2</code></a>
+    -   <a href="#targeted-maximum-likelihood-estimator-tmle-adjrctsurvrct"
+        id="toc-targeted-maximum-likelihood-estimator-tmle-adjrctsurvrct">Targeted
+        Maximum Likelihood Estimator (TMLE): <code>adjrct::survrct</code></a>
+-   <a href="#covariate-adjusted-analyses"
+    id="toc-covariate-adjusted-analyses">Covariate Adjusted Analyses</a>
+    -   <a href="#propensity-score" id="toc-propensity-score">Propensity
+        Score</a>
+    -   <a href="#adjusted-cox-proportional-hazards-model"
+        id="toc-adjusted-cox-proportional-hazards-model">Adjusted Cox
+        Proportional Hazards Model</a>
+    -   <a href="#adjusted-robust-cox-proportional-hazards-model"
+        id="toc-adjusted-robust-cox-proportional-hazards-model">Adjusted Robust
+        Cox Proportional Hazards Model</a>
+    -   <a href="#targeted-maximum-likelihood"
+        id="toc-targeted-maximum-likelihood">Targeted Maximum Likelihood</a>
 
 <style type="text/css">
 .main-container {
@@ -144,6 +170,7 @@ required_packages <-
     "tidyverse",
     "table1",
     "survminer",
+    "coxrobust",
     "survRM2"
   )
 
@@ -177,11 +204,6 @@ library(table1) # Creation of Summary tables
 library(survival) # For AFT & Cox Proportional Hazards Models
 library(survminer) # For Kaplan-Meier Plots
 library(coxrobust) # For coxr: Robust Cox PH Model
-```
-
-    ## Warning: package 'coxrobust' was built under R version 4.2.1
-
-``` r
 library(survRM2) # For restricted mean survival times (RMST)
 library(adjrct) # For TMLE estimates of RMST, Survival Probability
 library(splines) # For adding smoothing splines
@@ -404,10 +426,11 @@ ggsurvplot(
   surv.median.line = "hv",
   break.time.by = 365.25,
   xlab = "Days", 
-  ylab = "Overall survival probability")
+  ylab = "Overall survival probability"
+)
 ```
 
-![](Time-to-Event_v0.0_220721_files/figure-gfm/kaplan-meier-death-days-1.png)<!-- -->
+![](time_to_event_5fu_colon_cancer_files/figure-gfm/kaplan-meier-death-days-1.png)<!-- -->
 
 #### Time Scale: Months
 
@@ -425,16 +448,15 @@ ggsurvplot(
   surv.median.line = "hv",
   break.time.by = 12,
   xlab = "Months", 
-  ylab = "Overall survival probability")
+  ylab = "Overall survival probability"
+)
 ```
 
-![](Time-to-Event_v0.0_220721_files/figure-gfm/kaplan-meier-death-months-1.png)<!-- -->
+![](time_to_event_5fu_colon_cancer_files/figure-gfm/kaplan-meier-death-months-1.png)<!-- -->
 
 Note that numbers at will not exactly match across plots: actual
 calendar months vary in length from 28 to 31 days, while the time scale
-is coarsened by periods of (365.25/12
-![\\approx](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Capprox "\approx")
-30.4) days.
+is coarsened by periods of (365.25/12 $\approx$ 30.4) days.
 
 ## Checks on the Data:
 
@@ -474,10 +496,11 @@ ggsurvplot(
   break.time.by = 365,
   facet.by = "differentiation",
   xlab = "Days", 
-  ylab = "Overall survival probability")
+  ylab = "Overall survival probability"
+)
 ```
 
-![](Time-to-Event_v0.0_220721_files/figure-gfm/kaplan-meier-death-obstruction-1.png)<!-- -->
+![](time_to_event_5fu_colon_cancer_files/figure-gfm/kaplan-meier-death-obstruction-1.png)<!-- -->
 
 ### Reference level for Treatment
 
@@ -584,7 +607,7 @@ print(unadjusted_cox_ph_test)
 plot(cox.zph(unadjusted_cox))
 ```
 
-![](Time-to-Event_v0.0_220721_files/figure-gfm/unadjusted-cox-ph-test-1.png)<!-- -->
+![](time_to_event_5fu_colon_cancer_files/figure-gfm/unadjusted-cox-ph-test-1.png)<!-- -->
 
 ### Robust Cox Proportional Hazards Model
 
