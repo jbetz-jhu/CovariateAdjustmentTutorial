@@ -2,7 +2,7 @@
 title: "Covariate Adjustment in Randomized Trials"
 subtitle: "Worked Examples using Time-to-Event Clinical Trial Data"
 author: "Josh Betz (jbetz@jhu.edu), Kelly Van Lancker (kvanlan3@jhu.edu), and Michael Rosenblum (mrosen@jhu.edu)"
-date: "`r format(Sys.time(), '%Y-%m-%d %I:%M')`"
+# date: "`r format(Sys.time(), '%Y-%m-%d %I:%M')`"
 header-includes:
    - \usepackage{amsmath}
 output:
@@ -20,6 +20,9 @@ output:
 </style>
 
 ```{r Setup, echo = FALSE, message = FALSE}
+# Packages used for formatting, not needed for analysis
+library(pander)
+
 ### Graphics and Report Options ################################################
 table_digits <- 1 # Significant Figures for Mean/SD, N (%), Median/IQR
 
@@ -51,7 +54,6 @@ fig_h <- 8
 knitr::opts_chunk$set(
   echo = TRUE,
   message = FALSE,
-  # warning = FALSE,
   results = "markup",
   fig.width = fig_w,
   fig.height = fig_h,
@@ -75,6 +77,9 @@ When using regression models for inference, it is important to understand how mo
 **The focus of this template is on the analysis of time-to-event outcomes.** This tutorial illustrates the use of covariate-adjusted analysis in clinical trials using an example dataset from a randomized trial of treatments for colon cancer. This tutorial illustrates calculating the restricted mean survival time (RMST) and survival probability with and without adjustment for covariates. These methods are contrasted against methods commonly used in observational studies and randomized trials, such as the log-rank test and Cox Proportional Hazards model.
 
 
+$x$
+
+$$x = y$$
 
 #### Using This Tutorial
 
@@ -240,7 +245,8 @@ colon_cancer_lev5fu_vs_obs <-
 ### Baseline Demographics & Stratum
 
 Below are summary statistics of participant characteristics at baseline.
-```{r table-demographic-characteristics-original}
+
+```{r table-demographic-characteristics-original-code, eval = FALSE}
 table1(
   ~ age + sex + obstruction + perforation + organ_adherence +
     differentiation + local_spread + time_surgery_registration +
@@ -249,17 +255,39 @@ table1(
 )
 ```
 
-Note that `differentiation` and `positive_nodes` contain missing values, which must be imputed. If there are any missing covariates, observations may be dropped from analyses, or these may cause 
+```{r table-demographic-characteristics-original-eval, echo = FALSE}
+table1(
+  ~ age + sex + obstruction + perforation + organ_adherence +
+    differentiation + local_spread + time_surgery_registration +
+    positive_nodes + recurrence + death + composite | arm, 
+  data = colon_cancer_original,
+  render.continuous = c(. = "Mean (SD)", . = "Median (Min, Max)")
+) %>% 
+  pander::pander()
+```
+
+Note that `differentiation` and `positive_nodes` contain missing values, which must be imputed. If there are any missing covariates, observations may be dropped from analyses, or these may cause errors in other functions.
 
 Below are summary statistics of participant characteristics at baseline *after* imputing missing baseline covariates.
 
-```{r table-demographic-characteristics-imputed}
+```{r table-demographic-characteristics-imputed-code, eval = FALSE}
 table1(
   ~ age + sex + obstruction + perforation + organ_adherence +
     differentiation + local_spread + time_surgery_registration +
     positive_nodes + recurrence + death + composite | arm, 
   data = colon_cancer
 )
+```
+
+```{r table-demographic-characteristics-imputed-eval, echo = FALSE}
+table1(
+  ~ age + sex + obstruction + perforation + organ_adherence +
+    differentiation + local_spread + time_surgery_registration +
+    positive_nodes + recurrence + death + composite | arm, 
+  data = colon_cancer,
+  render.continuous = c(. = "Mean (SD)", . = "Median (Min, Max)")
+) %>% 
+  pander::pander()
 ```
 
 
@@ -318,13 +346,25 @@ Note that numbers at will not exactly match across plots: actual calendar months
 
 Rare events may lead to numerical instabilities in estimation: it is always advisable to check whether the frequencies of events in aggregate and within categories of interest are sufficient for the planned analysis. For example, tabulations can assess whether there are sufficient events within `obstruction` to support analysis:
 
-```{r table-events-by-arm-and-covariate}
+
+```{r table-events-by-arm-and-covariate-code, eval = FALSE}
 table1(
-  ~ recurrence + death + composite | differentiation + arm, 
+  ~ recurrence + death + composite | differentiation:arm, 
   data = colon_cancer,
   overall = NULL
 )
 ```
+
+```{r table-events-by-arm-and-covariate-eval, echo = FALSE}
+table1(
+  ~ recurrence + death + composite | differentiation:arm, 
+  data = colon_cancer,
+  overall = NULL,
+  render.continuous = c(. = "Mean (SD)", . = "Median (Min, Max)")
+) %>% 
+  pander::pander()
+```
+
 
 
 ```{r kaplan-meier-death-obstruction, fig.width = 2*fig_w}
@@ -606,18 +646,18 @@ adjusted_robust_cox_table %>%
 ### Targeted Maximum Likelihood
 
 ```{r tmle}
-surv_metadata_adj <-
-  adjrct::survrct(
-    outcome.formula = Surv(months_to_death, event_death) ~ tx +
-      age + positive_nodes +
-      sex + obstruction + organ_adherence + differentiation +
-      local_spread, 
-    trt.formula =
-      tx ~ age + positive_nodes +
-      sex + obstruction + organ_adherence + differentiation +
-      local_spread,
-    data = colon_cancer_lev5fu_vs_obs
-  )
+# surv_metadata_adj <-
+#   adjrct::survrct(
+#     outcome.formula = Surv(months_to_death, event_death) ~ tx +
+#       age + positive_nodes +
+#       sex + obstruction + organ_adherence + differentiation +
+#       local_spread, 
+#     trt.formula =
+#       tx ~ age + positive_nodes +
+#       sex + obstruction + organ_adherence + differentiation +
+#       local_spread,
+#     data = colon_cancer_lev5fu_vs_obs
+#   )
 ```
 
 
@@ -626,51 +666,51 @@ surv_metadata_adj <-
 #### Calculate Restricted Mean Survival Time
 
 ```{r tmle-adjusted-rmst, results = 'asis', message = TRUE}
-rmst_metadata_adj <-
-  adjrct::rmst(
-    metadata = surv_metadata_adj,
-    horizon = 60
-  )
-
-rmst_metadata_adj
+# rmst_metadata_adj <-
+#   adjrct::rmst(
+#     metadata = surv_metadata_adj,
+#     horizon = 60
+#   )
+# 
+# rmst_metadata_adj
 ```
 
 
 ```{r tmle-adjusted-rmst-format}
-rmst_metadata_adj_table <-
-  with(
-    rmst_metadata_adj$estimates[[1]],
-    
-    bind_rows(
-      data.frame(
-        Arm = "Treatment",
-        Estimate = arm1,
-        SE = arm1.std.error,
-        LCL = arm1.conf.low,
-        UCL = arm1.conf.high
-      ),
-      
-      data.frame(
-        Arm = "Control",
-        Estimate = arm0,
-        SE = arm0.std.error,
-        LCL = arm0.conf.low,
-        UCL = arm0.conf.high
-      ),
-      data.frame(
-        Arm = "Treatment - Control",
-        Estimate = theta,
-        SE = std.error,
-        LCL = theta.conf.low,
-        UCL = theta.conf.high
-      )
-    )
-  )
-
-kable(
-  x = rmst_metadata_adj_table,
-  caption = "Restricted Mean Survival Time "
-)
+# rmst_metadata_adj_table <-
+#   with(
+#     rmst_metadata_adj$estimates[[1]],
+#     
+#     bind_rows(
+#       data.frame(
+#         Arm = "Treatment",
+#         Estimate = arm1,
+#         SE = arm1.std.error,
+#         LCL = arm1.conf.low,
+#         UCL = arm1.conf.high
+#       ),
+#       
+#       data.frame(
+#         Arm = "Control",
+#         Estimate = arm0,
+#         SE = arm0.std.error,
+#         LCL = arm0.conf.low,
+#         UCL = arm0.conf.high
+#       ),
+#       data.frame(
+#         Arm = "Treatment - Control",
+#         Estimate = theta,
+#         SE = std.error,
+#         LCL = theta.conf.low,
+#         UCL = theta.conf.high
+#       )
+#     )
+#   )
+# 
+# kable(
+#   x = rmst_metadata_adj_table,
+#   caption = "Restricted Mean Survival Time "
+# )
 ```
 
 
@@ -678,8 +718,8 @@ kable(
 #### Calculate Survival Probability
 
 ```{r tmle-survival-probability, results = 'asis', message = TRUE}
-adjrct::survprob(
-  metadata = surv_metadata_adj,
-  horizon = 60
-)
+# adjrct::survprob(
+#   metadata = surv_metadata_adj,
+#   horizon = 60
+# )
 ```

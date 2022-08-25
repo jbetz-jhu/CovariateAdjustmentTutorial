@@ -2,7 +2,6 @@ Covariate Adjustment in Randomized Trials
 ================
 Josh Betz (<jbetz@jhu.edu>), Kelly Van Lancker (<kvanlan3@jhu.edu>), and
 Michael Rosenblum (<mrosen@jhu.edu>)
-2022-08-25 09:24
 
 
 
@@ -113,6 +112,10 @@ probability with and without adjustment for covariates. These methods
 are contrasted against methods commonly used in observational studies
 and randomized trials, such as the log-rank test and Cox Proportional
 Hazards model.
+
+$x$
+
+$$x = y$$
 
 #### Using This Tutorial
 
@@ -306,53 +309,761 @@ table1(
 )
 ```
 
-    ##                                             Obs               Lev           Lev+5FU           Overall
-    ## 1                                       (N=315)           (N=310)           (N=304)           (N=929)
-    ## 2                         age                                                                        
-    ## 3                   Mean (SD)       59.5 (12.0)       60.1 (11.6)       59.7 (12.3)       59.8 (11.9)
-    ## 4           Median [Min, Max] 60.0 [18.0, 85.0] 61.0 [27.0, 83.0] 62.0 [26.0, 81.0] 61.0 [18.0, 85.0]
-    ## 5                         sex                                                                        
-    ## 6                   0. Female       149 (47.3%)       133 (42.9%)       163 (53.6%)       445 (47.9%)
-    ## 7                     1. Male       166 (52.7%)       177 (57.1%)       141 (46.4%)       484 (52.1%)
-    ## 8                 obstruction                                                                        
-    ## 9                       0. No       252 (80.0%)       247 (79.7%)       250 (82.2%)       749 (80.6%)
-    ## 10                     1. Yes        63 (20.0%)        63 (20.3%)        54 (17.8%)       180 (19.4%)
-    ## 11                perforation                                                                        
-    ## 12                      0. No       306 (97.1%)       300 (96.8%)       296 (97.4%)       902 (97.1%)
-    ## 13                     1. Yes          9 (2.9%)         10 (3.2%)          8 (2.6%)         27 (2.9%)
-    ## 14            organ_adherence                                                                        
-    ## 15                      0. No       268 (85.1%)       261 (84.2%)       265 (87.2%)       794 (85.5%)
-    ## 16                     1. Yes        47 (14.9%)        49 (15.8%)        39 (12.8%)       135 (14.5%)
-    ## 17            differentiation                                                                        
-    ## 18                    1. Well         27 (8.6%)        37 (11.9%)         29 (9.5%)        93 (10.0%)
-    ## 19                2. Moderate       229 (72.7%)       219 (70.6%)       215 (70.7%)       663 (71.4%)
-    ## 20                    3. Poor        52 (16.5%)        44 (14.2%)        54 (17.8%)       150 (16.1%)
-    ## 21                    Missing          7 (2.2%)         10 (3.2%)          6 (2.0%)         23 (2.5%)
-    ## 22               local_spread                                                                        
-    ## 23               1. Submucosa          8 (2.5%)          3 (1.0%)         10 (3.3%)         21 (2.3%)
-    ## 24                  2. Muscle        38 (12.1%)        36 (11.6%)        32 (10.5%)       106 (11.4%)
-    ## 25                  3. Serosa       249 (79.0%)       259 (83.5%)       251 (82.6%)       759 (81.7%)
-    ## 26   4. Contiguous structures         20 (6.3%)         12 (3.9%)         11 (3.6%)         43 (4.6%)
-    ## 27  time_surgery_registration                                                                        
-    ## 28                   0. Short       224 (71.1%)       230 (74.2%)       228 (75.0%)       682 (73.4%)
-    ## 29                    1. Long        91 (28.9%)        80 (25.8%)        76 (25.0%)       247 (26.6%)
-    ## 30             positive_nodes                                                                        
-    ## 31                  Mean (SD)       3.79 (3.73)       3.69 (3.56)       3.49 (3.42)       3.66 (3.57)
-    ## 32          Median [Min, Max]    2.00 [0, 27.0]    2.00 [0, 33.0] 2.00 [1.00, 24.0]    2.00 [0, 33.0]
-    ## 33                    Missing          3 (1.0%)          6 (1.9%)          9 (3.0%)         18 (1.9%)
-    ## 34                 recurrence                                                                        
-    ## 35                      0. No       138 (43.8%)       138 (44.5%)       185 (60.9%)       461 (49.6%)
-    ## 36                     1. Yes       177 (56.2%)       172 (55.5%)       119 (39.1%)       468 (50.4%)
-    ## 37                      death                                                                        
-    ## 38                      0. No       147 (46.7%)       149 (48.1%)       181 (59.5%)       477 (51.3%)
-    ## 39                     1. Yes       168 (53.3%)       161 (51.9%)       123 (40.5%)       452 (48.7%)
-    ## 40                  composite                                                                        
-    ## 41                      0. No       125 (39.7%)       128 (41.3%)       170 (55.9%)       423 (45.5%)
-    ## 42                     1. Yes       190 (60.3%)       182 (58.7%)       134 (44.1%)       506 (54.5%)
+<table class="Rtable1">
+<thead>
+<tr>
+<th class="rowlabel firstrow lastrow">
+</th>
+<th class="firstrow lastrow">
+<span class="stratlabel">Obs<br><span
+class="stratn">(N=315)</span></span>
+</th>
+<th class="firstrow lastrow">
+<span class="stratlabel">Lev<br><span
+class="stratn">(N=310)</span></span>
+</th>
+<th class="firstrow lastrow">
+<span class="stratlabel">Lev+5FU<br><span
+class="stratn">(N=304)</span></span>
+</th>
+<th class="firstrow lastrow">
+<span class="stratlabel">Overall<br><span
+class="stratn">(N=929)</span></span>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="rowlabel firstrow">
+age
+</td>
+<td class="firstrow">
+</td>
+<td class="firstrow">
+</td>
+<td class="firstrow">
+</td>
+<td class="firstrow">
+</td>
+</tr>
+<tr>
+<td class="rowlabel">
+Mean (SD)
+</td>
+<td>
+59.5 (12.0)
+</td>
+<td>
+60.1 (11.6)
+</td>
+<td>
+59.7 (12.3)
+</td>
+<td>
+59.8 (11.9)
+</td>
+</tr>
+<tr>
+<td class="rowlabel lastrow">
+Median (Min, Max)
+</td>
+<td class="lastrow">
+60.0 (18.0, 85.0)
+</td>
+<td class="lastrow">
+61.0 (27.0, 83.0)
+</td>
+<td class="lastrow">
+62.0 (26.0, 81.0)
+</td>
+<td class="lastrow">
+61.0 (18.0, 85.0)
+</td>
+</tr>
+<tr>
+<td class="rowlabel firstrow">
+sex
+</td>
+<td class="firstrow">
+</td>
+<td class="firstrow">
+</td>
+<td class="firstrow">
+</td>
+<td class="firstrow">
+</td>
+</tr>
+<tr>
+<td class='rowlabel'>
+
+0.  Female
+    </td>
+    <td>
+    149 (47.3%)
+    </td>
+    <td>
+    133 (42.9%)
+    </td>
+    <td>
+    163 (53.6%)
+    </td>
+    <td>
+    445 (47.9%)
+    </td>
+    </tr>
+    <tr>
+    <td class='rowlabel lastrow'>
+
+    1.  Male
+        </td>
+        <td class="lastrow">
+        166 (52.7%)
+        </td>
+        <td class="lastrow">
+        177 (57.1%)
+        </td>
+        <td class="lastrow">
+        141 (46.4%)
+        </td>
+        <td class="lastrow">
+        484 (52.1%)
+        </td>
+        </tr>
+        <tr>
+        <td class="rowlabel firstrow">
+        obstruction
+        </td>
+        <td class="firstrow">
+        </td>
+        <td class="firstrow">
+        </td>
+        <td class="firstrow">
+        </td>
+        <td class="firstrow">
+        </td>
+        </tr>
+        <tr>
+        <td class='rowlabel'>
+
+        0.  No
+            </td>
+            <td>
+            252 (80.0%)
+            </td>
+            <td>
+            247 (79.7%)
+            </td>
+            <td>
+            250 (82.2%)
+            </td>
+            <td>
+            749 (80.6%)
+            </td>
+            </tr>
+            <tr>
+            <td class='rowlabel lastrow'>
+
+            1.  Yes
+                </td>
+                <td class="lastrow">
+                63 (20.0%)
+                </td>
+                <td class="lastrow">
+                63 (20.3%)
+                </td>
+                <td class="lastrow">
+                54 (17.8%)
+                </td>
+                <td class="lastrow">
+                180 (19.4%)
+                </td>
+                </tr>
+                <tr>
+                <td class="rowlabel firstrow">
+                perforation
+                </td>
+                <td class="firstrow">
+                </td>
+                <td class="firstrow">
+                </td>
+                <td class="firstrow">
+                </td>
+                <td class="firstrow">
+                </td>
+                </tr>
+                <tr>
+                <td class='rowlabel'>
+
+                0.  No
+                    </td>
+                    <td>
+                    306 (97.1%)
+                    </td>
+                    <td>
+                    300 (96.8%)
+                    </td>
+                    <td>
+                    296 (97.4%)
+                    </td>
+                    <td>
+                    902 (97.1%)
+                    </td>
+                    </tr>
+                    <tr>
+                    <td class='rowlabel lastrow'>
+
+                    1.  Yes
+                        </td>
+                        <td class="lastrow">
+                        9 (2.9%)
+                        </td>
+                        <td class="lastrow">
+                        10 (3.2%)
+                        </td>
+                        <td class="lastrow">
+                        8 (2.6%)
+                        </td>
+                        <td class="lastrow">
+                        27 (2.9%)
+                        </td>
+                        </tr>
+                        <tr>
+                        <td class="rowlabel firstrow">
+                        organ_adherence
+                        </td>
+                        <td class="firstrow">
+                        </td>
+                        <td class="firstrow">
+                        </td>
+                        <td class="firstrow">
+                        </td>
+                        <td class="firstrow">
+                        </td>
+                        </tr>
+                        <tr>
+                        <td class='rowlabel'>
+
+                        0.  No
+                            </td>
+                            <td>
+                            268 (85.1%)
+                            </td>
+                            <td>
+                            261 (84.2%)
+                            </td>
+                            <td>
+                            265 (87.2%)
+                            </td>
+                            <td>
+                            794 (85.5%)
+                            </td>
+                            </tr>
+                            <tr>
+                            <td class='rowlabel lastrow'>
+
+                            1.  Yes
+                                </td>
+                                <td class="lastrow">
+                                47 (14.9%)
+                                </td>
+                                <td class="lastrow">
+                                49 (15.8%)
+                                </td>
+                                <td class="lastrow">
+                                39 (12.8%)
+                                </td>
+                                <td class="lastrow">
+                                135 (14.5%)
+                                </td>
+                                </tr>
+                                <tr>
+                                <td class="rowlabel firstrow">
+                                differentiation
+                                </td>
+                                <td class="firstrow">
+                                </td>
+                                <td class="firstrow">
+                                </td>
+                                <td class="firstrow">
+                                </td>
+                                <td class="firstrow">
+                                </td>
+                                </tr>
+                                <tr>
+                                <td class='rowlabel'>
+
+                                1.  Well
+                                    </td>
+                                    <td>
+                                    27 (8.6%)
+                                    </td>
+                                    <td>
+                                    37 (11.9%)
+                                    </td>
+                                    <td>
+                                    29 (9.5%)
+                                    </td>
+                                    <td>
+                                    93 (10.0%)
+                                    </td>
+                                    </tr>
+                                    <tr>
+                                    <td class='rowlabel'>
+
+                                    2.  Moderate
+                                        </td>
+                                        <td>
+                                        229 (72.7%)
+                                        </td>
+                                        <td>
+                                        219 (70.6%)
+                                        </td>
+                                        <td>
+                                        215 (70.7%)
+                                        </td>
+                                        <td>
+                                        663 (71.4%)
+                                        </td>
+                                        </tr>
+                                        <tr>
+                                        <td class='rowlabel'>
+
+                                        3.  Poor
+                                            </td>
+                                            <td>
+                                            52 (16.5%)
+                                            </td>
+                                            <td>
+                                            44 (14.2%)
+                                            </td>
+                                            <td>
+                                            54 (17.8%)
+                                            </td>
+                                            <td>
+                                            150 (16.1%)
+                                            </td>
+                                            </tr>
+                                            <tr>
+                                            <td class="rowlabel lastrow">
+                                            Missing
+                                            </td>
+                                            <td class="lastrow">
+                                            7 (2.2%)
+                                            </td>
+                                            <td class="lastrow">
+                                            10 (3.2%)
+                                            </td>
+                                            <td class="lastrow">
+                                            6 (2.0%)
+                                            </td>
+                                            <td class="lastrow">
+                                            23 (2.5%)
+                                            </td>
+                                            </tr>
+                                            <tr>
+                                            <td class="rowlabel firstrow">
+                                            local_spread
+                                            </td>
+                                            <td class="firstrow">
+                                            </td>
+                                            <td class="firstrow">
+                                            </td>
+                                            <td class="firstrow">
+                                            </td>
+                                            <td class="firstrow">
+                                            </td>
+                                            </tr>
+                                            <tr>
+                                            <td class='rowlabel'>
+
+                                            1.  Submucosa
+                                                </td>
+                                                <td>
+                                                8 (2.5%)
+                                                </td>
+                                                <td>
+                                                3 (1.0%)
+                                                </td>
+                                                <td>
+                                                10 (3.3%)
+                                                </td>
+                                                <td>
+                                                21 (2.3%)
+                                                </td>
+                                                </tr>
+                                                <tr>
+                                                <td class='rowlabel'>
+
+                                                2.  Muscle
+                                                    </td>
+                                                    <td>
+                                                    38 (12.1%)
+                                                    </td>
+                                                    <td>
+                                                    36 (11.6%)
+                                                    </td>
+                                                    <td>
+                                                    32 (10.5%)
+                                                    </td>
+                                                    <td>
+                                                    106 (11.4%)
+                                                    </td>
+                                                    </tr>
+                                                    <tr>
+                                                    <td class='rowlabel'>
+
+                                                    3.  Serosa
+                                                        </td>
+                                                        <td>
+                                                        249 (79.0%)
+                                                        </td>
+                                                        <td>
+                                                        259 (83.5%)
+                                                        </td>
+                                                        <td>
+                                                        251 (82.6%)
+                                                        </td>
+                                                        <td>
+                                                        759 (81.7%)
+                                                        </td>
+                                                        </tr>
+                                                        <tr>
+                                                        <td class='rowlabel lastrow'>
+
+                                                        4.  Contiguous
+                                                            structures
+                                                            </td>
+                                                            <td class="lastrow">
+                                                            20 (6.3%)
+                                                            </td>
+                                                            <td class="lastrow">
+                                                            12 (3.9%)
+                                                            </td>
+                                                            <td class="lastrow">
+                                                            11 (3.6%)
+                                                            </td>
+                                                            <td class="lastrow">
+                                                            43 (4.6%)
+                                                            </td>
+                                                            </tr>
+                                                            <tr>
+                                                            <td class="rowlabel firstrow">
+                                                            time_surgery_registration
+                                                            </td>
+                                                            <td class="firstrow">
+                                                            </td>
+                                                            <td class="firstrow">
+                                                            </td>
+                                                            <td class="firstrow">
+                                                            </td>
+                                                            <td class="firstrow">
+                                                            </td>
+                                                            </tr>
+                                                            <tr>
+                                                            <td class='rowlabel'>
+
+                                                            0.  Short
+                                                                </td>
+                                                                <td>
+                                                                224
+                                                                (71.1%)
+                                                                </td>
+                                                                <td>
+                                                                230
+                                                                (74.2%)
+                                                                </td>
+                                                                <td>
+                                                                228
+                                                                (75.0%)
+                                                                </td>
+                                                                <td>
+                                                                682
+                                                                (73.4%)
+                                                                </td>
+                                                                </tr>
+                                                                <tr>
+                                                                <td class='rowlabel lastrow'>
+
+                                                                1.  Long
+                                                                    </td>
+                                                                    <td class="lastrow">
+                                                                    91
+                                                                    (28.9%)
+                                                                    </td>
+                                                                    <td class="lastrow">
+                                                                    80
+                                                                    (25.8%)
+                                                                    </td>
+                                                                    <td class="lastrow">
+                                                                    76
+                                                                    (25.0%)
+                                                                    </td>
+                                                                    <td class="lastrow">
+                                                                    247
+                                                                    (26.6%)
+                                                                    </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                    <td class="rowlabel firstrow">
+                                                                    positive_nodes
+                                                                    </td>
+                                                                    <td class="firstrow">
+                                                                    </td>
+                                                                    <td class="firstrow">
+                                                                    </td>
+                                                                    <td class="firstrow">
+                                                                    </td>
+                                                                    <td class="firstrow">
+                                                                    </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                    <td class="rowlabel">
+                                                                    Mean
+                                                                    (SD)
+                                                                    </td>
+                                                                    <td>
+                                                                    3.79
+                                                                    (3.73)
+                                                                    </td>
+                                                                    <td>
+                                                                    3.69
+                                                                    (3.56)
+                                                                    </td>
+                                                                    <td>
+                                                                    3.49
+                                                                    (3.42)
+                                                                    </td>
+                                                                    <td>
+                                                                    3.66
+                                                                    (3.57)
+                                                                    </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                    <td class="rowlabel">
+                                                                    Median
+                                                                    (Min,
+                                                                    Max)
+                                                                    </td>
+                                                                    <td>
+                                                                    2.00
+                                                                    (0,
+                                                                    27.0)
+                                                                    </td>
+                                                                    <td>
+                                                                    2.00
+                                                                    (0,
+                                                                    33.0)
+                                                                    </td>
+                                                                    <td>
+                                                                    2.00
+                                                                    (1.00,
+                                                                    24.0)
+                                                                    </td>
+                                                                    <td>
+                                                                    2.00
+                                                                    (0,
+                                                                    33.0)
+                                                                    </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                    <td class="rowlabel lastrow">
+                                                                    Missing
+                                                                    </td>
+                                                                    <td class="lastrow">
+                                                                    3
+                                                                    (1.0%)
+                                                                    </td>
+                                                                    <td class="lastrow">
+                                                                    6
+                                                                    (1.9%)
+                                                                    </td>
+                                                                    <td class="lastrow">
+                                                                    9
+                                                                    (3.0%)
+                                                                    </td>
+                                                                    <td class="lastrow">
+                                                                    18
+                                                                    (1.9%)
+                                                                    </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                    <td class="rowlabel firstrow">
+                                                                    recurrence
+                                                                    </td>
+                                                                    <td class="firstrow">
+                                                                    </td>
+                                                                    <td class="firstrow">
+                                                                    </td>
+                                                                    <td class="firstrow">
+                                                                    </td>
+                                                                    <td class="firstrow">
+                                                                    </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                    <td class='rowlabel'>
+
+                                                                    0.  No
+                                                                        </td>
+                                                                        <td>
+                                                                        138
+                                                                        (43.8%)
+                                                                        </td>
+                                                                        <td>
+                                                                        138
+                                                                        (44.5%)
+                                                                        </td>
+                                                                        <td>
+                                                                        185
+                                                                        (60.9%)
+                                                                        </td>
+                                                                        <td>
+                                                                        461
+                                                                        (49.6%)
+                                                                        </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                        <td class='rowlabel lastrow'>
+
+                                                                        1.  Yes
+                                                                            </td>
+                                                                            <td class="lastrow">
+                                                                            177
+                                                                            (56.2%)
+                                                                            </td>
+                                                                            <td class="lastrow">
+                                                                            172
+                                                                            (55.5%)
+                                                                            </td>
+                                                                            <td class="lastrow">
+                                                                            119
+                                                                            (39.1%)
+                                                                            </td>
+                                                                            <td class="lastrow">
+                                                                            468
+                                                                            (50.4%)
+                                                                            </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                            <td class="rowlabel firstrow">
+                                                                            death
+                                                                            </td>
+                                                                            <td class="firstrow">
+                                                                            </td>
+                                                                            <td class="firstrow">
+                                                                            </td>
+                                                                            <td class="firstrow">
+                                                                            </td>
+                                                                            <td class="firstrow">
+                                                                            </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                            <td class='rowlabel'>
+
+                                                                            0.  No
+                                                                                </td>
+                                                                                <td>
+                                                                                147
+                                                                                (46.7%)
+                                                                                </td>
+                                                                                <td>
+                                                                                149
+                                                                                (48.1%)
+                                                                                </td>
+                                                                                <td>
+                                                                                181
+                                                                                (59.5%)
+                                                                                </td>
+                                                                                <td>
+                                                                                477
+                                                                                (51.3%)
+                                                                                </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                <td class='rowlabel lastrow'>
+
+                                                                                1.  Yes
+                                                                                    </td>
+                                                                                    <td class="lastrow">
+                                                                                    168
+                                                                                    (53.3%)
+                                                                                    </td>
+                                                                                    <td class="lastrow">
+                                                                                    161
+                                                                                    (51.9%)
+                                                                                    </td>
+                                                                                    <td class="lastrow">
+                                                                                    123
+                                                                                    (40.5%)
+                                                                                    </td>
+                                                                                    <td class="lastrow">
+                                                                                    452
+                                                                                    (48.7%)
+                                                                                    </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                    <td class="rowlabel firstrow">
+                                                                                    composite
+                                                                                    </td>
+                                                                                    <td class="firstrow">
+                                                                                    </td>
+                                                                                    <td class="firstrow">
+                                                                                    </td>
+                                                                                    <td class="firstrow">
+                                                                                    </td>
+                                                                                    <td class="firstrow">
+                                                                                    </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                    <td class='rowlabel'>
+
+                                                                                    0.  No
+                                                                                        </td>
+                                                                                        <td>
+                                                                                        125
+                                                                                        (39.7%)
+                                                                                        </td>
+                                                                                        <td>
+                                                                                        128
+                                                                                        (41.3%)
+                                                                                        </td>
+                                                                                        <td>
+                                                                                        170
+                                                                                        (55.9%)
+                                                                                        </td>
+                                                                                        <td>
+                                                                                        423
+                                                                                        (45.5%)
+                                                                                        </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                        <td class='rowlabel lastrow'>
+
+                                                                                        1.  Yes
+                                                                                            </td>
+                                                                                            <td class="lastrow">
+                                                                                            190
+                                                                                            (60.3%)
+                                                                                            </td>
+                                                                                            <td class="lastrow">
+                                                                                            182
+                                                                                            (58.7%)
+                                                                                            </td>
+                                                                                            <td class="lastrow">
+                                                                                            134
+                                                                                            (44.1%)
+                                                                                            </td>
+                                                                                            <td class="lastrow">
+                                                                                            506
+                                                                                            (54.5%)
+                                                                                            </td>
+                                                                                            </tr>
+                                                                                            </tbody>
+                                                                                            </table>
 
 Note that `differentiation` and `positive_nodes` contain missing values,
 which must be imputed. If there are any missing covariates, observations
-may be dropped from analyses, or these may cause
+may be dropped from analyses, or these may cause errors in other
+functions.
 
 Below are summary statistics of participant characteristics at baseline
 *after* imputing missing baseline covariates.
@@ -366,47 +1077,718 @@ table1(
 )
 ```
 
-    ##                                             Obs               Lev           Lev+5FU           Overall
-    ## 1                                       (N=315)           (N=310)           (N=304)           (N=929)
-    ## 2                         age                                                                        
-    ## 3                   Mean (SD)       59.5 (12.0)       60.1 (11.6)       59.7 (12.3)       59.8 (11.9)
-    ## 4           Median [Min, Max] 60.0 [18.0, 85.0] 61.0 [27.0, 83.0] 62.0 [26.0, 81.0] 61.0 [18.0, 85.0]
-    ## 5                         sex                                                                        
-    ## 6                   0. Female       149 (47.3%)       133 (42.9%)       163 (53.6%)       445 (47.9%)
-    ## 7                     1. Male       166 (52.7%)       177 (57.1%)       141 (46.4%)       484 (52.1%)
-    ## 8                 obstruction                                                                        
-    ## 9                       0. No       252 (80.0%)       247 (79.7%)       250 (82.2%)       749 (80.6%)
-    ## 10                     1. Yes        63 (20.0%)        63 (20.3%)        54 (17.8%)       180 (19.4%)
-    ## 11                perforation                                                                        
-    ## 12                      0. No       306 (97.1%)       300 (96.8%)       296 (97.4%)       902 (97.1%)
-    ## 13                     1. Yes          9 (2.9%)         10 (3.2%)          8 (2.6%)         27 (2.9%)
-    ## 14            organ_adherence                                                                        
-    ## 15                      0. No       268 (85.1%)       261 (84.2%)       265 (87.2%)       794 (85.5%)
-    ## 16                     1. Yes        47 (14.9%)        49 (15.8%)        39 (12.8%)       135 (14.5%)
-    ## 17            differentiation                                                                        
-    ## 18                    1. Well         27 (8.6%)        37 (11.9%)         29 (9.5%)        93 (10.0%)
-    ## 19                2. Moderate       235 (74.6%)       228 (73.5%)       220 (72.4%)       683 (73.5%)
-    ## 20                    3. Poor        53 (16.8%)        45 (14.5%)        55 (18.1%)       153 (16.5%)
-    ## 21               local_spread                                                                        
-    ## 22               1. Submucosa          8 (2.5%)          3 (1.0%)         10 (3.3%)         21 (2.3%)
-    ## 23                  2. Muscle        38 (12.1%)        36 (11.6%)        32 (10.5%)       106 (11.4%)
-    ## 24                  3. Serosa       249 (79.0%)       259 (83.5%)       251 (82.6%)       759 (81.7%)
-    ## 25   4. Contiguous structures         20 (6.3%)         12 (3.9%)         11 (3.6%)         43 (4.6%)
-    ## 26  time_surgery_registration                                                                        
-    ## 27                   0. Short       224 (71.1%)       230 (74.2%)       228 (75.0%)       682 (73.4%)
-    ## 28                    1. Long        91 (28.9%)        80 (25.8%)        76 (25.0%)       247 (26.6%)
-    ## 29             positive_nodes                                                                        
-    ## 30                  Mean (SD)       3.80 (3.74)       3.71 (3.56)       3.51 (3.41)       3.68 (3.57)
-    ## 31          Median [Min, Max]    2.00 [0, 27.0]    2.00 [0, 33.0] 2.00 [1.00, 24.0]    2.00 [0, 33.0]
-    ## 32                 recurrence                                                                        
-    ## 33                      0. No       138 (43.8%)       138 (44.5%)       185 (60.9%)       461 (49.6%)
-    ## 34                     1. Yes       177 (56.2%)       172 (55.5%)       119 (39.1%)       468 (50.4%)
-    ## 35                      death                                                                        
-    ## 36                      0. No       147 (46.7%)       149 (48.1%)       181 (59.5%)       477 (51.3%)
-    ## 37                     1. Yes       168 (53.3%)       161 (51.9%)       123 (40.5%)       452 (48.7%)
-    ## 38                  composite                                                                        
-    ## 39                      0. No       125 (39.7%)       128 (41.3%)       170 (55.9%)       423 (45.5%)
-    ## 40                     1. Yes       190 (60.3%)       182 (58.7%)       134 (44.1%)       506 (54.5%)
+<table class="Rtable1">
+<thead>
+<tr>
+<th class="rowlabel firstrow lastrow">
+</th>
+<th class="firstrow lastrow">
+<span class="stratlabel">Obs<br><span
+class="stratn">(N=315)</span></span>
+</th>
+<th class="firstrow lastrow">
+<span class="stratlabel">Lev<br><span
+class="stratn">(N=310)</span></span>
+</th>
+<th class="firstrow lastrow">
+<span class="stratlabel">Lev+5FU<br><span
+class="stratn">(N=304)</span></span>
+</th>
+<th class="firstrow lastrow">
+<span class="stratlabel">Overall<br><span
+class="stratn">(N=929)</span></span>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="rowlabel firstrow">
+age
+</td>
+<td class="firstrow">
+</td>
+<td class="firstrow">
+</td>
+<td class="firstrow">
+</td>
+<td class="firstrow">
+</td>
+</tr>
+<tr>
+<td class="rowlabel">
+Mean (SD)
+</td>
+<td>
+59.5 (12.0)
+</td>
+<td>
+60.1 (11.6)
+</td>
+<td>
+59.7 (12.3)
+</td>
+<td>
+59.8 (11.9)
+</td>
+</tr>
+<tr>
+<td class="rowlabel lastrow">
+Median (Min, Max)
+</td>
+<td class="lastrow">
+60.0 (18.0, 85.0)
+</td>
+<td class="lastrow">
+61.0 (27.0, 83.0)
+</td>
+<td class="lastrow">
+62.0 (26.0, 81.0)
+</td>
+<td class="lastrow">
+61.0 (18.0, 85.0)
+</td>
+</tr>
+<tr>
+<td class="rowlabel firstrow">
+sex
+</td>
+<td class="firstrow">
+</td>
+<td class="firstrow">
+</td>
+<td class="firstrow">
+</td>
+<td class="firstrow">
+</td>
+</tr>
+<tr>
+<td class='rowlabel'>
+
+0.  Female
+    </td>
+    <td>
+    149 (47.3%)
+    </td>
+    <td>
+    133 (42.9%)
+    </td>
+    <td>
+    163 (53.6%)
+    </td>
+    <td>
+    445 (47.9%)
+    </td>
+    </tr>
+    <tr>
+    <td class='rowlabel lastrow'>
+
+    1.  Male
+        </td>
+        <td class="lastrow">
+        166 (52.7%)
+        </td>
+        <td class="lastrow">
+        177 (57.1%)
+        </td>
+        <td class="lastrow">
+        141 (46.4%)
+        </td>
+        <td class="lastrow">
+        484 (52.1%)
+        </td>
+        </tr>
+        <tr>
+        <td class="rowlabel firstrow">
+        obstruction
+        </td>
+        <td class="firstrow">
+        </td>
+        <td class="firstrow">
+        </td>
+        <td class="firstrow">
+        </td>
+        <td class="firstrow">
+        </td>
+        </tr>
+        <tr>
+        <td class='rowlabel'>
+
+        0.  No
+            </td>
+            <td>
+            252 (80.0%)
+            </td>
+            <td>
+            247 (79.7%)
+            </td>
+            <td>
+            250 (82.2%)
+            </td>
+            <td>
+            749 (80.6%)
+            </td>
+            </tr>
+            <tr>
+            <td class='rowlabel lastrow'>
+
+            1.  Yes
+                </td>
+                <td class="lastrow">
+                63 (20.0%)
+                </td>
+                <td class="lastrow">
+                63 (20.3%)
+                </td>
+                <td class="lastrow">
+                54 (17.8%)
+                </td>
+                <td class="lastrow">
+                180 (19.4%)
+                </td>
+                </tr>
+                <tr>
+                <td class="rowlabel firstrow">
+                perforation
+                </td>
+                <td class="firstrow">
+                </td>
+                <td class="firstrow">
+                </td>
+                <td class="firstrow">
+                </td>
+                <td class="firstrow">
+                </td>
+                </tr>
+                <tr>
+                <td class='rowlabel'>
+
+                0.  No
+                    </td>
+                    <td>
+                    306 (97.1%)
+                    </td>
+                    <td>
+                    300 (96.8%)
+                    </td>
+                    <td>
+                    296 (97.4%)
+                    </td>
+                    <td>
+                    902 (97.1%)
+                    </td>
+                    </tr>
+                    <tr>
+                    <td class='rowlabel lastrow'>
+
+                    1.  Yes
+                        </td>
+                        <td class="lastrow">
+                        9 (2.9%)
+                        </td>
+                        <td class="lastrow">
+                        10 (3.2%)
+                        </td>
+                        <td class="lastrow">
+                        8 (2.6%)
+                        </td>
+                        <td class="lastrow">
+                        27 (2.9%)
+                        </td>
+                        </tr>
+                        <tr>
+                        <td class="rowlabel firstrow">
+                        organ_adherence
+                        </td>
+                        <td class="firstrow">
+                        </td>
+                        <td class="firstrow">
+                        </td>
+                        <td class="firstrow">
+                        </td>
+                        <td class="firstrow">
+                        </td>
+                        </tr>
+                        <tr>
+                        <td class='rowlabel'>
+
+                        0.  No
+                            </td>
+                            <td>
+                            268 (85.1%)
+                            </td>
+                            <td>
+                            261 (84.2%)
+                            </td>
+                            <td>
+                            265 (87.2%)
+                            </td>
+                            <td>
+                            794 (85.5%)
+                            </td>
+                            </tr>
+                            <tr>
+                            <td class='rowlabel lastrow'>
+
+                            1.  Yes
+                                </td>
+                                <td class="lastrow">
+                                47 (14.9%)
+                                </td>
+                                <td class="lastrow">
+                                49 (15.8%)
+                                </td>
+                                <td class="lastrow">
+                                39 (12.8%)
+                                </td>
+                                <td class="lastrow">
+                                135 (14.5%)
+                                </td>
+                                </tr>
+                                <tr>
+                                <td class="rowlabel firstrow">
+                                differentiation
+                                </td>
+                                <td class="firstrow">
+                                </td>
+                                <td class="firstrow">
+                                </td>
+                                <td class="firstrow">
+                                </td>
+                                <td class="firstrow">
+                                </td>
+                                </tr>
+                                <tr>
+                                <td class='rowlabel'>
+
+                                1.  Well
+                                    </td>
+                                    <td>
+                                    27 (8.6%)
+                                    </td>
+                                    <td>
+                                    37 (11.9%)
+                                    </td>
+                                    <td>
+                                    29 (9.5%)
+                                    </td>
+                                    <td>
+                                    93 (10.0%)
+                                    </td>
+                                    </tr>
+                                    <tr>
+                                    <td class='rowlabel'>
+
+                                    2.  Moderate
+                                        </td>
+                                        <td>
+                                        235 (74.6%)
+                                        </td>
+                                        <td>
+                                        228 (73.5%)
+                                        </td>
+                                        <td>
+                                        220 (72.4%)
+                                        </td>
+                                        <td>
+                                        683 (73.5%)
+                                        </td>
+                                        </tr>
+                                        <tr>
+                                        <td class='rowlabel lastrow'>
+
+                                        3.  Poor
+                                            </td>
+                                            <td class="lastrow">
+                                            53 (16.8%)
+                                            </td>
+                                            <td class="lastrow">
+                                            45 (14.5%)
+                                            </td>
+                                            <td class="lastrow">
+                                            55 (18.1%)
+                                            </td>
+                                            <td class="lastrow">
+                                            153 (16.5%)
+                                            </td>
+                                            </tr>
+                                            <tr>
+                                            <td class="rowlabel firstrow">
+                                            local_spread
+                                            </td>
+                                            <td class="firstrow">
+                                            </td>
+                                            <td class="firstrow">
+                                            </td>
+                                            <td class="firstrow">
+                                            </td>
+                                            <td class="firstrow">
+                                            </td>
+                                            </tr>
+                                            <tr>
+                                            <td class='rowlabel'>
+
+                                            1.  Submucosa
+                                                </td>
+                                                <td>
+                                                8 (2.5%)
+                                                </td>
+                                                <td>
+                                                3 (1.0%)
+                                                </td>
+                                                <td>
+                                                10 (3.3%)
+                                                </td>
+                                                <td>
+                                                21 (2.3%)
+                                                </td>
+                                                </tr>
+                                                <tr>
+                                                <td class='rowlabel'>
+
+                                                2.  Muscle
+                                                    </td>
+                                                    <td>
+                                                    38 (12.1%)
+                                                    </td>
+                                                    <td>
+                                                    36 (11.6%)
+                                                    </td>
+                                                    <td>
+                                                    32 (10.5%)
+                                                    </td>
+                                                    <td>
+                                                    106 (11.4%)
+                                                    </td>
+                                                    </tr>
+                                                    <tr>
+                                                    <td class='rowlabel'>
+
+                                                    3.  Serosa
+                                                        </td>
+                                                        <td>
+                                                        249 (79.0%)
+                                                        </td>
+                                                        <td>
+                                                        259 (83.5%)
+                                                        </td>
+                                                        <td>
+                                                        251 (82.6%)
+                                                        </td>
+                                                        <td>
+                                                        759 (81.7%)
+                                                        </td>
+                                                        </tr>
+                                                        <tr>
+                                                        <td class='rowlabel lastrow'>
+
+                                                        4.  Contiguous
+                                                            structures
+                                                            </td>
+                                                            <td class="lastrow">
+                                                            20 (6.3%)
+                                                            </td>
+                                                            <td class="lastrow">
+                                                            12 (3.9%)
+                                                            </td>
+                                                            <td class="lastrow">
+                                                            11 (3.6%)
+                                                            </td>
+                                                            <td class="lastrow">
+                                                            43 (4.6%)
+                                                            </td>
+                                                            </tr>
+                                                            <tr>
+                                                            <td class="rowlabel firstrow">
+                                                            time_surgery_registration
+                                                            </td>
+                                                            <td class="firstrow">
+                                                            </td>
+                                                            <td class="firstrow">
+                                                            </td>
+                                                            <td class="firstrow">
+                                                            </td>
+                                                            <td class="firstrow">
+                                                            </td>
+                                                            </tr>
+                                                            <tr>
+                                                            <td class='rowlabel'>
+
+                                                            0.  Short
+                                                                </td>
+                                                                <td>
+                                                                224
+                                                                (71.1%)
+                                                                </td>
+                                                                <td>
+                                                                230
+                                                                (74.2%)
+                                                                </td>
+                                                                <td>
+                                                                228
+                                                                (75.0%)
+                                                                </td>
+                                                                <td>
+                                                                682
+                                                                (73.4%)
+                                                                </td>
+                                                                </tr>
+                                                                <tr>
+                                                                <td class='rowlabel lastrow'>
+
+                                                                1.  Long
+                                                                    </td>
+                                                                    <td class="lastrow">
+                                                                    91
+                                                                    (28.9%)
+                                                                    </td>
+                                                                    <td class="lastrow">
+                                                                    80
+                                                                    (25.8%)
+                                                                    </td>
+                                                                    <td class="lastrow">
+                                                                    76
+                                                                    (25.0%)
+                                                                    </td>
+                                                                    <td class="lastrow">
+                                                                    247
+                                                                    (26.6%)
+                                                                    </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                    <td class="rowlabel firstrow">
+                                                                    positive_nodes
+                                                                    </td>
+                                                                    <td class="firstrow">
+                                                                    </td>
+                                                                    <td class="firstrow">
+                                                                    </td>
+                                                                    <td class="firstrow">
+                                                                    </td>
+                                                                    <td class="firstrow">
+                                                                    </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                    <td class="rowlabel">
+                                                                    Mean
+                                                                    (SD)
+                                                                    </td>
+                                                                    <td>
+                                                                    3.80
+                                                                    (3.74)
+                                                                    </td>
+                                                                    <td>
+                                                                    3.71
+                                                                    (3.56)
+                                                                    </td>
+                                                                    <td>
+                                                                    3.51
+                                                                    (3.41)
+                                                                    </td>
+                                                                    <td>
+                                                                    3.68
+                                                                    (3.57)
+                                                                    </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                    <td class="rowlabel lastrow">
+                                                                    Median
+                                                                    (Min,
+                                                                    Max)
+                                                                    </td>
+                                                                    <td class="lastrow">
+                                                                    2.00
+                                                                    (0,
+                                                                    27.0)
+                                                                    </td>
+                                                                    <td class="lastrow">
+                                                                    2.00
+                                                                    (0,
+                                                                    33.0)
+                                                                    </td>
+                                                                    <td class="lastrow">
+                                                                    2.00
+                                                                    (1.00,
+                                                                    24.0)
+                                                                    </td>
+                                                                    <td class="lastrow">
+                                                                    2.00
+                                                                    (0,
+                                                                    33.0)
+                                                                    </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                    <td class="rowlabel firstrow">
+                                                                    recurrence
+                                                                    </td>
+                                                                    <td class="firstrow">
+                                                                    </td>
+                                                                    <td class="firstrow">
+                                                                    </td>
+                                                                    <td class="firstrow">
+                                                                    </td>
+                                                                    <td class="firstrow">
+                                                                    </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                    <td class='rowlabel'>
+
+                                                                    0.  No
+                                                                        </td>
+                                                                        <td>
+                                                                        138
+                                                                        (43.8%)
+                                                                        </td>
+                                                                        <td>
+                                                                        138
+                                                                        (44.5%)
+                                                                        </td>
+                                                                        <td>
+                                                                        185
+                                                                        (60.9%)
+                                                                        </td>
+                                                                        <td>
+                                                                        461
+                                                                        (49.6%)
+                                                                        </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                        <td class='rowlabel lastrow'>
+
+                                                                        1.  Yes
+                                                                            </td>
+                                                                            <td class="lastrow">
+                                                                            177
+                                                                            (56.2%)
+                                                                            </td>
+                                                                            <td class="lastrow">
+                                                                            172
+                                                                            (55.5%)
+                                                                            </td>
+                                                                            <td class="lastrow">
+                                                                            119
+                                                                            (39.1%)
+                                                                            </td>
+                                                                            <td class="lastrow">
+                                                                            468
+                                                                            (50.4%)
+                                                                            </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                            <td class="rowlabel firstrow">
+                                                                            death
+                                                                            </td>
+                                                                            <td class="firstrow">
+                                                                            </td>
+                                                                            <td class="firstrow">
+                                                                            </td>
+                                                                            <td class="firstrow">
+                                                                            </td>
+                                                                            <td class="firstrow">
+                                                                            </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                            <td class='rowlabel'>
+
+                                                                            0.  No
+                                                                                </td>
+                                                                                <td>
+                                                                                147
+                                                                                (46.7%)
+                                                                                </td>
+                                                                                <td>
+                                                                                149
+                                                                                (48.1%)
+                                                                                </td>
+                                                                                <td>
+                                                                                181
+                                                                                (59.5%)
+                                                                                </td>
+                                                                                <td>
+                                                                                477
+                                                                                (51.3%)
+                                                                                </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                <td class='rowlabel lastrow'>
+
+                                                                                1.  Yes
+                                                                                    </td>
+                                                                                    <td class="lastrow">
+                                                                                    168
+                                                                                    (53.3%)
+                                                                                    </td>
+                                                                                    <td class="lastrow">
+                                                                                    161
+                                                                                    (51.9%)
+                                                                                    </td>
+                                                                                    <td class="lastrow">
+                                                                                    123
+                                                                                    (40.5%)
+                                                                                    </td>
+                                                                                    <td class="lastrow">
+                                                                                    452
+                                                                                    (48.7%)
+                                                                                    </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                    <td class="rowlabel firstrow">
+                                                                                    composite
+                                                                                    </td>
+                                                                                    <td class="firstrow">
+                                                                                    </td>
+                                                                                    <td class="firstrow">
+                                                                                    </td>
+                                                                                    <td class="firstrow">
+                                                                                    </td>
+                                                                                    <td class="firstrow">
+                                                                                    </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                    <td class='rowlabel'>
+
+                                                                                    0.  No
+                                                                                        </td>
+                                                                                        <td>
+                                                                                        125
+                                                                                        (39.7%)
+                                                                                        </td>
+                                                                                        <td>
+                                                                                        128
+                                                                                        (41.3%)
+                                                                                        </td>
+                                                                                        <td>
+                                                                                        170
+                                                                                        (55.9%)
+                                                                                        </td>
+                                                                                        <td>
+                                                                                        423
+                                                                                        (45.5%)
+                                                                                        </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                        <td class='rowlabel lastrow'>
+
+                                                                                        1.  Yes
+                                                                                            </td>
+                                                                                            <td class="lastrow">
+                                                                                            190
+                                                                                            (60.3%)
+                                                                                            </td>
+                                                                                            <td class="lastrow">
+                                                                                            182
+                                                                                            (58.7%)
+                                                                                            </td>
+                                                                                            <td class="lastrow">
+                                                                                            134
+                                                                                            (44.1%)
+                                                                                            </td>
+                                                                                            <td class="lastrow">
+                                                                                            506
+                                                                                            (54.5%)
+                                                                                            </td>
+                                                                                            </tr>
+                                                                                            </tbody>
+                                                                                            </table>
 
 ### Kaplan-Meier Survival Estimate: Death
 
@@ -470,23 +1852,347 @@ sufficient events within `obstruction` to support analysis:
 
 ``` r
 table1(
-  ~ recurrence + death + composite | differentiation + arm, 
+  ~ recurrence + death + composite | differentiation:arm, 
   data = colon_cancer,
   overall = NULL
 )
 ```
 
-    ##                      Obs        Lev    Lev+5FU         Obs         Lev     Lev+5FU        Obs        Lev    Lev+5FU
-    ## 1                 (N=27)     (N=37)     (N=29)     (N=235)     (N=228)     (N=220)     (N=53)     (N=45)     (N=55)
-    ## 2  recurrence                                                                                                      
-    ## 3       0. No 10 (37.0%) 19 (51.4%) 20 (69.0%) 109 (46.4%) 101 (44.3%) 138 (62.7%) 19 (35.8%) 18 (40.0%) 27 (49.1%)
-    ## 4      1. Yes 17 (63.0%) 18 (48.6%)  9 (31.0%) 126 (53.6%) 127 (55.7%)  82 (37.3%) 34 (64.2%) 27 (60.0%) 28 (50.9%)
-    ## 5       death                                                                                                      
-    ## 6       0. No 11 (40.7%) 19 (51.4%) 21 (72.4%) 118 (50.2%) 112 (49.1%) 132 (60.0%) 18 (34.0%) 18 (40.0%) 28 (50.9%)
-    ## 7      1. Yes 16 (59.3%) 18 (48.6%)  8 (27.6%) 117 (49.8%) 116 (50.9%)  88 (40.0%) 35 (66.0%) 27 (60.0%) 27 (49.1%)
-    ## 8   composite                                                                                                      
-    ## 9       0. No 10 (37.0%) 17 (45.9%) 20 (69.0%)  98 (41.7%)  94 (41.2%) 125 (56.8%) 17 (32.1%) 17 (37.8%) 25 (45.5%)
-    ## 10     1. Yes 17 (63.0%) 20 (54.1%)  9 (31.0%) 137 (58.3%) 134 (58.8%)  95 (43.2%) 36 (67.9%) 28 (62.2%) 30 (54.5%)
+<table class="Rtable1">
+<thead>
+<tr>
+<th class="grouplabel">
+</th>
+<th colspan="3" class="grouplabel">
+<div>
+
+1.  Well
+    </div>
+    </th>
+    <th colspan="3" class="grouplabel">
+    <div>
+
+    2.  Moderate
+        </div>
+        </th>
+        <th colspan="3" class="grouplabel">
+        <div>
+
+        3.  Poor
+            </div>
+            </th>
+            </tr>
+            <tr>
+            <th class="rowlabel firstrow lastrow">
+            </th>
+            <th class="firstrow lastrow">
+            <span class="stratlabel">Obs<br><span
+            class="stratn">(N=27)</span></span>
+            </th>
+            <th class="firstrow lastrow">
+            <span class="stratlabel">Lev<br><span
+            class="stratn">(N=37)</span></span>
+            </th>
+            <th class="firstrow lastrow">
+            <span class="stratlabel">Lev+5FU<br><span
+            class="stratn">(N=29)</span></span>
+            </th>
+            <th class="firstrow lastrow">
+            <span class="stratlabel">Obs<br><span
+            class="stratn">(N=235)</span></span>
+            </th>
+            <th class="firstrow lastrow">
+            <span class="stratlabel">Lev<br><span
+            class="stratn">(N=228)</span></span>
+            </th>
+            <th class="firstrow lastrow">
+            <span class="stratlabel">Lev+5FU<br><span
+            class="stratn">(N=220)</span></span>
+            </th>
+            <th class="firstrow lastrow">
+            <span class="stratlabel">Obs<br><span
+            class="stratn">(N=53)</span></span>
+            </th>
+            <th class="firstrow lastrow">
+            <span class="stratlabel">Lev<br><span
+            class="stratn">(N=45)</span></span>
+            </th>
+            <th class="firstrow lastrow">
+            <span class="stratlabel">Lev+5FU<br><span
+            class="stratn">(N=55)</span></span>
+            </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+            <td class="rowlabel firstrow">
+            recurrence
+            </td>
+            <td class="firstrow">
+            </td>
+            <td class="firstrow">
+            </td>
+            <td class="firstrow">
+            </td>
+            <td class="firstrow">
+            </td>
+            <td class="firstrow">
+            </td>
+            <td class="firstrow">
+            </td>
+            <td class="firstrow">
+            </td>
+            <td class="firstrow">
+            </td>
+            <td class="firstrow">
+            </td>
+            </tr>
+            <tr>
+            <td class='rowlabel'>
+
+            0.  No
+                </td>
+                <td>
+                10 (37.0%)
+                </td>
+                <td>
+                19 (51.4%)
+                </td>
+                <td>
+                20 (69.0%)
+                </td>
+                <td>
+                109 (46.4%)
+                </td>
+                <td>
+                101 (44.3%)
+                </td>
+                <td>
+                138 (62.7%)
+                </td>
+                <td>
+                19 (35.8%)
+                </td>
+                <td>
+                18 (40.0%)
+                </td>
+                <td>
+                27 (49.1%)
+                </td>
+                </tr>
+                <tr>
+                <td class='rowlabel lastrow'>
+
+                1.  Yes
+                    </td>
+                    <td class="lastrow">
+                    17 (63.0%)
+                    </td>
+                    <td class="lastrow">
+                    18 (48.6%)
+                    </td>
+                    <td class="lastrow">
+                    9 (31.0%)
+                    </td>
+                    <td class="lastrow">
+                    126 (53.6%)
+                    </td>
+                    <td class="lastrow">
+                    127 (55.7%)
+                    </td>
+                    <td class="lastrow">
+                    82 (37.3%)
+                    </td>
+                    <td class="lastrow">
+                    34 (64.2%)
+                    </td>
+                    <td class="lastrow">
+                    27 (60.0%)
+                    </td>
+                    <td class="lastrow">
+                    28 (50.9%)
+                    </td>
+                    </tr>
+                    <tr>
+                    <td class="rowlabel firstrow">
+                    death
+                    </td>
+                    <td class="firstrow">
+                    </td>
+                    <td class="firstrow">
+                    </td>
+                    <td class="firstrow">
+                    </td>
+                    <td class="firstrow">
+                    </td>
+                    <td class="firstrow">
+                    </td>
+                    <td class="firstrow">
+                    </td>
+                    <td class="firstrow">
+                    </td>
+                    <td class="firstrow">
+                    </td>
+                    <td class="firstrow">
+                    </td>
+                    </tr>
+                    <tr>
+                    <td class='rowlabel'>
+
+                    0.  No
+                        </td>
+                        <td>
+                        11 (40.7%)
+                        </td>
+                        <td>
+                        19 (51.4%)
+                        </td>
+                        <td>
+                        21 (72.4%)
+                        </td>
+                        <td>
+                        118 (50.2%)
+                        </td>
+                        <td>
+                        112 (49.1%)
+                        </td>
+                        <td>
+                        132 (60.0%)
+                        </td>
+                        <td>
+                        18 (34.0%)
+                        </td>
+                        <td>
+                        18 (40.0%)
+                        </td>
+                        <td>
+                        28 (50.9%)
+                        </td>
+                        </tr>
+                        <tr>
+                        <td class='rowlabel lastrow'>
+
+                        1.  Yes
+                            </td>
+                            <td class="lastrow">
+                            16 (59.3%)
+                            </td>
+                            <td class="lastrow">
+                            18 (48.6%)
+                            </td>
+                            <td class="lastrow">
+                            8 (27.6%)
+                            </td>
+                            <td class="lastrow">
+                            117 (49.8%)
+                            </td>
+                            <td class="lastrow">
+                            116 (50.9%)
+                            </td>
+                            <td class="lastrow">
+                            88 (40.0%)
+                            </td>
+                            <td class="lastrow">
+                            35 (66.0%)
+                            </td>
+                            <td class="lastrow">
+                            27 (60.0%)
+                            </td>
+                            <td class="lastrow">
+                            27 (49.1%)
+                            </td>
+                            </tr>
+                            <tr>
+                            <td class="rowlabel firstrow">
+                            composite
+                            </td>
+                            <td class="firstrow">
+                            </td>
+                            <td class="firstrow">
+                            </td>
+                            <td class="firstrow">
+                            </td>
+                            <td class="firstrow">
+                            </td>
+                            <td class="firstrow">
+                            </td>
+                            <td class="firstrow">
+                            </td>
+                            <td class="firstrow">
+                            </td>
+                            <td class="firstrow">
+                            </td>
+                            <td class="firstrow">
+                            </td>
+                            </tr>
+                            <tr>
+                            <td class='rowlabel'>
+
+                            0.  No
+                                </td>
+                                <td>
+                                10 (37.0%)
+                                </td>
+                                <td>
+                                17 (45.9%)
+                                </td>
+                                <td>
+                                20 (69.0%)
+                                </td>
+                                <td>
+                                98 (41.7%)
+                                </td>
+                                <td>
+                                94 (41.2%)
+                                </td>
+                                <td>
+                                125 (56.8%)
+                                </td>
+                                <td>
+                                17 (32.1%)
+                                </td>
+                                <td>
+                                17 (37.8%)
+                                </td>
+                                <td>
+                                25 (45.5%)
+                                </td>
+                                </tr>
+                                <tr>
+                                <td class='rowlabel lastrow'>
+
+                                1.  Yes
+                                    </td>
+                                    <td class="lastrow">
+                                    17 (63.0%)
+                                    </td>
+                                    <td class="lastrow">
+                                    20 (54.1%)
+                                    </td>
+                                    <td class="lastrow">
+                                    9 (31.0%)
+                                    </td>
+                                    <td class="lastrow">
+                                    137 (58.3%)
+                                    </td>
+                                    <td class="lastrow">
+                                    134 (58.8%)
+                                    </td>
+                                    <td class="lastrow">
+                                    95 (43.2%)
+                                    </td>
+                                    <td class="lastrow">
+                                    36 (67.9%)
+                                    </td>
+                                    <td class="lastrow">
+                                    28 (62.2%)
+                                    </td>
+                                    <td class="lastrow">
+                                    30 (54.5%)
+                                    </td>
+                                    </tr>
+                                    </tbody>
+                                    </table>
 
 ``` r
 ggsurvplot(
@@ -936,148 +2642,74 @@ Estimates from a Robust Cox Proportional Hazards Model.
 ### Targeted Maximum Likelihood
 
 ``` r
-surv_metadata_adj <-
-  adjrct::survrct(
-    outcome.formula = Surv(months_to_death, event_death) ~ tx +
-      age + positive_nodes +
-      sex + obstruction + organ_adherence + differentiation +
-      local_spread, 
-    trt.formula =
-      tx ~ age + positive_nodes +
-      sex + obstruction + organ_adherence + differentiation +
-      local_spread,
-    data = colon_cancer_lev5fu_vs_obs
-  )
+# surv_metadata_adj <-
+#   adjrct::survrct(
+#     outcome.formula = Surv(months_to_death, event_death) ~ tx +
+#       age + positive_nodes +
+#       sex + obstruction + organ_adherence + differentiation +
+#       local_spread, 
+#     trt.formula =
+#       tx ~ age + positive_nodes +
+#       sex + obstruction + organ_adherence + differentiation +
+#       local_spread,
+#     data = colon_cancer_lev5fu_vs_obs
+#   )
 ```
 
 #### Calculate Restricted Mean Survival Time
 
 ``` r
-rmst_metadata_adj <-
-  adjrct::rmst(
-    metadata = surv_metadata_adj,
-    horizon = 60
-  )
-
-rmst_metadata_adj
+# rmst_metadata_adj <-
+#   adjrct::rmst(
+#     metadata = surv_metadata_adj,
+#     horizon = 60
+#   )
+# 
+# rmst_metadata_adj
 ```
-
-    ## RMST Estimator: tmle
-
-    ## Marginal RMST: E(min[T, 60] | A = a)
-
-    ## Treatment Arm
-
-    ## Estimate: 47.74
-
-    ## Std. error: 1.07
-
-    ## 95% CI: (45.64, 49.85)
-
-    ## Control Arm
-
-    ## Estimate: 44.53
-
-    ## Std. error: 1.03
-
-    ## 95% CI: (42.52, 46.54)
-
-    ## Treatment Effect: E(min[T, 60] | A = 1) - E(min[T, 60] | A = 0)
-
-    ## Additive effect
-
-    ## Estimate: 3.22
-
-    ## Std. error: 1.43
-
-    ## 95% CI: (0.41, 6.02)
 
 ``` r
-rmst_metadata_adj_table <-
-  with(
-    rmst_metadata_adj$estimates[[1]],
-    
-    bind_rows(
-      data.frame(
-        Arm = "Treatment",
-        Estimate = arm1,
-        SE = arm1.std.error,
-        LCL = arm1.conf.low,
-        UCL = arm1.conf.high
-      ),
-      
-      data.frame(
-        Arm = "Control",
-        Estimate = arm0,
-        SE = arm0.std.error,
-        LCL = arm0.conf.low,
-        UCL = arm0.conf.high
-      ),
-      data.frame(
-        Arm = "Treatment - Control",
-        Estimate = theta,
-        SE = std.error,
-        LCL = theta.conf.low,
-        UCL = theta.conf.high
-      )
-    )
-  )
-
-kable(
-  x = rmst_metadata_adj_table,
-  caption = "Restricted Mean Survival Time "
-)
+# rmst_metadata_adj_table <-
+#   with(
+#     rmst_metadata_adj$estimates[[1]],
+#     
+#     bind_rows(
+#       data.frame(
+#         Arm = "Treatment",
+#         Estimate = arm1,
+#         SE = arm1.std.error,
+#         LCL = arm1.conf.low,
+#         UCL = arm1.conf.high
+#       ),
+#       
+#       data.frame(
+#         Arm = "Control",
+#         Estimate = arm0,
+#         SE = arm0.std.error,
+#         LCL = arm0.conf.low,
+#         UCL = arm0.conf.high
+#       ),
+#       data.frame(
+#         Arm = "Treatment - Control",
+#         Estimate = theta,
+#         SE = std.error,
+#         LCL = theta.conf.low,
+#         UCL = theta.conf.high
+#       )
+#     )
+#   )
+# 
+# kable(
+#   x = rmst_metadata_adj_table,
+#   caption = "Restricted Mean Survival Time "
+# )
 ```
-
-| Arm                 |  Estimate |       SE |        LCL |       UCL |
-|:--------------------|----------:|---------:|-----------:|----------:|
-| Treatment           | 47.743148 | 1.072887 | 45.6403279 | 49.845969 |
-| Control             | 44.527301 | 1.026012 | 42.5163553 | 46.538247 |
-| Treatment - Control |  3.215847 | 1.431316 |  0.4105197 |  6.021175 |
-
-Restricted Mean Survival Time
 
 #### Calculate Survival Probability
 
 ``` r
-adjrct::survprob(
-  metadata = surv_metadata_adj,
-  horizon = 60
-)
+# adjrct::survprob(
+#   metadata = surv_metadata_adj,
+#   horizon = 60
+# )
 ```
-
-    ## Warning: step size truncated due to increasing deviance
-
-    ## Warning: step size truncated due to increasing deviance
-
-    ## Warning: step size truncated due to increasing deviance
-
-    ## Survival Probability Estimator: tmle
-
-    ## Marginal Survival Probability: Pr(T > 60 | A = a)
-
-    ## Treatment Arm
-
-    ## Estimate: 0.63
-
-    ## Std. error: 0.03
-
-    ## 95% CI: (0.58, 0.69)
-
-    ## Control Arm
-
-    ## Estimate: 0.53
-
-    ## Std. error: 0.03
-
-    ## 95% CI: (0.48, 0.59)
-
-    ## Treatment Effect: Pr(T > 60 | A = 1) - Pr(T > 60 | A = 0)
-
-    ## Additive effect
-
-    ## Estimate: 0.1
-
-    ## Std. error: 0.04
-
-    ## 95% CI: (0.03, 0.17)
