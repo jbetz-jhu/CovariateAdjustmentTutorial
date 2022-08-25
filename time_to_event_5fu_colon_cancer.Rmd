@@ -1,0 +1,685 @@
+---
+title: "Covariate Adjustment in Randomized Trials"
+subtitle: "Worked Examples using Time-to-Event Clinical Trial Data"
+author: "Josh Betz (jbetz@jhu.edu), Kelly Van Lancker (kvanlan3@jhu.edu), and Michael Rosenblum (mrosen@jhu.edu)"
+date: "`r format(Sys.time(), '%Y-%m-%d %I:%M')`"
+header-includes:
+   - \usepackage{amsmath}
+output:
+  github_document:
+    toc: true
+# bibliography: covariate_adjustment.bib # For Bibliography - In same folder
+# csl: biomed-central.csl # For citation style - In same folder
+---
+
+<style type="text/css">
+.main-container {
+  max-width: 100% !important;
+  margin: auto;
+}
+</style>
+
+```{r Setup, echo = FALSE, message = FALSE}
+### Graphics and Report Options ################################################
+table_digits <- 1 # Significant Figures for Mean/SD, N (%), Median/IQR
+
+bootstrap_tutorial_url <-
+  paste0(
+    "https://jbetz-jhu.github.io/CovariateAdjustmentTutorial/",
+    "bootstrap_tutorial.html"
+  )
+
+survival_colon_cancer_url <-
+  paste0(
+    "https://github.com/jbetz-jhu/CovariateAdjustmentTutorial/blob/main/",
+    "create_moertel_cancer_data.r"
+  )
+
+
+### Set Default Options ########################################################
+options(
+  knitr.kable.NA = "",
+  width = 300
+)
+
+
+
+### Set Default Options ########################################################
+fig_w <- 8
+fig_h <- 8
+
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  # warning = FALSE,
+  results = "markup",
+  fig.width = fig_w,
+  fig.height = fig_h,
+  dpi = 300,
+  dev = "CairoPNG"
+)
+```
+
+
+## Executive Summary
+
+Randomly allocating participants to treatment arms will tend to produce groups that are initially comparable to one another across both observed and unobserved factors. In any given randomized trial, there will be some degree of imbalance in the distribution of baseline covariates between treatment groups. When a variable is a strong predictor of the outcome and is imbalanced across treatment arms, it represents a potential confounding variable and source of bias, even if these differences are not statistically significant [@Assmann2000]. Confounding can be addressed both in the design phase of a trial, using stratified randomization to lessen the potential for imbalance, and in during the analysis phase, through covariate adjustment.
+
+
+Covariate adjustment can lead to a more efficient trial, potentially lowering the required sample size to detect a given treatment effect if it exists, or provide greater precision (shorter confidence interval widths and higher power) for the same sample size and treatment effect. When stratified randomization is used, covariate adjustment is generally suggested, but not always implemented, which can lead to reduced power and precision [@Kahan2011]. Accessible and practical discussions of baseline balance, stratified randomized trials, and adjusted analyses are also available to offer further explanation and guidance to investigators [@Kernan1999, @Assmann2000].
+
+
+When using regression models for inference, it is important to understand how model misspecification may affect statistical inference. Fortunately, there are several approaches to covariate-adjusted analyses whose validity does not depend on a correctly specified model, or provide inference with greater robustness to misspecification than those used in common practice.
+
+
+**The focus of this template is on the analysis of time-to-event outcomes.** This tutorial illustrates the use of covariate-adjusted analysis in clinical trials using an example dataset from a randomized trial of treatments for colon cancer. This tutorial illustrates calculating the restricted mean survival time (RMST) and survival probability with and without adjustment for covariates. These methods are contrasted against methods commonly used in observational studies and randomized trials, such as the log-rank test and Cox Proportional Hazards model.
+
+
+
+#### Using This Tutorial
+
+This tutorial contains an example dataset as well as code to illustrate how to perform covariate adjustment in practice for continuous and binary outcomes using [R](https://www.r-project.org/). R is a free and open source language and statistical computing environment. [Rstudio](https://rstudio.com/) is a powerful development environment for using the R language. The ability of R can be extended by downloading software packages from the [Comprehensive R Archival Network (CRAN)](https://cran.r-project.org/). In R, these packages can be installed from the Comprehensive R Archival Network, or CRAN, using the `install.packages()` command. In Rstudio IDE, there is a 'Packages' tab that allows users to see which packages are installed, which packages are currently in use, and install or update packages using a graphical interface. Once the required packages are installed, data can be downloaded from Github, and users can run the code on their own devices.
+
+
+
+
+## Covariate Adjusted Analysis in Practice
+
+Once R and Rstudio have been installed, additional packages must be installed from CRAN or Github, and some tools may need to be installed to compile packages from source code.
+
+
+### Installing RTools - Compiling Packages from Source
+
+Some R packages must be compiled from source code. [RTools](https://cran.r-project.org/bin/windows/Rtools/) is a set of software tools for compiling such R packages. Choose the appropriate version of RTools for your version of R.
+
+
+### Installing R Packages from CRAN
+
+The following packages and their dependencies needs to be installed:
+
+  - [knitr](https://cran.r-project.org/web/packages/knitr/index.html) - Tools for literate programming: including code in reproducible reports
+  - [devtools](https://cloud.r-project.org/web/packages/devtools/index.html) - A suite of tools for R package development
+  - [tidyverse](https://www.tidyverse.org/packages/) - An ecosystem of packages for working with data
+  - [table1](https://cran.r-project.org/web/packages/table1/index.html) - Creating simple tabulations in aggregate and by treatment arm
+  - [survminer](https://cran.r-project.org/web/packages/survminer/index.html) - Creating plots of time-to-event data
+  - [survRM2](https://cran.r-project.org/web/packages/survRM2/index.html) - Calculating the restricted mean survival time (RMST) with and without covariate adjustment.
+  
+
+```{r install-packages, eval = FALSE}
+required_packages <-
+  c("knitr",
+    "devtools",
+    "tidyverse",
+    "table1",
+    "survminer",
+    "coxrobust",
+    "survRM2"
+  )
+
+install.packages(required_packages)
+```
+
+**NOTE:** Packages only need to be installed once: after installation, they can be updated using the 'Packages' tab in RStudio.
+
+
+
+### Installing R Packages from GitHub
+
+[Github](https://github.com/) is a platform for developing software and documentation with version control. It is a common platform for R package development, testing, reporting and addressing software issues. Use `devtools::install_github` to install packages hosted on Github.
+
+```{r install-github, eval = FALSE}
+devtools::install_github("nt-williams/simul")
+devtools::install_github("nt-williams/adjrct")
+```
+
+
+
+
+### Loading Installed Packages
+
+Once the required packages are installed, they can be loaded using `library()` command.
+
+
+```{r load-packages}
+library(knitr) # Printing tables in reports
+library(tidyverse) # Data manipulation: dplyr, tidyr
+library(table1) # Creation of Summary tables
+library(survival) # For AFT & Cox Proportional Hazards Models
+library(survminer) # For Kaplan-Meier Plots
+library(coxrobust) # For coxr: Robust Cox PH Model
+library(survRM2) # For restricted mean survival times (RMST)
+library(adjrct) # For TMLE estimates of RMST, Survival Probability
+library(splines) # For adding smoothing splines
+```
+
+
+
+
+## Chemotherapy for Stage B/C Colon Cancer
+
+Data used in this example come from the `survival::colon` dataset, a trial of adjuvant chemotherapy for colon cancer. See `?survival::colon` for more details. In brief, the study had three treatment arms: observation, levamisole, and levamisole + 5-Fluorouracil.
+
+These data have been pre-processed to make the data more usable. Event times were converted from long (one row per event type: recurrence vs. death) to wide (each event as separate columns instead of rows), categorical variables were cast as factors with named labels to make them easier to interpret, and since some individuals were followed up for 8 years or so, the scale of time was coarsened to months instead of days. The code for processing the data is available [here](`r survival_colon_cancer_url`)
+
+
+```{r colon-data-from-survival-package, echo = FALSE}
+data_url <-
+  "https://github.com/jbetz-jhu/CovariateAdjustmentTutorial/raw/main/moertel_colon_cancer_trial.RData"
+
+load(file = url(data_url))
+```
+
+
+
+
+  - `id`: Patient id
+  - Baseline Covariates
+    - `arm`: Treatment - Obs(ervation), Lev(amisole), Lev(amisole)+5-FU
+    - `age`: Age in years
+    - `sex`: Patient Sex
+    - `obstruction`:	obstruction of colon by tumor
+    - `perforation`:	perforation of colon
+    - `adherence`:	adherence to nearby organs
+    - `positive_nodes`: number of lymph nodes with detectable cancer
+    - `differentiation`:	differentiation of tumor (`1. Well`, `2. Moderate`, `3. Poor`)
+    - `extent`:	Extent of local spread (`1. Submucosa`, `2. Muscle`, `3. Serosa`, `4. Contiguous structures`)
+    - `time_surgery_registration`:	time from surgery to registration
+  - Outcome:
+    - `event_recurrence`:	Observed (1) or Censored (0)
+    - `time_to_recurrence`:	days until recurrence event
+    - `months_to_recurrence`:	months until recurrence event
+    - `event_death`:	Observed (1) or Censored (0)
+    - `time_to_death`:	days until recurrence event
+    - `months_to_death`: months until recurrence event
+    - `event_composite`: Observed death OR recurrence (1) or neither event (0)
+    - `time_to_composite`: days until first composite event or censoring time
+    - `months_to_composite`: days until first composite event or censoring time
+
+
+
+Since some functions require a binary treatment indicator and the study contains three arms, we can create a dataset for each binary treatment comparison of interest:
+
+```{r create-datasets-with-binary-treatment}
+# Datasets with Binary Treatment ###############################################
+# LEV vs Obs
+colon_cancer_lev_vs_obs <-
+  colon_cancer %>% 
+  dplyr::filter(
+    arm %in% c("Lev", "Obs")
+  ) %>% 
+  dplyr::mutate(
+    tx = as.integer(1*(arm == "Lev"))
+  )
+
+
+# LEV+5FU vs LEV
+colon_cancer_lev5fu_vs_lev <-
+  colon_cancer %>% 
+  dplyr::filter(
+    arm %in% c("Lev", "Lev+5FU")
+  ) %>% 
+  dplyr::mutate(
+    tx = as.integer(1*(arm == "Lev+5FU"))
+  )
+
+
+# LEV+5FU vs Obs
+colon_cancer_lev5fu_vs_obs <-
+  colon_cancer %>% 
+  dplyr::filter(
+    arm %in% c("Obs", "Lev+5FU")
+  ) %>% 
+  dplyr::mutate(
+    tx = as.integer(1*(arm == "Lev+5FU"))
+  )
+```
+
+
+
+
+### Baseline Demographics & Stratum
+
+Below are summary statistics of participant characteristics at baseline.
+```{r table-demographic-characteristics-original}
+table1(
+  ~ age + sex + obstruction + perforation + organ_adherence +
+    differentiation + local_spread + time_surgery_registration +
+    positive_nodes + recurrence + death + composite | arm, 
+  data = colon_cancer_original
+)
+```
+
+Note that `differentiation` and `positive_nodes` contain missing values, which must be imputed. If there are any missing covariates, observations may be dropped from analyses, or these may cause 
+
+Below are summary statistics of participant characteristics at baseline *after* imputing missing baseline covariates.
+
+```{r table-demographic-characteristics-imputed}
+table1(
+  ~ age + sex + obstruction + perforation + organ_adherence +
+    differentiation + local_spread + time_surgery_registration +
+    positive_nodes + recurrence + death + composite | arm, 
+  data = colon_cancer
+)
+```
+
+
+
+
+### Kaplan-Meier Survival Estimate: Death
+
+#### Time Scale: Days
+```{r kaplan-meier-death-days}
+time_to_death_km <-
+  survfit(
+      formula = Surv(time_to_death, event_death) ~ arm,
+      data = colon_cancer
+    )
+
+ggsurvplot(
+  fit = time_to_death_km,
+  conf.int = TRUE,
+  risk.table = TRUE,
+  surv.median.line = "hv",
+  break.time.by = 365.25,
+  xlab = "Days", 
+  ylab = "Overall survival probability"
+)
+```
+
+
+#### Time Scale: Months
+
+```{r kaplan-meier-death-months}
+months_to_death_km <-
+  survfit(
+      formula = Surv(months_to_death, event_death) ~ arm,
+      data = colon_cancer
+    )
+
+ggsurvplot(
+  fit = months_to_death_km,
+  conf.int = TRUE,
+  risk.table = TRUE,
+  surv.median.line = "hv",
+  break.time.by = 12,
+  xlab = "Months", 
+  ylab = "Overall survival probability"
+)
+```
+
+Note that numbers at will not exactly match across plots: actual calendar months vary in length from 28 to 31 days, while the time scale is coarsened by periods of (365.25/12 $\approx$ 30.4) days.
+
+
+
+
+## Checks on the Data:
+
+### Frequency of Events
+
+Rare events may lead to numerical instabilities in estimation: it is always advisable to check whether the frequencies of events in aggregate and within categories of interest are sufficient for the planned analysis. For example, tabulations can assess whether there are sufficient events within `obstruction` to support analysis:
+
+```{r table-events-by-arm-and-covariate}
+table1(
+  ~ recurrence + death + composite | differentiation + arm, 
+  data = colon_cancer,
+  overall = NULL
+)
+```
+
+
+```{r kaplan-meier-death-obstruction, fig.width = 2*fig_w}
+ggsurvplot(
+  fit = time_to_death_km,
+  conf.int = TRUE,
+  surv.median.line = "hv",
+  break.time.by = 365,
+  facet.by = "differentiation",
+  xlab = "Days", 
+  ylab = "Overall survival probability"
+)
+```
+
+
+
+
+### Reference level for Treatment
+
+When the treatment is a `factor` variable, we can use the `levels()` function to see the reference level (i.e. the comparator/control group): it will appear as the first level.
+
+```{r check-reference-level}
+# Check reference level
+levels(colon_cancer$arm)
+```
+
+**Make sure that the reference level is appropriately chosen before running analyses to avoid errors in inference.**
+
+
+
+
+--------------------------------------------------------------------------------
+
+
+
+
+## Unadjusted Tests & Models
+
+
+### Log-rank Test
+
+The log-rank test (and the G-rho family of rank-based test procedures) can be obtained using `survival::survdiff`:
+
+```{r unadjusted-log-rank-test}
+survival::survdiff(
+  formula = Surv(months_to_death, event_death) ~ arm,
+  data = colon_cancer
+)
+```
+
+
+
+
+### Cox Proportional Hazards Model
+
+The Cox Proportional Hazards model can be fit using the `survival::coxph` function. Robust standard errors can be utilized with the argument `robust = TRUE`.
+
+```{r unadjusted-cox}
+unadjusted_cox <-
+  survival::coxph(
+    formula = Surv(months_to_death, event_death) ~ arm,
+    # Use Efron's Method for Tied Event Times
+    ties = "efron",
+    # Use Robust Standard Errors
+    robust = TRUE,
+    data = colon_cancer
+  )
+
+summary(unadjusted_cox)
+```
+
+The Proportional Hazards (PH) assumption can be assessed using `survival::cox.zph`:
+
+```{r unadjusted-cox-ph-test}
+unadjusted_cox_ph_test <- cox.zph(unadjusted_cox)
+
+print(unadjusted_cox_ph_test)
+
+# Plot 
+plot(cox.zph(unadjusted_cox))
+```
+
+
+
+
+### Robust Cox Proportional Hazards Model
+
+The `coxrobust` package has the `coxr` package for fitting a robust Cox proportional hazard model, based on a smooth modification of the partial likelihood (see `?coxrobust::coxr` for details).
+
+```{r unadjusted-robust-cox}
+unadjusted_robust_cox <-
+  coxr(
+    formula = Surv(months_to_death, event_death) ~ arm,
+    data = colon_cancer
+  )
+
+unadjusted_robust_cox_table <- 
+  with(unadjusted_robust_cox,
+       data.frame(
+         Beta = coefficients,
+         SE = sqrt(diag(unadjusted_robust_cox$var))
+       )
+  ) %>% 
+  dplyr::mutate(
+    `Beta LCL` = Beta + qnorm(p = 0.025)*SE,
+    `Beta UCL` = Beta + qnorm(p = 0.0975)*SE,
+    HR = exp(Beta),
+    `HR LCL` = exp(`Beta LCL`),
+    `HR UCL` = exp(`Beta UCL`)
+  )
+
+unadjusted_robust_cox_table %>% 
+  kable(
+    x = .,
+    digits = 2,
+    caption = "Estimates from a Robust Cox Proportional Hazards Model."
+  )
+```
+
+
+
+### Restricted Mean Survival Time: `survRM2::rmst2`
+
+```{r unadjusted-restricted-mean-survival-time-rmst2}
+with(
+  colon_cancer_lev5fu_vs_obs,
+  survRM2::rmst2(
+    time = months_to_death,
+    status = event_death,
+    arm = tx,
+    tau = 60
+  )
+)
+```
+
+
+
+
+### Targeted Maximum Likelihood Estimator (TMLE): `adjrct::survrct`
+
+```{r unadjusted-tmle-adjrct}
+surv_metadata_unadj <-
+  adjrct::survrct(
+    outcome.formula = Surv(months_to_death, event_death) ~ tx, 
+    trt.formula = tx ~ 1,
+    data = colon_cancer_lev5fu_vs_obs,
+  )
+```
+
+
+
+
+#### Unadjusted Restricted Mean Survival Time (RMST)
+
+```{r unadjusted-tmle-survival-rmst-adjrct}
+adjrct::rmst(
+  metadata = surv_metadata_unadj,
+  horizon = 60
+)
+```
+
+
+
+
+#### Unadjusted Survival Probability
+
+```{r unadjusted-tmle-survival-probability-adjrct}
+adjrct::survprob(
+  metadata = surv_metadata_unadj,
+  horizon = 60
+)
+```
+
+
+
+
+
+--------------------------------------------------------------------------------
+
+
+
+
+## Covariate Adjusted Analyses
+
+
+### Propensity Score
+
+```{r propensity-score-glm}
+ps_model <-
+  glm(
+    formula =
+      tx ~ age + positive_nodes +
+      sex + obstruction + organ_adherence + differentiation +
+      local_spread,
+    data = colon_cancer_lev5fu_vs_obs,
+    family = binomial(link = "logit")
+  )
+
+summary(ps_model)
+```
+
+
+
+
+### Adjusted Cox Proportional Hazards Model
+
+```{r adjusted-cox}
+adjusted_cox <-
+  coxph(
+    formula = Surv(months_to_death, event_death) ~ arm +
+      # Covariates
+      pspline(age) + pspline(positive_nodes) +
+      sex + obstruction + organ_adherence + differentiation +
+      local_spread,
+    # Use Efron's Method for Tied Event Times
+    ties = "efron",
+    # Use Robust Standard Errors
+    robust = TRUE,
+    data = colon_cancer
+  )
+```
+
+
+```{r adjusted-cox-proportional-hazards}
+cox.zph(
+  fit = adjusted_cox
+)
+```
+
+
+```{r adjusted-cox-wald-tests}
+summary(adjusted_cox)
+```
+
+
+
+### Adjusted Robust Cox Proportional Hazards Model
+
+```{r adjusted-robust-cox}
+adjusted_robust_cox <-
+  coxr(
+    formula = Surv(months_to_death, event_death) ~ arm +
+      # Covariates
+      bs(age) + bs(positive_nodes) +
+      sex + obstruction + organ_adherence + differentiation +
+      local_spread,
+    data = colon_cancer
+  )
+
+adjusted_robust_cox_table <- 
+  with(adjusted_robust_cox,
+       data.frame(
+         Beta = coefficients,
+         SE = sqrt(diag(unadjusted_robust_cox$var))
+       )
+  ) %>% 
+  dplyr::mutate(
+    `Beta LCL` = Beta + qnorm(p = 0.025)*SE,
+    `Beta UCL` = Beta + qnorm(p = 0.0975)*SE,
+    HR = exp(Beta),
+    `HR LCL` = exp(`Beta LCL`),
+    `HR UCL` = exp(`Beta UCL`)
+  )
+
+adjusted_robust_cox_table %>% 
+  kable(
+    x = .,
+    digits = 2,
+    caption = "Estimates from a Robust Cox Proportional Hazards Model."
+  )
+```
+
+
+--------------------------------------------------------------------------------
+
+
+
+
+### Targeted Maximum Likelihood
+
+```{r tmle}
+surv_metadata_adj <-
+  adjrct::survrct(
+    outcome.formula = Surv(months_to_death, event_death) ~ tx +
+      age + positive_nodes +
+      sex + obstruction + organ_adherence + differentiation +
+      local_spread, 
+    trt.formula =
+      tx ~ age + positive_nodes +
+      sex + obstruction + organ_adherence + differentiation +
+      local_spread,
+    data = colon_cancer_lev5fu_vs_obs
+  )
+```
+
+
+
+
+#### Calculate Restricted Mean Survival Time
+
+```{r tmle-adjusted-rmst, results = 'asis', message = TRUE}
+rmst_metadata_adj <-
+  adjrct::rmst(
+    metadata = surv_metadata_adj,
+    horizon = 60
+  )
+
+rmst_metadata_adj
+```
+
+
+```{r tmle-adjusted-rmst-format}
+rmst_metadata_adj_table <-
+  with(
+    rmst_metadata_adj$estimates[[1]],
+    
+    bind_rows(
+      data.frame(
+        Arm = "Treatment",
+        Estimate = arm1,
+        SE = arm1.std.error,
+        LCL = arm1.conf.low,
+        UCL = arm1.conf.high
+      ),
+      
+      data.frame(
+        Arm = "Control",
+        Estimate = arm0,
+        SE = arm0.std.error,
+        LCL = arm0.conf.low,
+        UCL = arm0.conf.high
+      ),
+      data.frame(
+        Arm = "Treatment - Control",
+        Estimate = theta,
+        SE = std.error,
+        LCL = theta.conf.low,
+        UCL = theta.conf.high
+      )
+    )
+  )
+
+kable(
+  x = rmst_metadata_adj_table,
+  caption = "Restricted Mean Survival Time "
+)
+```
+
+
+
+#### Calculate Survival Probability
+
+```{r tmle-survival-probability, results = 'asis', message = TRUE}
+adjrct::survprob(
+  metadata = surv_metadata_adj,
+  horizon = 60
+)
+```
