@@ -113,10 +113,6 @@ are contrasted against methods commonly used in observational studies
 and randomized trials, such as the log-rank test and Cox Proportional
 Hazards model.
 
-$x$
-
-$$x = y$$
-
 #### Using This Tutorial
 
 This tutorial contains an example dataset as well as code to illustrate
@@ -1812,7 +1808,7 @@ ggsurvplot(
 )
 ```
 
-![](time_to_event_5fu_colon_cancer_files/figure-gfm/kaplan-meier-death-days-1.png)<!-- -->
+<img src="time_to_event_5fu_colon_cancer_files/figure-gfm/kaplan-meier-death-days-1.png" width="80%" style="display: block; margin: auto;" />
 
 #### Time Scale: Months
 
@@ -1834,7 +1830,7 @@ ggsurvplot(
 )
 ```
 
-![](time_to_event_5fu_colon_cancer_files/figure-gfm/kaplan-meier-death-months-1.png)<!-- -->
+<img src="time_to_event_5fu_colon_cancer_files/figure-gfm/kaplan-meier-death-months-1.png" width="80%" style="display: block; margin: auto;" />
 
 Note that numbers at will not exactly match across plots: actual
 calendar months vary in length from 28 to 31 days, while the time scale
@@ -2203,10 +2199,20 @@ ggsurvplot(
   facet.by = "differentiation",
   xlab = "Days", 
   ylab = "Overall survival probability"
-)
+) +
+  theme(
+    # Adjust Plot Labels for Readability
+    axis.text.x = element_text(size = 18),
+    axis.text.y = element_text(size = 18),
+    axis.title.y = element_text(size = 26),
+    axis.title.x = element_text(size = 26),
+    strip.text = element_text(size = 26),
+    legend.text = element_text(size = 22),
+    legend.title = element_text(size = 22)
+  )
 ```
 
-![](time_to_event_5fu_colon_cancer_files/figure-gfm/kaplan-meier-death-obstruction-1.png)<!-- -->
+<img src="time_to_event_5fu_colon_cancer_files/figure-gfm/kaplan-meier-death-obstruction-1.png" width="80%" style="display: block; margin: auto;" />
 
 ### Reference level for Treatment
 
@@ -2313,7 +2319,7 @@ print(unadjusted_cox_ph_test)
 plot(cox.zph(unadjusted_cox))
 ```
 
-![](time_to_event_5fu_colon_cancer_files/figure-gfm/unadjusted-cox-ph-test-1.png)<!-- -->
+<img src="time_to_event_5fu_colon_cancer_files/figure-gfm/unadjusted-cox-ph-test-1.png" alt="Diagnostic plot of the PH assumption" width="80%" style="display: block; margin: auto;" />
 
 ### Robust Cox Proportional Hazards Model
 
@@ -2642,74 +2648,148 @@ Estimates from a Robust Cox Proportional Hazards Model.
 ### Targeted Maximum Likelihood
 
 ``` r
-# surv_metadata_adj <-
-#   adjrct::survrct(
-#     outcome.formula = Surv(months_to_death, event_death) ~ tx +
-#       age + positive_nodes +
-#       sex + obstruction + organ_adherence + differentiation +
-#       local_spread, 
-#     trt.formula =
-#       tx ~ age + positive_nodes +
-#       sex + obstruction + organ_adherence + differentiation +
-#       local_spread,
-#     data = colon_cancer_lev5fu_vs_obs
-#   )
+surv_metadata_adj <-
+  adjrct::survrct(
+    outcome.formula = Surv(months_to_death, event_death) ~ tx +
+      age + positive_nodes +
+      sex + obstruction + organ_adherence + differentiation +
+      local_spread,
+    trt.formula =
+      tx ~ age + positive_nodes +
+      sex + obstruction + organ_adherence + differentiation +
+      local_spread,
+    data = colon_cancer_lev5fu_vs_obs
+  )
 ```
 
 #### Calculate Restricted Mean Survival Time
 
 ``` r
-# rmst_metadata_adj <-
-#   adjrct::rmst(
-#     metadata = surv_metadata_adj,
-#     horizon = 60
-#   )
-# 
-# rmst_metadata_adj
+rmst_metadata_adj <-
+  adjrct::rmst(
+    metadata = surv_metadata_adj,
+    horizon = 60
+  )
+
+rmst_metadata_adj
 ```
 
+    ## RMST Estimator: tmle
+
+    ## Marginal RMST: E(min[T, 60] | A = a)
+
+    ## Treatment Arm
+
+    ## Estimate: 47.74
+
+    ## Std. error: 1.07
+
+    ## 95% CI: (45.64, 49.85)
+
+    ## Control Arm
+
+    ## Estimate: 44.53
+
+    ## Std. error: 1.03
+
+    ## 95% CI: (42.52, 46.54)
+
+    ## Treatment Effect: E(min[T, 60] | A = 1) - E(min[T, 60] | A = 0)
+
+    ## Additive effect
+
+    ## Estimate: 3.22
+
+    ## Std. error: 1.43
+
+    ## 95% CI: (0.41, 6.02)
+
 ``` r
-# rmst_metadata_adj_table <-
-#   with(
-#     rmst_metadata_adj$estimates[[1]],
-#     
-#     bind_rows(
-#       data.frame(
-#         Arm = "Treatment",
-#         Estimate = arm1,
-#         SE = arm1.std.error,
-#         LCL = arm1.conf.low,
-#         UCL = arm1.conf.high
-#       ),
-#       
-#       data.frame(
-#         Arm = "Control",
-#         Estimate = arm0,
-#         SE = arm0.std.error,
-#         LCL = arm0.conf.low,
-#         UCL = arm0.conf.high
-#       ),
-#       data.frame(
-#         Arm = "Treatment - Control",
-#         Estimate = theta,
-#         SE = std.error,
-#         LCL = theta.conf.low,
-#         UCL = theta.conf.high
-#       )
-#     )
-#   )
-# 
-# kable(
-#   x = rmst_metadata_adj_table,
-#   caption = "Restricted Mean Survival Time "
-# )
+rmst_metadata_adj_table <-
+  with(
+    rmst_metadata_adj$estimates[[1]],
+
+    bind_rows(
+      data.frame(
+        Arm = "Treatment",
+        Estimate = arm1,
+        SE = arm1.std.error,
+        LCL = arm1.conf.low,
+        UCL = arm1.conf.high
+      ),
+
+      data.frame(
+        Arm = "Control",
+        Estimate = arm0,
+        SE = arm0.std.error,
+        LCL = arm0.conf.low,
+        UCL = arm0.conf.high
+      ),
+      data.frame(
+        Arm = "Treatment - Control",
+        Estimate = theta,
+        SE = std.error,
+        LCL = theta.conf.low,
+        UCL = theta.conf.high
+      )
+    )
+  )
+
+kable(
+  x = rmst_metadata_adj_table,
+  caption = "Restricted Mean Survival Time "
+)
 ```
+
+| Arm                 |  Estimate |       SE |        LCL |       UCL |
+|:--------------------|----------:|---------:|-----------:|----------:|
+| Treatment           | 47.743148 | 1.072887 | 45.6403279 | 49.845969 |
+| Control             | 44.527301 | 1.026012 | 42.5163553 | 46.538247 |
+| Treatment - Control |  3.215847 | 1.431316 |  0.4105197 |  6.021175 |
+
+Restricted Mean Survival Time
 
 #### Calculate Survival Probability
 
 ``` r
-# adjrct::survprob(
-#   metadata = surv_metadata_adj,
-#   horizon = 60
-# )
+adjrct::survprob(
+  metadata = surv_metadata_adj,
+  horizon = 60
+)
 ```
+
+    ## Warning: step size truncated due to increasing deviance
+
+    ## Warning: step size truncated due to increasing deviance
+
+    ## Warning: step size truncated due to increasing deviance
+
+    ## Survival Probability Estimator: tmle
+
+    ## Marginal Survival Probability: Pr(T > 60 | A = a)
+
+    ## Treatment Arm
+
+    ## Estimate: 0.63
+
+    ## Std. error: 0.03
+
+    ## 95% CI: (0.58, 0.69)
+
+    ## Control Arm
+
+    ## Estimate: 0.53
+
+    ## Std. error: 0.03
+
+    ## 95% CI: (0.48, 0.59)
+
+    ## Treatment Effect: Pr(T > 60 | A = 1) - Pr(T > 60 | A = 0)
+
+    ## Additive effect
+
+    ## Estimate: 0.1
+
+    ## Std. error: 0.04
+
+    ## 95% CI: (0.03, 0.17)

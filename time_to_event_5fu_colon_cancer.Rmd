@@ -57,7 +57,9 @@ knitr::opts_chunk$set(
   results = "markup",
   fig.width = fig_w,
   fig.height = fig_h,
-  dpi = 300,
+  fig.align = "center",
+  out.width = "80%",
+  dpi = 600,
   dev = "CairoPNG"
 )
 ```
@@ -77,9 +79,7 @@ When using regression models for inference, it is important to understand how mo
 **The focus of this template is on the analysis of time-to-event outcomes.** This tutorial illustrates the use of covariate-adjusted analysis in clinical trials using an example dataset from a randomized trial of treatments for colon cancer. This tutorial illustrates calculating the restricted mean survival time (RMST) and survival probability with and without adjustment for covariates. These methods are contrasted against methods commonly used in observational studies and randomized trials, such as the log-rank test and Cox Proportional Hazards model.
 
 
-$x$
 
-$$x = y$$
 
 #### Using This Tutorial
 
@@ -367,7 +367,7 @@ table1(
 
 
 
-```{r kaplan-meier-death-obstruction, fig.width = 2*fig_w}
+```{r kaplan-meier-death-obstruction, fig.width = 2.5*fig_w}
 ggsurvplot(
   fit = time_to_death_km,
   conf.int = TRUE,
@@ -376,7 +376,17 @@ ggsurvplot(
   facet.by = "differentiation",
   xlab = "Days", 
   ylab = "Overall survival probability"
-)
+) +
+  theme(
+    # Adjust Plot Labels for Readability
+    axis.text.x = element_text(size = 18),
+    axis.text.y = element_text(size = 18),
+    axis.title.y = element_text(size = 26),
+    axis.title.x = element_text(size = 26),
+    strip.text = element_text(size = 26),
+    legend.text = element_text(size = 22),
+    legend.title = element_text(size = 22)
+  )
 ```
 
 
@@ -646,18 +656,18 @@ adjusted_robust_cox_table %>%
 ### Targeted Maximum Likelihood
 
 ```{r tmle}
-# surv_metadata_adj <-
-#   adjrct::survrct(
-#     outcome.formula = Surv(months_to_death, event_death) ~ tx +
-#       age + positive_nodes +
-#       sex + obstruction + organ_adherence + differentiation +
-#       local_spread, 
-#     trt.formula =
-#       tx ~ age + positive_nodes +
-#       sex + obstruction + organ_adherence + differentiation +
-#       local_spread,
-#     data = colon_cancer_lev5fu_vs_obs
-#   )
+surv_metadata_adj <-
+  adjrct::survrct(
+    outcome.formula = Surv(months_to_death, event_death) ~ tx +
+      age + positive_nodes +
+      sex + obstruction + organ_adherence + differentiation +
+      local_spread,
+    trt.formula =
+      tx ~ age + positive_nodes +
+      sex + obstruction + organ_adherence + differentiation +
+      local_spread,
+    data = colon_cancer_lev5fu_vs_obs
+  )
 ```
 
 
@@ -666,51 +676,51 @@ adjusted_robust_cox_table %>%
 #### Calculate Restricted Mean Survival Time
 
 ```{r tmle-adjusted-rmst, results = 'asis', message = TRUE}
-# rmst_metadata_adj <-
-#   adjrct::rmst(
-#     metadata = surv_metadata_adj,
-#     horizon = 60
-#   )
-# 
-# rmst_metadata_adj
+rmst_metadata_adj <-
+  adjrct::rmst(
+    metadata = surv_metadata_adj,
+    horizon = 60
+  )
+
+rmst_metadata_adj
 ```
 
 
 ```{r tmle-adjusted-rmst-format}
-# rmst_metadata_adj_table <-
-#   with(
-#     rmst_metadata_adj$estimates[[1]],
-#     
-#     bind_rows(
-#       data.frame(
-#         Arm = "Treatment",
-#         Estimate = arm1,
-#         SE = arm1.std.error,
-#         LCL = arm1.conf.low,
-#         UCL = arm1.conf.high
-#       ),
-#       
-#       data.frame(
-#         Arm = "Control",
-#         Estimate = arm0,
-#         SE = arm0.std.error,
-#         LCL = arm0.conf.low,
-#         UCL = arm0.conf.high
-#       ),
-#       data.frame(
-#         Arm = "Treatment - Control",
-#         Estimate = theta,
-#         SE = std.error,
-#         LCL = theta.conf.low,
-#         UCL = theta.conf.high
-#       )
-#     )
-#   )
-# 
-# kable(
-#   x = rmst_metadata_adj_table,
-#   caption = "Restricted Mean Survival Time "
-# )
+rmst_metadata_adj_table <-
+  with(
+    rmst_metadata_adj$estimates[[1]],
+
+    bind_rows(
+      data.frame(
+        Arm = "Treatment",
+        Estimate = arm1,
+        SE = arm1.std.error,
+        LCL = arm1.conf.low,
+        UCL = arm1.conf.high
+      ),
+
+      data.frame(
+        Arm = "Control",
+        Estimate = arm0,
+        SE = arm0.std.error,
+        LCL = arm0.conf.low,
+        UCL = arm0.conf.high
+      ),
+      data.frame(
+        Arm = "Treatment - Control",
+        Estimate = theta,
+        SE = std.error,
+        LCL = theta.conf.low,
+        UCL = theta.conf.high
+      )
+    )
+  )
+
+kable(
+  x = rmst_metadata_adj_table,
+  caption = "Restricted Mean Survival Time "
+)
 ```
 
 
@@ -718,8 +728,8 @@ adjusted_robust_cox_table %>%
 #### Calculate Survival Probability
 
 ```{r tmle-survival-probability, results = 'asis', message = TRUE}
-# adjrct::survprob(
-#   metadata = surv_metadata_adj,
-#   horizon = 60
-# )
+adjrct::survprob(
+  metadata = surv_metadata_adj,
+  horizon = 60
+)
 ```
