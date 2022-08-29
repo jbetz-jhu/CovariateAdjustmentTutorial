@@ -74,7 +74,7 @@ knitr::opts_chunk$set(
 Randomly allocating participants to treatment arms will tend to produce groups that are initially comparable to one another across both observed and unobserved factors. In any given randomized trial, there will be some degree of imbalance in the distribution of baseline covariates between treatment groups. When a variable is a strong predictor of the outcome and is imbalanced across treatment arms, it represents a potential confounding variable and source of bias, even if these differences are not statistically significant [@Assmann2000]. Confounding can be addressed both in the design phase of a trial, using stratified randomization to lessen the potential for imbalance, and in during the analysis phase, through covariate adjustment.
 
 
-Covariate adjustment can lead to a more efficient trial, potentially lowering the required sample size to detect a given treatment effect if it exists, or provide greater precision (shorter confidence interval widths and higher power) for the same sample size and treatment effect. When stratified randomization is used, covariate adjustment is generally suggested, but not always implemented, which can lead to reduced power and precision [@Kahan2011]. Accessible and practical discussions of baseline balance, stratified randomized trials, and adjusted analyses are also available to offer further explanation and guidance to investigators [@Kernan1999, @Assmann2000].
+Covariate adjustment can lead to a more efficient trial, potentially lowering the required sample size to detect a given treatment effect if it exists, or provide greater precision (shorter confidence interval widths and higher power) for the same sample size and treatment effect. When stratified randomization is used, covariate adjustment is generally suggested, but not always implemented, which can lead to reduced power and precision [@Kahan2011]. Accessible and practical discussions of baseline balance, stratified randomized trials, and adjusted analyses are also available to offer further explanation and guidance to investigators [@Kernan1999; @Assmann2000].
 
 
 When using regression models for inference, it is important to understand how model misspecification may affect statistical inference. Fortunately, there are several approaches to covariate-adjusted analyses whose validity does not depend on a correctly specified model, or provide inference with greater robustness to misspecification than those used in common practice.
@@ -755,7 +755,7 @@ rmst_metadata_adj
 ```
 
 
-The covariate-adjusted average survival time in the first 60 months was 47.74 months in the Lev+5FU arm and 44.53 months in the observation arm: the difference in average time without an event between arms was 3.2 months. While the point estimates are similar to the unadjusted estimate, the variance of the estimate is reduced by about 13% $1 - ({SE}_{Unadj}/{SE}_{Adj})^{2}$ = `1 - (1.43/1.53)^2 = 0.1264471.`
+The covariate-adjusted average survival time in the first 60 months was 47.74 months in the Lev+5FU arm and 44.53 months in the observation arm: the difference in average time without an event between arms was 3.2 months. While the point estimates are similar to the unadjusted estimate, the variance of the estimate is reduced by about 13%: $1 - ({SE}_{Unadj}/{SE}_{Adj})^{2}$ = `1 - (1.43/1.53)^2 = 0.1264471.`
 
 
 ```{r tmle-adjusted-rmst-format}
@@ -850,3 +850,6 @@ kable(
   digits = 2
 )
 ```
+
+
+## References

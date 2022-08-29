@@ -67,6 +67,7 @@ Michael Rosenblum (<mrosen@jhu.edu>)
         Cox Proportional Hazards Model</a>
     -   <a href="#targeted-maximum-likelihood"
         id="toc-targeted-maximum-likelihood">Targeted Maximum Likelihood</a>
+-   <a href="#references" id="toc-references">References</a>
 
 <style type="text/css">
 .main-container {
@@ -84,7 +85,7 @@ some degree of imbalance in the distribution of baseline covariates
 between treatment groups. When a variable is a strong predictor of the
 outcome and is imbalanced across treatment arms, it represents a
 potential confounding variable and source of bias, even if these
-differences are not statistically significant (**Assmann2000?**).
+differences are not statistically significant (Assmann et al. 2000).
 Confounding can be addressed both in the design phase of a trial, using
 stratified randomization to lessen the potential for imbalance, and in
 during the analysis phase, through covariate adjustment.
@@ -95,10 +96,10 @@ it exists, or provide greater precision (shorter confidence interval
 widths and higher power) for the same sample size and treatment effect.
 When stratified randomization is used, covariate adjustment is generally
 suggested, but not always implemented, which can lead to reduced power
-and precision (**Kahan2011?**). Accessible and practical discussions of
-baseline balance, stratified randomized trials, and adjusted analyses
-are also available to offer further explanation and guidance to
-investigators (**Assmann2000?**).
+and precision (Kahan and Morris 2011). Accessible and practical
+discussions of baseline balance, stratified randomized trials, and
+adjusted analyses are also available to offer further explanation and
+guidance to investigators (Kernan 1999; Assmann et al. 2000).
 
 When using regression models for inference, it is important to
 understand how model misspecification may affect statistical inference.
@@ -2870,7 +2871,7 @@ The covariate-adjusted average survival time in the first 60 months was
 47.74 months in the Lev+5FU arm and 44.53 months in the observation arm:
 the difference in average time without an event between arms was 3.2
 months. While the point estimates are similar to the unadjusted
-estimate, the variance of the estimate is reduced by about 13%
+estimate, the variance of the estimate is reduced by about 13%:
 $1 - ({SE}_{Unadj}/{SE}_{Adj})^{2}$ = `1 - (1.43/1.53)^2 = 0.1264471.`
 
 ``` r
@@ -3023,7 +3024,18 @@ kable(
 
 TMLE covariate-adjusted estimates of survival probability.
 
+## References
+
 <div id="refs" class="references csl-bib-body hanging-indent">
+
+<div id="ref-Assmann2000" class="csl-entry">
+
+Assmann, Susan F, Stuart J Pocock, Laura E Enos, and Linda E Kasten.
+2000. “Subgroup Analysis and Other (Mis)uses of Baseline Data in
+Clinical Trials.” *The Lancet* 355 (9209): 1064–69.
+<https://doi.org/10.1016/s0140-6736(00)02039-0>.
+
+</div>
 
 <div id="ref-DiRienzo2001" class="csl-entry">
 
@@ -3042,6 +3054,22 @@ Rosenblum. 2018. “Improved Precision in the Analysis of Randomized
 Trials with Survival Outcomes, Without Assuming Proportional Hazards.”
 *Lifetime Data Analysis* 25 (3): 439–68.
 <https://doi.org/10.1007/s10985-018-9428-5>.
+
+</div>
+
+<div id="ref-Kahan2011" class="csl-entry">
+
+Kahan, Brennan C., and Tim P. Morris. 2011. “Improper Analysis of Trials
+Randomised Using Stratified Blocks or Minimisation.” *Statistics in
+Medicine* 31 (4): 328–40. <https://doi.org/10.1002/sim.4431>.
+
+</div>
+
+<div id="ref-Kernan1999" class="csl-entry">
+
+Kernan, W. 1999. “Stratified Randomization for Clinical Trials.”
+*Journal of Clinical Epidemiology* 52 (1): 19–26.
+<https://doi.org/10.1016/s0895-4356(98)00138-3>.
 
 </div>
 
