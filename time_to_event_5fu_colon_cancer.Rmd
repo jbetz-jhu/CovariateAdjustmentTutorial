@@ -8,7 +8,7 @@ header-includes:
 output:
   github_document:
     toc: true
-# bibliography: covariate_adjustment.bib # For Bibliography - In same folder
+bibliography: covariate_adjustment.bib # For Bibliography - In same folder
 # csl: biomed-central.csl # For citation style - In same folder
 ---
 
@@ -26,17 +26,21 @@ library(pander)
 ### Graphics and Report Options ################################################
 table_digits <- 1 # Significant Figures for Mean/SD, N (%), Median/IQR
 
+root_url <- "https://jbetz-jhu.github.io/CovariateAdjustmentTutorial"
+
 bootstrap_tutorial_url <-
-  paste0(
-    "https://jbetz-jhu.github.io/CovariateAdjustmentTutorial/",
-    "bootstrap_tutorial.html"
-  )
+  paste0(root_url, "/bootstrap_tutorial.html")
 
 survival_colon_cancer_url <-
-  paste0(
-    "https://github.com/jbetz-jhu/CovariateAdjustmentTutorial/blob/main/",
-    "create_moertel_cancer_data.r"
-  )
+  paste0(root_url, "/blob/main/create_moertel_cancer_data.r")
+
+estimands_tutorial_url <-
+  paste0(root_url, "/blob/gh-pages/Estimands_of_Interest.html")
+
+estimators_tutorial_url <-
+  paste0(root_url, "/blob/gh-pages/Estimators.html")
+
+
 
 
 ### Set Default Options ########################################################
@@ -76,7 +80,7 @@ Covariate adjustment can lead to a more efficient trial, potentially lowering th
 When using regression models for inference, it is important to understand how model misspecification may affect statistical inference. Fortunately, there are several approaches to covariate-adjusted analyses whose validity does not depend on a correctly specified model, or provide inference with greater robustness to misspecification than those used in common practice.
 
 
-**The focus of this template is on the analysis of time-to-event outcomes.** This tutorial illustrates the use of covariate-adjusted analysis in clinical trials using an example dataset from a randomized trial of treatments for colon cancer. This tutorial illustrates calculating the restricted mean survival time (RMST) and survival probability with and without adjustment for covariates. These methods are contrasted against methods commonly used in observational studies and randomized trials, such as the log-rank test and Cox Proportional Hazards model.
+**The focus of this template is on the analysis of time-to-event outcomes.** This tutorial illustrates the use of covariate-adjusted analysis in clinical trials using an example dataset from a randomized trial of treatments for colon cancer. This tutorial illustrates calculating the restricted mean survival time (RMST) and survival probability with and without adjustment for covariates. These methods are contrasted against methods commonly used in observational studies and randomized trials, such as the logrank test and Cox Proportional Hazards model.
 
 
 
@@ -293,53 +297,6 @@ table1(
 
 
 
-### Kaplan-Meier Survival Estimate: Death
-
-#### Time Scale: Days
-```{r kaplan-meier-death-days}
-time_to_death_km <-
-  survfit(
-      formula = Surv(time_to_death, event_death) ~ arm,
-      data = colon_cancer
-    )
-
-ggsurvplot(
-  fit = time_to_death_km,
-  conf.int = TRUE,
-  risk.table = TRUE,
-  surv.median.line = "hv",
-  break.time.by = 365.25,
-  xlab = "Days", 
-  ylab = "Overall survival probability"
-)
-```
-
-
-#### Time Scale: Months
-
-```{r kaplan-meier-death-months}
-months_to_death_km <-
-  survfit(
-      formula = Surv(months_to_death, event_death) ~ arm,
-      data = colon_cancer
-    )
-
-ggsurvplot(
-  fit = months_to_death_km,
-  conf.int = TRUE,
-  risk.table = TRUE,
-  surv.median.line = "hv",
-  break.time.by = 12,
-  xlab = "Months", 
-  ylab = "Overall survival probability"
-)
-```
-
-Note that numbers at will not exactly match across plots: actual calendar months vary in length from 28 to 31 days, while the time scale is coarsened by periods of (365.25/12 $\approx$ 30.4) days.
-
-
-
-
 ## Checks on the Data:
 
 ### Frequency of Events
@@ -367,6 +324,108 @@ table1(
 
 
 
+
+### Reference level for Treatment
+
+When the treatment is a `factor` variable, we can use the `levels()` function to see the reference level (i.e. the comparator/control group): it will appear as the first level.
+
+```{r check-reference-level}
+# Check reference level
+levels(colon_cancer$arm)
+```
+
+**Make sure that the reference level is appropriately chosen before running analyses to avoid errors in interpretation and inference.**
+
+
+
+
+--------------------------------------------------------------------------------
+
+
+
+
+## Types of Tests & Estimators: Time-to-Event Outcomes
+
+The Kaplan-Meier (K-M) estimate of the survival function is a ubiquitous approach to estimating and visualizing the survival probability, i.e. the probability of not having an event of interest, over a follow-up period. The K-M estimator assumes that censoring is independent of the event time within each treatment arm, which may be violated if certain baseline characteristics, such as disease severity, are associated with both the event time of interest and dropout [@Diaz2018]. This could occur if individuals with greater baseline severity are more likely to have the event and more likely to drop out before the event is observed.
+
+The logrank test is perhaps the most common method for performing sample size calculations and performing unadjusted comparisons of time-to-event outcomes. The logrank test is valid if censoring is independent of the treatment or independent of the event time in each treatment arm [@VanLancker2021]. The logrank test is most powerful under the proportional hazards assumption. When the proportional hazards assumption is violated, a weight function can be specified in a weighted logrank test to emphasize different domains of the survival curve. For more on the use of weighted logrank tests to address violations of the proportional hazards, see @Lin2017.
+
+The Cox Proportional Hazards (PH) regression is the most common method for performing covariate-adjusted comparisons of time-to-event outcomes under the proportional hazards assumption. The logrank test is equivalent to the Score test in a Cox PH model which only includes a treatment indicator and no additional covariates. Inclusion of covariates allows relaxation of the uninformative censoring assumption, but raises concerns about the impact of model assumptions and specification.
+
+The validity of tests for the hypothesis of no treatment effect in randomized experiments using the Cox PH model depends on the relationship of censoring times to the treatment assignment and covariates. If censoring times are conditionally independent of treatment assignment given the covariates, or conditionally independent of the covariates given the treatment assignment, tests are valid when the sandwich variance estimator is used. However, if the model is mispecified and the distribution of censoring times depends on both the treatment and covariates, tests based on the Cox model will not be valid, and alternatives should be considered [@DiRienzo2001].
+
+When the proportional hazards assumption is violated, the estimates from a Cox PH model represent a weighted average of the hazard functions over time. The weights in this weighted average are determined by both the survival in each group and the censoring distribution. This dependence upon the censoring distribution makes it difficult to meaningfully interpret the estimate when there are appreciable violations of the PH assumption [@Rudser2012].
+
+Even in the situation when the proportional hazards assumption appears to hold, the clinical interpretation of the hazard ratio is not straightforward. In the absence of censoring, measures of a treatment effect are usually based on summaries of the outcome distribution that explicitly reference the scale of measurement of the outcome which facilitate evaluation of clinical importance, such as the mean, median, or proportion above or below a clinically meaningful threshold [@Rudser2012]. The hazard function is the instantaneous rate at which events occur, which changes over time, and does not quantify the expected length of time until the event [@Rudser2012].
+
+Since quantities such as survival probabilities (e.g. survival at 5 years), quantiles (e.g. median, 75^th^ percentile), or the restricted mean survival time (RMST, e.g. average time without an event in the 5 yeras post randomization) explicitly reference the time frame of events, they may be more clinically meaningful for comparing treatments [@Rudser2012]. Survival probability and RMST are interpretable under violations of the proportional hazards assumption, and estimators for these quantities exist that are doubly robust (i.e. consistent if either the censoring or survival distributions are consistently estimated) and are at least as efficient as the K-M estimator [@Diaz2018].
+
+While covariate-adjusted hazard ratios can be obtained from a Cox PH model, these are conditional treatment effects: they are the estimated hazard ratio given all of the covariates in the model. Covariate adjusted estimators of the survival probability and RMST are marginal treatment effects, which are useful for assessing the public health impact of an intervention on the intended use population. For more information on estimands and estimators for survival data, see the pages on [estimands](`r estimands_tutorial_url`) and [estimators and models](`r estimators_tutorial_url`).
+
+
+
+
+--------------------------------------------------------------------------------
+
+
+
+
+
+## Implementing Unadjusted Tests & Models
+
+### Kaplan-Meier Survival Estimate: Death
+
+#### KM for Death - Time Scale: Days
+
+```{r kaplan-meier-death-days}
+time_to_death_km <-
+  survfit(
+      formula = Surv(time_to_death, event_death) ~ arm,
+      data = colon_cancer
+    )
+
+ggsurvplot(
+  fit = time_to_death_km,
+  conf.int = TRUE,
+  risk.table = TRUE,
+  surv.median.line = "hv",
+  break.time.by = 365.25,
+  xlab = "Days", 
+  ylab = "Overall survival probability"
+)
+```
+
+
+
+
+#### KM for Death - Time Scale: Months
+
+```{r kaplan-meier-death-months}
+months_to_death_km <-
+  survfit(
+      formula = Surv(months_to_death, event_death) ~ arm,
+      data = colon_cancer
+    )
+
+ggsurvplot(
+  fit = months_to_death_km,
+  conf.int = TRUE,
+  risk.table = TRUE,
+  surv.median.line = "hv",
+  break.time.by = 12,
+  xlab = "Months", 
+  ylab = "Overall survival probability"
+)
+```
+
+
+Note that numbers at will not exactly match across plots: actual calendar months vary in length from 28 to 31 days, while the time scale is coarsened by periods of (365.25/12 $\approx$ 30.4) days.
+
+
+
+
+#### KM for Death - Stratified by `obstruction`
+
 ```{r kaplan-meier-death-obstruction, fig.width = 2.5*fig_w}
 ggsurvplot(
   fit = time_to_death_km,
@@ -392,33 +451,11 @@ ggsurvplot(
 
 
 
-### Reference level for Treatment
+### Logrank Test
 
-When the treatment is a `factor` variable, we can use the `levels()` function to see the reference level (i.e. the comparator/control group): it will appear as the first level.
+The logrank test (and the G-rho family of rank-based test procedures) can be obtained using `survival::survdiff`:
 
-```{r check-reference-level}
-# Check reference level
-levels(colon_cancer$arm)
-```
-
-**Make sure that the reference level is appropriately chosen before running analyses to avoid errors in inference.**
-
-
-
-
---------------------------------------------------------------------------------
-
-
-
-
-## Unadjusted Tests & Models
-
-
-### Log-rank Test
-
-The log-rank test (and the G-rho family of rank-based test procedures) can be obtained using `survival::survdiff`:
-
-```{r unadjusted-log-rank-test}
+```{r unadjusted-logrank-test}
 survival::survdiff(
   formula = Surv(months_to_death, event_death) ~ arm,
   data = colon_cancer
@@ -446,6 +483,9 @@ unadjusted_cox <-
 summary(unadjusted_cox)
 ```
 
+Assuming the proportional hazards assumption is correct, the hazard of death in those receiving Lev+5FU was 31% lower (`(1 - 0.68929) = 0.31071`) than the observation arm.
+
+
 The Proportional Hazards (PH) assumption can be assessed using `survival::cox.zph`:
 
 ```{r unadjusted-cox-ph-test}
@@ -456,6 +496,8 @@ print(unadjusted_cox_ph_test)
 # Plot 
 plot(cox.zph(unadjusted_cox))
 ```
+
+These plots should show an approximately constant value over time when the proportional hazards assumption holds.
 
 
 
@@ -494,6 +536,9 @@ unadjusted_robust_cox_table %>%
   )
 ```
 
+Using the robust Cox PH model, the hazard of death in those receiving Lev+5FU was 25% lower (`(1 - exp(-0.29)) = 0.2517364`) than the observation arm. Alternatively, the hazard of death was 33% higher `exp(-(-0.29)) = 1.336427` in the observation arm relative to the Lev+5FU arm.
+
+
 
 
 ### Restricted Mean Survival Time: `survRM2::rmst2`
@@ -510,10 +555,14 @@ with(
 )
 ```
 
+The average survival time in the first 60 months was 47.84 months in the Lev+5FU arm and 44.24 months in the observation arm: the difference in average time without an event (RMST) between arms in the first 60 months was 3.6 months. The ratio of RMST between treatment and control was 1.081 (8% increase in RMST), and the mean difference in life expectancy lost to death (Restricted Mean Time Lost or RMTL) was 0.77 months.
+
 
 
 
 ### Targeted Maximum Likelihood Estimator (TMLE): `adjrct::survrct`
+
+The first step in using `adjrct::survrct` is to compute the metadata necessary for computing the model-robust estimates of restricted mean survival time and survival probability:
 
 ```{r unadjusted-tmle-adjrct}
 surv_metadata_unadj <-
@@ -536,6 +585,8 @@ adjrct::rmst(
 )
 ```
 
+The average survival time in the first 60 months was 47.84 months in the Lev+5FU arm and 44.24 months in the observation arm: the difference in average time without an event between arms was 3.6 months.
+
 
 
 
@@ -548,6 +599,7 @@ adjrct::survprob(
 )
 ```
 
+The unadjusted survival probability in the first 60 months was 0.63 in the in the Lev+5FU arm and 0.53 in the observation arm. The difference in the probability of surviving the first 60 months between Lev+5FU and observation was 0.11 (i.e an 11% lower risk of dying in the first 60 months in the treatment arm relative to control).
 
 
 
@@ -597,6 +649,7 @@ adjusted_cox <-
   )
 ```
 
+Assuming the proportional hazards assumption holds, conditioning on `age`, `positive_nodes`, `sex`, `obstruction`, `organ_adherence`, `differentiation`, and `local_spread`, the hazard of death in those receiving Lev+5FU was 33% lower (`(1 - exp(-0.400301)) = 0.3298817`) than the observation arm. Note that this is also a conditional treatment effect, not a marginal treatment effect.
 
 ```{r adjusted-cox-proportional-hazards}
 cox.zph(
@@ -604,6 +657,18 @@ cox.zph(
 )
 ```
 
+Here we can see that `obstruction`, `differentiation`, and `local_spread` suggest departures from the proportional hazards assumption:
+
+
+```{r adjusted-cox-proportional-hazards-plot}
+cox.zph(
+  fit = adjusted_cox
+) %>% 
+  plot(var = "differentiation")
+abline(h = 0, col = rgb(1, 0, 0, 0.75))
+```
+
+Note that the sign of the coefficient is initially large and positive, decreases with time, and eventually becomes negative in sign.
 
 ```{r adjusted-cox-wald-tests}
 summary(adjusted_cox)
@@ -647,6 +712,10 @@ adjusted_robust_cox_table %>%
   )
 ```
 
+Assuming the proportional hazards assumption holds, conditioning on `age`, `positive_nodes`, `sex`, `obstruction`, `organ_adherence`, `differentiation`, and `local_spread`, the hazard of death in those receiving Lev+5FU was 26% lower (`(1 - exp(-0.30)) = 0.2591818`) than the observation arm using the robust Cox PH model. Note that this is also a conditional treatment effect, not a marginal treatment effect.
+
+
+
 
 --------------------------------------------------------------------------------
 
@@ -686,6 +755,9 @@ rmst_metadata_adj
 ```
 
 
+The covariate-adjusted average survival time in the first 60 months was 47.74 months in the Lev+5FU arm and 44.53 months in the observation arm: the difference in average time without an event between arms was 3.2 months. While the point estimates are similar to the unadjusted estimate, the variance of the estimate is reduced by about 13% $1 - ({SE}_{Unadj}/{SE}_{Adj})^{2}$ = `1 - (1.43/1.53)^2 = 0.1264471.`
+
+
 ```{r tmle-adjusted-rmst-format}
 rmst_metadata_adj_table <-
   with(
@@ -719,7 +791,8 @@ rmst_metadata_adj_table <-
 
 kable(
   x = rmst_metadata_adj_table,
-  caption = "Restricted Mean Survival Time "
+  caption = "TMLE covariate-adjusted estimates of Restricted Mean Survival Time.",
+  digits = 2
 )
 ```
 
@@ -728,8 +801,52 @@ kable(
 #### Calculate Survival Probability
 
 ```{r tmle-survival-probability, results = 'asis', message = TRUE}
-adjrct::survprob(
-  metadata = surv_metadata_adj,
-  horizon = 60
+survival_metadata_adj <-
+  adjrct::survprob(
+    metadata = surv_metadata_adj,
+    horizon = 60
+  )
+
+survival_metadata_adj
+```
+
+The covariate-adjusted survival probability in the first 60 months was 0.63 in the in the Lev+5FU arm and 0.53 in the observation arm. The difference in the probability of surviving the first 60 months between Lev+5FU and observation was 0.10 (i.e an 10% lower risk of dying in the first 60 months in the treatment arm relative to control). The point estimates and variance estimates are almost identical to the unadjusted estimates.
+
+
+```{r tmle-adjusted-survival-format}
+survival_metadata_adj_table <-
+  with(
+    survival_metadata_adj$estimates[[1]],
+
+    bind_rows(
+      data.frame(
+        Arm = "Treatment",
+        Estimate = arm1,
+        SE = arm1.std.error,
+        LCL = arm1.conf.low,
+        UCL = arm1.conf.high
+      ),
+
+      data.frame(
+        Arm = "Control",
+        Estimate = arm0,
+        SE = arm0.std.error,
+        LCL = arm0.conf.low,
+        UCL = arm0.conf.high
+      ),
+      data.frame(
+        Arm = "Treatment - Control",
+        Estimate = theta,
+        SE = std.error,
+        LCL = theta.conf.low,
+        UCL = theta.conf.high
+      )
+    )
+  )
+
+kable(
+  x = survival_metadata_adj_table,
+  caption = "TMLE covariate-adjusted estimates of survival probability.",
+  digits = 2
 )
 ```
