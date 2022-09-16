@@ -261,7 +261,6 @@ colon_cancer <-
   )
 
 
-
 # Datasets with Binary Treatment ###############################################
 # LEV vs Obs
 colon_cancer_lev_vs_obs <-
@@ -296,9 +295,14 @@ colon_cancer_lev5fu_vs_obs <-
   )
 
 
+colon_cancer_lev5fu_vs_lev <- droplevels(colon_cancer_lev5fu_vs_lev)
+colon_cancer_lev5fu_vs_obs <- droplevels(colon_cancer_lev5fu_vs_obs)
+colon_cancer_lev_vs_obs <- droplevels(colon_cancer_lev_vs_obs)
+
+
 save(
   list = c("colon_cancer", "colon_cancer_original",
            "colon_cancer_lev_vs_obs", "colon_cancer_lev5fu_vs_lev",
            "colon_cancer_lev5fu_vs_obs"),
   file = "moertel_colon_cancer_trial.RData"
-  )
+)
