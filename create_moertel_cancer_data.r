@@ -259,3 +259,46 @@ colon_cancer <-
   dplyr::select(
     all_of(x = names(colon_cancer))
   )
+
+
+
+# Datasets with Binary Treatment ###############################################
+# LEV vs Obs
+colon_cancer_lev_vs_obs <-
+  colon_cancer %>% 
+  dplyr::filter(
+    arm %in% c("Lev", "Obs")
+  ) %>% 
+  dplyr::mutate(
+    tx = as.integer(1*(arm == "Lev"))
+  )
+
+
+# LEV+5FU vs LEV
+colon_cancer_lev5fu_vs_lev <-
+  colon_cancer %>% 
+  dplyr::filter(
+    arm %in% c("Lev", "Lev+5FU")
+  ) %>% 
+  dplyr::mutate(
+    tx = as.integer(1*(arm == "Lev+5FU"))
+  )
+
+
+# LEV+5FU vs Obs
+colon_cancer_lev5fu_vs_obs <-
+  colon_cancer %>% 
+  dplyr::filter(
+    arm %in% c("Obs", "Lev+5FU")
+  ) %>% 
+  dplyr::mutate(
+    tx = as.integer(1*(arm == "Lev+5FU"))
+  )
+
+
+save(
+  list = c("colon_cancer", "colon_cancer_original",
+           "colon_cancer_lev_vs_obs", "colon_cancer_lev5fu_vs_lev",
+           "colon_cancer_lev5fu_vs_obs"),
+  file = "moertel_colon_cancer_trial.RData"
+  )
