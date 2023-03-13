@@ -48,7 +48,7 @@ options(
 )
 
 run_adjrct <- FALSE
-# run_adjrct <- TRUE # Takes time
+run_adjrct <- TRUE # Takes time
 
 
 ### Set Default Options ########################################################
@@ -630,6 +630,9 @@ kable(
 )
 ```
 
+The covariate-adjusted RMST is slightly smaller than the unadjusted estimate for the surgical group (81.5 vs 83.0), and slightly larger for the medical group (77.3 vs. 75.9). As a result, there is a slightly smaller covariate-adjusted difference in RMST at 90 days compared to the unadjusted estimate (4.2 vs 7.1).
+
+
 
 
 #### Calculate Survival Probability
@@ -683,3 +686,5 @@ kable(
   digits = 2
 )
 ```
+
+The covariate-adjusted survival probability is slightly smaller than the unadjusted estimate for the surgical group (0.86 vs 0.88), and slightly larger for the medical group (0.79 vs. 0.77). As a result, there is a slightly smaller covariate-adjusted difference in survival probability at 90 days compared to the unadjusted estimate (0.07 vs 0.11).

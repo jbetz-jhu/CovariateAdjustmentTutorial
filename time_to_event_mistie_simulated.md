@@ -602,6 +602,18 @@ adjrct::survprob(
 )
 ```
 
+    ## Warning: step size truncated due to increasing deviance
+
+    ## Warning: step size truncated due to increasing deviance
+
+    ## Warning: step size truncated due to increasing deviance
+
+    ## Warning: step size truncated due to increasing deviance
+
+    ## Warning: step size truncated due to increasing deviance
+
+    ## Warning: step size truncated due to increasing deviance
+
 The unadjusted survival probability in the first 90 days was 0.88 in the
 in the surgical arm and 0.77 in the medical arm. The difference in the
 probability of surviving the first 90 days between surgical and medical
@@ -751,6 +763,36 @@ rmst_metadata_adj <-
 rmst_metadata_adj
 ```
 
+    ## RMST Estimator: tmle
+
+    ## Marginal RMST: E(min[T, 90] | A = a)
+
+    ## Treatment Arm
+
+    ## Estimate: 81.51
+
+    ## Std. error: 1.51
+
+    ## 95% CI: (78.55, 84.47)
+
+    ## Control Arm
+
+    ## Estimate: 77.27
+
+    ## Std. error: 1.66
+
+    ## 95% CI: (74.01, 80.53)
+
+    ## Treatment Effect: E(min[T, 90] | A = 1) - E(min[T, 90] | A = 0)
+
+    ## Additive effect
+
+    ## Estimate: 4.24
+
+    ## Std. error: 2.17
+
+    ## 95% CI: (-0.01, 8.48)
+
 ``` r
 rmst_metadata_adj_table <-
   with(
@@ -789,6 +831,20 @@ kable(
 )
 ```
 
+| Arm                 | Estimate |   SE |   LCL |   UCL |
+|:--------------------|---------:|-----:|------:|------:|
+| Treatment           |    81.51 | 1.51 | 78.55 | 84.47 |
+| Control             |    77.27 | 1.66 | 74.01 | 80.53 |
+| Treatment - Control |     4.24 | 2.17 | -0.01 |  8.48 |
+
+TMLE covariate-adjusted estimates of Restricted Mean Survival Time.
+
+The covariate-adjusted RMST is slightly smaller than the unadjusted
+estimate for the surgical group (81.5 vs 83.0), and slightly larger for
+the medical group (77.3 vs. 75.9). As a result, there is a slightly
+smaller covariate-adjusted difference in RMST at 90 days compared to the
+unadjusted estimate (4.2 vs 7.1).
+
 #### Calculate Survival Probability
 
 ``` r
@@ -800,6 +856,36 @@ survival_metadata_adj <-
 
 survival_metadata_adj
 ```
+
+    ## Survival Probability Estimator: tmle
+
+    ## Marginal Survival Probability: Pr(T > 90 | A = a)
+
+    ## Treatment Arm
+
+    ## Estimate: 0.86
+
+    ## Std. error: 0.02
+
+    ## 95% CI: (0.82, 0.91)
+
+    ## Control Arm
+
+    ## Estimate: 0.79
+
+    ## Std. error: 0.02
+
+    ## 95% CI: (0.74, 0.84)
+
+    ## Treatment Effect: Pr(T > 90 | A = 1) - Pr(T > 90 | A = 0)
+
+    ## Additive effect
+
+    ## Estimate: 0.07
+
+    ## Std. error: 0.03
+
+    ## 95% CI: (0.01, 0.14)
 
 ``` r
 survival_metadata_adj_table <-
@@ -838,6 +924,20 @@ kable(
   digits = 2
 )
 ```
+
+| Arm                 | Estimate |   SE |  LCL |  UCL |
+|:--------------------|---------:|-----:|-----:|-----:|
+| Treatment           |     0.86 | 0.02 | 0.82 | 0.91 |
+| Control             |     0.79 | 0.02 | 0.74 | 0.84 |
+| Treatment - Control |     0.07 | 0.03 | 0.01 | 0.14 |
+
+TMLE covariate-adjusted estimates of survival probability.
+
+The covariate-adjusted survival probability is slightly smaller than the
+unadjusted estimate for the surgical group (0.86 vs 0.88), and slightly
+larger for the medical group (0.79 vs. 0.77). As a result, there is a
+slightly smaller covariate-adjusted difference in survival probability
+at 90 days compared to the unadjusted estimate (0.07 vs 0.11).
 
 <div id="refs" class="references csl-bib-body hanging-indent">
 
