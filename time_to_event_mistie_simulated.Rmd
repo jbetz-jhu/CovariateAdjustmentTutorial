@@ -8,7 +8,7 @@ header-includes:
 output:
   github_document:
     toc: true
-# bibliography: covariate_adjustment.bib # For Bibliography - In same folder
+bibliography: covariate_adjustment.bib # For Bibliography - In same folder
 # csl: biomed-central.csl # For citation style - In same folder
 ---
 
@@ -441,7 +441,7 @@ The average survival time in the first 90 days was 83 days in the surgical arm a
 
 ### Targeted Maximum Likelihood Estimator (TMLE): `adjrct::survrct`
 
-The first step in using `adjrct::survrct` is to compute the metadata necessary for computing the model-robust estimates of restricted mean survival time and survival probability:
+The first step in using `adjrct::survrct` is to compute the metadata necessary for computing the model-robust estimates of restricted mean survival time and survival probability: **NOTE: in this particular dataset, this may take some time, considerably more than `survRM2::rmst()`.**
 
 ```{r unadjusted-tmle-adjrct, eval = run_adjrct}
 surv_metadata_unadj <-

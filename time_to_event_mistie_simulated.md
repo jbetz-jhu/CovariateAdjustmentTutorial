@@ -76,7 +76,7 @@ some degree of imbalance in the distribution of baseline covariates
 between treatment groups. When a variable is a strong predictor of the
 outcome and is imbalanced across treatment arms, it represents a
 potential confounding variable and source of bias, even if these
-differences are not statistically significant \[@Assmann2000\].
+differences are not statistically significant (Assmann et al. 2000).
 Confounding can be addressed both in the design phase of a trial, using
 stratified randomization to lessen the potential for imbalance, and in
 during the analysis phase, through covariate adjustment.
@@ -87,10 +87,10 @@ it exists, or provide greater precision (shorter confidence interval
 widths and higher power) for the same sample size and treatment effect.
 When stratified randomization is used, covariate adjustment is generally
 suggested, but not always implemented, which can lead to reduced power
-and precision \[@Kahan2011\]. Accessible and practical discussions of
-baseline balance, stratified randomized trials, and adjusted analyses
-are also available to offer further explanation and guidance to
-investigators \[@Kernan1999; @Assmann2000\].
+and precision (Kahan and Morris 2011). Accessible and practical
+discussions of baseline balance, stratified randomized trials, and
+adjusted analyses are also available to offer further explanation and
+guidance to investigators (Kernan 1999; Assmann et al. 2000).
 
 When using regression models for inference, it is important to
 understand how model misspecification may affect statistical inference.
@@ -301,8 +301,8 @@ i.e. the probability of not having an event of interest, over a
 follow-up period. The K-M estimator assumes that censoring is
 independent of the event time within each treatment arm, which may be
 violated if certain baseline characteristics, such as disease severity,
-are associated with both the event time of interest and dropout
-\[@Diaz2018\]. This could occur if individuals with greater baseline
+are associated with both the event time of interest and dropout (Dı́az et
+al. 2018). This could occur if individuals with greater baseline
 severity are more likely to have the event and more likely to drop out
 before the event is observed.
 
@@ -310,12 +310,12 @@ The logrank test is perhaps the most common method for performing sample
 size calculations and performing unadjusted comparisons of time-to-event
 outcomes. The logrank test is valid if censoring is independent of the
 treatment or independent of the event time in each treatment arm
-\[@VanLancker2021\]. The logrank test is most powerful under the
-proportional hazards assumption. When the proportional hazards
-assumption is violated, a weight function can be specified in a weighted
-logrank test to emphasize different domains of the survival curve. For
-more on the use of weighted logrank tests to address violations of the
-proportional hazards, see @Lin2017.
+(Lancker, Dukes, and Vansteelandt 2021). The logrank test is most
+powerful under the proportional hazards assumption. When the
+proportional hazards assumption is violated, a weight function can be
+specified in a weighted logrank test to emphasize different domains of
+the survival curve. For more on the use of weighted logrank tests to
+address violations of the proportional hazards, see Lin and León (2017).
 
 The Cox Proportional Hazards (PH) regression is the most common method
 for performing covariate-adjusted comparisons of time-to-event outcomes
@@ -335,7 +335,8 @@ of the covariates given the treatment assignment, tests are valid when
 the sandwich variance estimator is used. However, if the model is
 mispecified and the distribution of censoring times depends on both the
 treatment and covariates, tests based on the Cox model will not be
-valid, and alternatives should be considered \[@DiRienzo2001\].
+valid, and alternatives should be considered (DiRienzo and Lagakos
+2001).
 
 When the proportional hazards assumption is violated, the estimates from
 a Cox PH model represent a weighted average of the hazard functions over
@@ -343,7 +344,7 @@ time. The weights in this weighted average are determined by both the
 survival in each group and the censoring distribution. This dependence
 upon the censoring distribution makes it difficult to meaningfully
 interpret the estimate when there are appreciable violations of the PH
-assumption \[@Rudser2012\].
+assumption (Rudser, LeBlanc, and Emerson 2012).
 
 Even in the situation when the proportional hazards assumption appears
 to hold, the clinical interpretation of the hazard ratio is not
@@ -351,22 +352,23 @@ straightforward. In the absence of censoring, measures of a treatment
 effect are usually based on summaries of the outcome distribution that
 explicitly reference the scale of measurement of the outcome which
 facilitate evaluation of clinical importance, such as the mean, median,
-or proportion above or below a clinically meaningful threshold
-\[@Rudser2012\]. The hazard function is the instantaneous rate at which
-events occur, which changes over time, and does not quantify the
-expected length of time until the event \[@Rudser2012\].
+or proportion above or below a clinically meaningful threshold (Rudser,
+LeBlanc, and Emerson 2012). The hazard function is the instantaneous
+rate at which events occur, which changes over time, and does not
+quantify the expected length of time until the event (Rudser, LeBlanc,
+and Emerson 2012).
 
 Since quantities such as survival probabilities (e.g. survival at 5
 years), quantiles (e.g. median, 75<sup>th</sup> percentile), or the
 restricted mean survival time (RMST, e.g. average time without an event
 in the 5 yeras post randomization) explicitly reference the time frame
 of events, they may be more clinically meaningful for comparing
-treatments \[@Rudser2012\]. Survival probability and RMST are
-interpretable under violations of the proportional hazards assumption,
-and estimators for these quantities exist that are doubly robust
-(i.e. consistent if either the censoring or survival distributions are
-consistently estimated) and are at least as efficient as the K-M
-estimator \[@Diaz2018\].
+treatments (Rudser, LeBlanc, and Emerson 2012). Survival probability and
+RMST are interpretable under violations of the proportional hazards
+assumption, and estimators for these quantities exist that are doubly
+robust (i.e. consistent if either the censoring or survival
+distributions are consistently estimated) and are at least as efficient
+as the K-M estimator (Dı́az et al. 2018).
 
 While covariate-adjusted hazard ratios can be obtained from a Cox PH
 model, these are conditional treatment effects: they are the estimated
@@ -566,7 +568,9 @@ RMST).
 
 The first step in using `adjrct::survrct` is to compute the metadata
 necessary for computing the model-robust estimates of restricted mean
-survival time and survival probability:
+survival time and survival probability: **NOTE: in this particular
+dataset, this may take some time, considerably more than
+`survRM2::rmst()`.**
 
 ``` r
 surv_metadata_unadj <-
@@ -834,3 +838,79 @@ kable(
   digits = 2
 )
 ```
+
+<div id="refs" class="references csl-bib-body hanging-indent">
+
+<div id="ref-Assmann2000" class="csl-entry">
+
+Assmann, Susan F, Stuart J Pocock, Laura E Enos, and Linda E Kasten.
+2000. “Subgroup Analysis and Other (Mis)uses of Baseline Data in
+Clinical Trials.” *The Lancet* 355 (9209): 1064–69.
+<https://doi.org/10.1016/s0140-6736(00)02039-0>.
+
+</div>
+
+<div id="ref-DiRienzo2001" class="csl-entry">
+
+DiRienzo, A. G., and S. W. Lagakos. 2001. “Effects of Model
+Misspecification on Tests of No Randomized Treatment Effect Arising from
+Coxs Proportional Hazards Model.” *Journal of the Royal Statistical
+Society: Series B (Statistical Methodology)* 63 (4): 745–57.
+<https://doi.org/10.1111/1467-9868.00310>.
+
+</div>
+
+<div id="ref-Diaz2018" class="csl-entry">
+
+Dı́az, Iván, Elizabeth Colantuoni, Daniel F. Hanley, and Michael
+Rosenblum. 2018. “Improved Precision in the Analysis of Randomized
+Trials with Survival Outcomes, Without Assuming Proportional Hazards.”
+*Lifetime Data Analysis* 25 (3): 439–68.
+<https://doi.org/10.1007/s10985-018-9428-5>.
+
+</div>
+
+<div id="ref-Kahan2011" class="csl-entry">
+
+Kahan, Brennan C., and Tim P. Morris. 2011. “Improper Analysis of Trials
+Randomised Using Stratified Blocks or Minimisation.” *Statistics in
+Medicine* 31 (4): 328–40. <https://doi.org/10.1002/sim.4431>.
+
+</div>
+
+<div id="ref-Kernan1999" class="csl-entry">
+
+Kernan, W. 1999. “Stratified Randomization for Clinical Trials.”
+*Journal of Clinical Epidemiology* 52 (1): 19–26.
+<https://doi.org/10.1016/s0895-4356(98)00138-3>.
+
+</div>
+
+<div id="ref-VanLancker2021" class="csl-entry">
+
+Lancker, Kelly Van, Oliver Dukes, and Stijn Vansteelandt. 2021.
+“Principled Selection of Baseline Covariates to Account for Censoring in
+Randomized Trials with a Survival Endpoint.” *Statistics in Medicine* 40
+(18): 4108–21. <https://doi.org/10.1002/sim.9017>.
+
+</div>
+
+<div id="ref-Lin2017" class="csl-entry">
+
+Lin, Ray S., and Larry F. León. 2017. “Estimation of Treatment Effects
+in Weighted Log-Rank Tests.” *Contemporary Clinical Trials
+Communications* 8 (December): 147–55.
+<https://doi.org/10.1016/j.conctc.2017.09.004>.
+
+</div>
+
+<div id="ref-Rudser2012" class="csl-entry">
+
+Rudser, Kyle D., Michael L. LeBlanc, and Scott S. Emerson. 2012.
+“Distribution-Free Inference on Contrasts of Arbitrary Summary Measures
+of Survival.” *Statistics in Medicine* 31 (16): 1722–37.
+<https://doi.org/10.1002/sim.4505>.
+
+</div>
+
+</div>
