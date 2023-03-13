@@ -3,7 +3,7 @@
 
 ### Simulated MISTIE III Data: Minimally Invasive Surgery for Intracranial Hemorrhage
 
-The **M**inimally **I**nvasive **S**urgery with **T**hrombolysis in **I**ntracerebral haemorrhage **E**vacuation trial was a Phase III trial evaluating the safety and efficacy of minimally invasive surgery with Alteplase for ICH removal compared to standard-of-care medical management. Outcomes were measured at 30, 180, and 365-days post-randomization using the Modified Rankin Scale (MRS). Survival was also assessed, with patients administratively censored on the date of their final MRS assessment.
+The **M**inimally **I**nvasive **S**urgery with **T**hrombolysis in **I**ntracerebral haemorrhage **E**vacuation trial was a Phase III trial evaluating the safety and efficacy of minimally invasive surgery with Alteplase for ICH removal compared to standard-of-care medical management for individuals with intracranial hemorrhage. Outcomes were measured at 30, 180, and 365-days post-randomization using the Modified Rankin Scale (MRS). Survival was also assessed, with patients administratively censored on the date of their final MRS assessment.
 
 A new synthetic dataset was created by resampling baseline covariates from the original data with replacement. The columns in the synthetic dataset were sequentially replaced using simulated values based on predictions from a sequence of regression models based on the actual study data.
 
