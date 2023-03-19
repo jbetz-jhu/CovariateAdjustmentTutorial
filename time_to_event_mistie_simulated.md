@@ -1,4 +1,4 @@
-Covariate Adjustment in Randomized Trials
+MISTIE III: Time-to-Event Outcome
 ================
 Josh Betz (<jbetz@jhu.edu>), Kelly Van Lancker (<kvanlan3@jhu.edu>), and
 Michael Rosenblum (<mrosen@jhu.edu>)
@@ -449,10 +449,10 @@ survival::survdiff(
     ##     arm, data = sim_miii)
     ## 
     ##                N Observed Expected (O-E)^2/E (O-E)^2/V
-    ## arm=medical  251       66     53.9      2.70      5.23
-    ## arm=surgical 249       46     58.1      2.51      5.23
+    ## arm=medical  250       64     49.6      4.19      8.06
+    ## arm=surgical 250       40     54.4      3.82      8.06
     ## 
-    ##  Chisq= 5.2  on 1 degrees of freedom, p= 0.02
+    ##  Chisq= 8.1  on 1 degrees of freedom, p= 0.005
 
 ### Cox Proportional Hazards Model
 
@@ -478,20 +478,20 @@ summary(unadjusted_cox)
     ## survival::coxph(formula = Surv(time = days_on_study, event = died_on_study) ~ 
     ##     arm, data = sim_miii, ties = "efron", robust = TRUE)
     ## 
-    ##   n= 500, number of events= 112 
+    ##   n= 500, number of events= 104 
     ## 
-    ##                coef exp(coef) se(coef) robust se      z Pr(>|z|)  
-    ## armsurgical -0.4363    0.6464   0.1921    0.1906 -2.289   0.0221 *
+    ##                coef exp(coef) se(coef) robust se      z Pr(>|z|)   
+    ## armsurgical -0.5670    0.5672   0.2016    0.1995 -2.841  0.00449 **
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
     ##             exp(coef) exp(-coef) lower .95 upper .95
-    ## armsurgical    0.6464      1.547    0.4449    0.9393
+    ## armsurgical    0.5672      1.763    0.3836    0.8387
     ## 
-    ## Concordance= 0.559  (se = 0.023 )
-    ## Likelihood ratio test= 5.25  on 1 df,   p=0.02
-    ## Wald test            = 5.24  on 1 df,   p=0.02
-    ## Score (logrank) test = 5.24  on 1 df,   p=0.02,   Robust = 5.21  p=0.02
+    ## Concordance= 0.575  (se = 0.024 )
+    ## Likelihood ratio test= 8.16  on 1 df,   p=0.004
+    ## Wald test            = 8.07  on 1 df,   p=0.004
+    ## Score (logrank) test = 8.12  on 1 df,   p=0.004,   Robust = 8.03  p=0.005
     ## 
     ##   (Note: the likelihood ratio and score tests assume independence of
     ##      observations within a cluster, the Wald and robust score tests do not).
@@ -510,8 +510,8 @@ print(unadjusted_cox_ph_test)
 ```
 
     ##        chisq df      p
-    ## arm      7.1  1 0.0077
-    ## GLOBAL   7.1  1 0.0077
+    ## arm     9.85  1 0.0017
+    ## GLOBAL  9.85  1 0.0017
 
 ``` r
 # Plot 
@@ -542,25 +542,25 @@ with(
     ## 
     ## Restricted Mean Survival Time (RMST) by arm 
     ##                Est.    se lower .95 upper .95
-    ## RMST (arm=1) 82.970 1.332    80.359    85.581
-    ## RMST (arm=0) 75.895 1.819    72.329    79.461
+    ## RMST (arm=1) 84.510 1.160    82.237    86.783
+    ## RMST (arm=0) 75.744 1.932    71.957    79.531
     ## 
     ## 
     ## Restricted Mean Time Lost (RMTL) by arm 
     ##                Est.    se lower .95 upper .95
-    ## RMTL (arm=1)  7.030 1.332     4.419     9.641
-    ## RMTL (arm=0) 14.105 1.819    10.539    17.671
+    ## RMTL (arm=1)  5.490 1.160     3.217     7.763
+    ## RMTL (arm=0) 14.256 1.932    10.469    18.043
     ## 
     ## 
     ## Between-group contrast 
-    ##                       Est. lower .95 upper .95     p
-    ## RMST (arm=1)-(arm=0) 7.075     2.655    11.495 0.002
-    ## RMST (arm=1)/(arm=0) 1.093     1.033     1.157 0.002
-    ## RMTL (arm=1)/(arm=0) 0.498     0.318     0.781 0.002
+    ##                       Est. lower .95 upper .95 p
+    ## RMST (arm=1)-(arm=0) 8.766     4.350    13.182 0
+    ## RMST (arm=1)/(arm=0) 1.116     1.054     1.181 0
+    ## RMTL (arm=1)/(arm=0) 0.385     0.235     0.630 0
 
 The average survival time in the first 90 days was 83 days in the
 surgical arm and 76 days in the medical arm: the difference in average
-survival time (RMST) between arms in the first 90 months was 7.1 months.
+survival time (RMST) between arms in the first 90 months was 7.1 days.
 The ratio of RMST between treatment and control was 1.09 (9% increase in
 RMST).
 
@@ -610,10 +610,6 @@ adjrct::survprob(
 
     ## Warning: step size truncated due to increasing deviance
 
-    ## Warning: step size truncated due to increasing deviance
-
-    ## Warning: step size truncated due to increasing deviance
-
 The unadjusted survival probability in the first 90 days was 0.88 in the
 in the surgical arm and 0.77 in the medical arm. The difference in the
 probability of surviving the first 90 days between surgical and medical
@@ -651,28 +647,28 @@ summary(ps_model)
     ## 
     ## Parametric coefficients:
     ##                                Estimate Std. Error z value Pr(>|z|)  
-    ## (Intercept)                    -0.17775    0.24161  -0.736   0.4619  
-    ## male1. Male                    -0.06097    0.20454  -0.298   0.7656  
-    ## hx_cvd1. Yes                    0.42166    0.30489   1.383   0.1667  
-    ## hx_hyperlipidemia1. Yes        -0.12545    0.21337  -0.588   0.5566  
-    ## on_anticoagulants1. Yes         0.13985    0.38987   0.359   0.7198  
-    ## on_antiplatelets1. Yes         -0.45477    0.24349  -1.868   0.0618 .
-    ## ich_locationLobar               0.05184    0.21183   0.245   0.8067  
-    ## gcs_category2. Moderate (9-12)  0.46377    0.23402   1.982   0.0475 *
-    ## gcs_category3. Mild (13-15)     0.58348    0.26000   2.244   0.0248 *
+    ## (Intercept)                    -0.17041    0.23550  -0.724   0.4693  
+    ## male1. Male                     0.07898    0.20003   0.395   0.6930  
+    ## hx_cvd1. Yes                    0.17986    0.28062   0.641   0.5216  
+    ## hx_hyperlipidemia1. Yes        -0.37854    0.21745  -1.741   0.0817 .
+    ## on_anticoagulants1. Yes        -0.27188    0.41718  -0.652   0.5146  
+    ## on_antiplatelets1. Yes          0.44788    0.23563   1.901   0.0573 .
+    ## ich_locationLobar              -0.08078    0.20635  -0.391   0.6955  
+    ## gcs_category2. Moderate (9-12)  0.06881    0.23064   0.298   0.7654  
+    ## gcs_category3. Mild (13-15)     0.36935    0.25002   1.477   0.1396  
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
     ## Approximate significance of smooth terms:
     ##                   edf Ref.df Chi.sq p-value  
-    ## s(age)          8.399  8.815 14.546  0.0703 .
-    ## s(ich_s_volume) 1.000  1.001  1.795  0.1806  
-    ## s(ivh_s_volume) 1.001  1.002  0.875  0.3504  
+    ## s(age)          5.381  6.561 12.174  0.0757 .
+    ## s(ich_s_volume) 1.000  1.001  0.001  0.9798  
+    ## s(ivh_s_volume) 1.000  1.000  0.519  0.4715  
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## R-sq.(adj) =  0.0422   Deviance explained = 6.25%
-    ## UBRE = 0.37722  Scale est. = 1         n = 500
+    ## R-sq.(adj) =  0.0228   Deviance explained = 4.03%
+    ## UBRE = 0.39596  Scale est. = 1         n = 500
 
 ### Adjusted Cox Proportional Hazards Model
 
@@ -705,19 +701,19 @@ cox.zph(
 )
 ```
 
-    ##                          chisq    df     p
-    ## arm                   5.99e+00  0.99 0.014
-    ## pspline(age)          1.26e-02  4.07 1.000
-    ## male                  4.79e+00  0.99 0.028
-    ## hx_cvd                9.00e-01  0.99 0.341
-    ## hx_hyperlipidemia     2.00e+00  0.99 0.155
-    ## on_anticoagulants     2.34e+00  0.99 0.124
-    ## on_antiplatelets      6.23e-01  0.99 0.427
-    ## ich_location          9.23e-04  0.99 0.975
-    ## pspline(ich_s_volume) 8.55e+00  4.06 0.076
-    ## pspline(ivh_s_volume) 1.47e+00  4.00 0.831
-    ## gcs_category          3.84e+00  1.98 0.145
-    ## GLOBAL                2.54e+01 21.06 0.233
+    ##                          chisq    df      p
+    ## arm                   10.06992  0.99 0.0015
+    ## pspline(age)           0.20280  4.02 0.9953
+    ## male                   0.87577  0.99 0.3462
+    ## hx_cvd                 0.00932  0.98 0.9197
+    ## hx_hyperlipidemia      0.02266  0.99 0.8783
+    ## on_anticoagulants      0.07419  0.99 0.7813
+    ## on_antiplatelets       0.16014  0.99 0.6842
+    ## ich_location           6.89229  1.00 0.0086
+    ## pspline(ich_s_volume)  3.40417  4.01 0.4944
+    ## pspline(ivh_s_volume)  0.07829  4.02 0.9993
+    ## gcs_category           2.79527  1.99 0.2447
+    ## GLOBAL                26.87130 20.96 0.1735
 
 Here we can see departures from the proportional hazards assumption:
 
@@ -769,29 +765,29 @@ rmst_metadata_adj
 
     ## Treatment Arm
 
-    ## Estimate: 81.51
+    ## Estimate: 84.28
 
-    ## Std. error: 1.51
+    ## Std. error: 1.19
 
-    ## 95% CI: (78.55, 84.47)
+    ## 95% CI: (81.95, 86.61)
 
     ## Control Arm
 
-    ## Estimate: 77.27
+    ## Estimate: 76.65
 
-    ## Std. error: 1.66
+    ## Std. error: 1.77
 
-    ## 95% CI: (74.01, 80.53)
+    ## 95% CI: (73.17, 80.13)
 
     ## Treatment Effect: E(min[T, 90] | A = 1) - E(min[T, 90] | A = 0)
 
     ## Additive effect
 
-    ## Estimate: 4.24
+    ## Estimate: 7.63
 
-    ## Std. error: 2.17
+    ## Std. error: 2.11
 
-    ## 95% CI: (-0.01, 8.48)
+    ## 95% CI: (3.49, 11.77)
 
 ``` r
 rmst_metadata_adj_table <-
@@ -833,9 +829,9 @@ kable(
 
 | Arm                 | Estimate |   SE |   LCL |   UCL |
 |:--------------------|---------:|-----:|------:|------:|
-| Treatment           |    81.51 | 1.51 | 78.55 | 84.47 |
-| Control             |    77.27 | 1.66 | 74.01 | 80.53 |
-| Treatment - Control |     4.24 | 2.17 | -0.01 |  8.48 |
+| Treatment           |    84.28 | 1.19 | 81.95 | 86.61 |
+| Control             |    76.65 | 1.77 | 73.17 | 80.13 |
+| Treatment - Control |     7.63 | 2.11 |  3.49 | 11.77 |
 
 TMLE covariate-adjusted estimates of Restricted Mean Survival Time.
 
@@ -853,7 +849,17 @@ survival_metadata_adj <-
     metadata = surv_metadata_adj,
     horizon = 90
   )
+```
 
+    ## Warning: step size truncated due to increasing deviance
+
+    ## Warning: step size truncated due to increasing deviance
+
+    ## Warning: step size truncated due to increasing deviance
+
+    ## Warning: step size truncated due to increasing deviance
+
+``` r
 survival_metadata_adj
 ```
 
@@ -863,29 +869,29 @@ survival_metadata_adj
 
     ## Treatment Arm
 
-    ## Estimate: 0.86
+    ## Estimate: 0.89
 
     ## Std. error: 0.02
 
-    ## 95% CI: (0.82, 0.91)
+    ## 95% CI: (0.85, 0.93)
 
     ## Control Arm
 
-    ## Estimate: 0.79
+    ## Estimate: 0.81
 
     ## Std. error: 0.02
 
-    ## 95% CI: (0.74, 0.84)
+    ## 95% CI: (0.77, 0.86)
 
     ## Treatment Effect: Pr(T > 90 | A = 1) - Pr(T > 90 | A = 0)
 
     ## Additive effect
 
-    ## Estimate: 0.07
+    ## Estimate: 0.08
 
     ## Std. error: 0.03
 
-    ## 95% CI: (0.01, 0.14)
+    ## 95% CI: (0.02, 0.14)
 
 ``` r
 survival_metadata_adj_table <-
@@ -927,9 +933,9 @@ kable(
 
 | Arm                 | Estimate |   SE |  LCL |  UCL |
 |:--------------------|---------:|-----:|-----:|-----:|
-| Treatment           |     0.86 | 0.02 | 0.82 | 0.91 |
-| Control             |     0.79 | 0.02 | 0.74 | 0.84 |
-| Treatment - Control |     0.07 | 0.03 | 0.01 | 0.14 |
+| Treatment           |     0.89 | 0.02 | 0.85 | 0.93 |
+| Control             |     0.81 | 0.02 | 0.77 | 0.86 |
+| Treatment - Control |     0.08 | 0.03 | 0.02 | 0.14 |
 
 TMLE covariate-adjusted estimates of survival probability.
 

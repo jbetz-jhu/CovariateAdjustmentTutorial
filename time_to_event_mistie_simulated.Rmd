@@ -1,6 +1,6 @@
 ---
-title: "Covariate Adjustment in Randomized Trials"
-subtitle: "Worked Examples using Time-to-Event Clinical Trial Data"
+title: "MISTIE III: Time-to-Event Outcome"
+subtitle: "Adjusted and Unadjusted Analyses - **Simulated Data**"
 author: "Josh Betz (jbetz@jhu.edu), Kelly Van Lancker (kvanlan3@jhu.edu), and Michael Rosenblum (mrosen@jhu.edu)"
 # date: "`r format(Sys.time(), '%Y-%m-%d %I:%M')`"
 header-includes:
@@ -175,10 +175,13 @@ A new synthetic dataset was created by resampling baseline covariates from the o
 
 ```{r colon-data-from-survival-package, echo = FALSE}
 data_url <-
-  "https://github.com/jbetz-jhu/CovariateAdjustmentTutorial/raw/main/Simulated_MISTIE_III_v1.1.csv"
+  "https://github.com/jbetz-jhu/CovariateAdjustmentTutorial/raw/main/Simulated_MISTIE_III_v1.2.csv"
 
 sim_miii <-
-  read.csv(file = url(data_url))
+  read.csv(file = url(data_url)) %>% 
+  dplyr::slice(
+    1:500
+  )
 
 # Read in data: Recast categorical variables as factors
 sim_miii <-
@@ -434,7 +437,7 @@ with(
 )
 ```
 
-The average survival time in the first 90 days was 83 days in the surgical arm and 76 days in the medical arm: the difference in average survival time (RMST) between arms in the first 90 months was 7.1 months. The ratio of RMST between treatment and control was 1.09 (9% increase in RMST).
+The average survival time in the first 90 days was 83 days in the surgical arm and 76 days in the medical arm: the difference in average survival time (RMST) between arms in the first 90 months was 7.1 days. The ratio of RMST between treatment and control was 1.09 (9% increase in RMST).
 
 
 
